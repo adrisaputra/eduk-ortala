@@ -3,7 +3,7 @@
 return [
     'Pindah Instansi' => 'Pindah Instansi',
     'Naik Pangkat' => 'Naik Pangkat',
-    'Kenaikan Gaji Berkala' => 'Kenaikan Gaji Berkala',
+    'KGB' => 'KGB',
     'Cuti' => 'Cuti',
     'Tugas Luar' => 'Tugas Luar',
     'Daftar Pegawai' => 'Daftar Pegawai',

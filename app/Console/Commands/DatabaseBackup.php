@@ -40,7 +40,7 @@ class DatabaseBackup extends Command
      */
     public function handle()
     {
-        $filename = "rpjmd-backup-" . Carbon::now()->format('Y-m-d') . ".sql";
+        $filename = "eduk-backup-" . Carbon::now()->format('Y-m-d') . ".sql";
 
         // Create backup folder and set permission if not exist.
         $storageAt = public_path('/db_backup/');

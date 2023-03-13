@@ -2,12 +2,12 @@
 
 return [
     'dashboard' => 'Dashboard',
-    'Kebijakan' => 'Kebijakan',
-    'Report' => 'Report',
-    'Program' => 'Program',
-    'Sub Kegiatan' => 'Sub Activity',
-    'Belanja' => 'Expense',
-    'Database' => 'Database',
-    'Log Activity' => 'Log Activity',
-    'Pengaturan' => 'Setting',
+    'Statistik' => 'Statistik',
+    'DUK' => 'DUK',
+    'Layanan' => 'Layanan',
+    'Master Data' => 'Master Data',
+    'Riwayat' => 'Riwayat',
+    'Database' => 'Basis Data',
+    'Log Activity' => 'Log Aktifitas',
+    'Pengaturan' => 'Pengaturan',
 ]; 

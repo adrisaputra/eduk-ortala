@@ -14,7 +14,7 @@ $slider = SiteHelpers::slider();
             <div class="carousel-inner">
                 @foreach($slider as $i => $v)
                 <div class="carousel-item @if($i==0) active @endif">
-                    <img src="{{ asset('upload/slider/'.$v->image) }}" style="background-size: cover;background-position: center;width: 100%;height: 100%;">
+                    <img src="{{ asset('upload/slider/'.$v->image) }}" style="background-size: cover;background-position: center;height: 100%;">
                 </div>
                 @endforeach
             </div>
