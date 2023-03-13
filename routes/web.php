@@ -69,7 +69,7 @@ Route::get('database',[DatabaseController::class, 'index']);
 Route::post('import_database',[DatabaseController::class, 'store']);
 Route::get('/backup_database', function() {
     Artisan::call('database:backup');
-    return response()->download(public_path().'/db_backup/rpjmd-backup-' . Carbon::now()->format('Y-m-d') . '.sql');
+    return response()->download(public_path().'/db_backup/eduk-backup-' . Carbon::now()->format('Y-m-d') . '.sql');
 });
 
 Route::middleware(['user_access','verified'])->group(function () {
