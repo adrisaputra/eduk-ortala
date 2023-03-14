@@ -14,7 +14,7 @@
 			<div class="card-body pt-0">
 					<!--begin::Section-->
 					
-					<form action="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($position->id)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+					<form action="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($unit->id)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
 					{{ csrf_field() }}
 					<input type="hidden" name="_method" value="PUT">
 		
@@ -25,8 +25,18 @@
 							<div class="rounded border p-10">
 
 								<div class="mb-10">
-									<label class="form-label required">{{ __('Nama Jabatan') }}</label>
-									<input type="text" class="form-control" placeholder="Nama Jabatan" name="name" value="{{ $position->name }}" />
+									<label class="form-label required">{{ __('Kode Unor') }}</label>
+									<input type="text" class="form-control" placeholder="Kode Unor" name="code" value="{{ $unit->code }}" />
+									@if ($errors->has('code'))
+										<div class="fv-plugins-message-container invalid-feedback">
+											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('code') }}</div>
+										</div>
+									@endif
+								</div>
+
+								<div class="mb-10">
+									<label class="form-label required">{{ __('Nama Unor') }}</label>
+									<input type="text" class="form-control" placeholder="Nama Unor" name="name" value="{{ $unit->name }}" />
 									@if ($errors->has('name'))
 										<div class="fv-plugins-message-container invalid-feedback">
 											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('name') }}</div>
@@ -35,13 +45,23 @@
 								</div>
 
 								<div class="mb-10">
-									<label class="form-label required">{{ __('Jenis Jabatan') }}</label>
-									<input type="text" class="form-control" placeholder="Jenis Jabatan" name="type" value="{{ $position->type }}" />
-									@if ($errors->has('type'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('type') }}</div>
-										</div>
-									@endif
+									<label for="exampleFormControlInput1" class="form-label">{{ __('Unor Induk') }}</label>
+									<select class="form-select" aria-label="Select example" name="parent_code">
+										<option value="">- Pilih Unor Induk -</option>
+										@foreach($get_unit as $v)
+											<option value="{{ $v->code }}" @if($unit->parent_code==$v->code) selected @endif>{{ $v->name }}</option>
+										@endforeach
+									</select>
+								</div>
+
+								<div class="mb-10">
+									<label for="exampleFormControlInput1" class="form-label">{{ __('Unor Atasan') }}</label>
+									<select class="form-select" aria-label="Select example" name="leader_code">
+										<option value="">- Pilih Unor Atasan -</option>
+										@foreach($get_unit as $v)
+											<option value="{{ $v->code }}" @if($unit->leader_code==$v->code) selected @endif>{{ $v->name }}</option>
+										@endforeach
+									</select>
 								</div>
 
 								<div class="mb-10">

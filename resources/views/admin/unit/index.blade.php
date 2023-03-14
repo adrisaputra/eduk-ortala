@@ -78,7 +78,6 @@
 							<th style="width: 2%">No</th>
 							<th>Kode Unor</th>
 							<th>Nama Unor</th>
-							<th>Esselon</th>
 							<th style="width: 10%">#aksi</th>
 						</tr>
 						<!--end::Table row-->
@@ -91,7 +90,6 @@
 							<td>{{ ($unit ->currentpage()-1) * $unit ->perpage() + $loop->index + 1 }}</td>
 							<td>{{ $v->code }}</td>
 							<td>{{ $v->name }}</td>
-							<td>{{ $v->esselon }}</td>
 							<td>
 								@can('ubah-data')
 									<a href="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($v->id) ) }}" class="btn btn-icon btn-sm btn-warning"><i class="fa fa-edit"></i></a>

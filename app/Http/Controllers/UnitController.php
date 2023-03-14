@@ -42,7 +42,8 @@ class UnitController extends Controller
     public function create()
     {
         $title = "Unit Organisasi";
-        $view=view('admin.unit.create',compact('title'));
+        $get_unit = Unit::get();
+        $view=view('admin.unit.create',compact('title', 'get_unit'));
         $view=$view->render();
         return $view;
     }
@@ -51,8 +52,8 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|string',
-            'type' => 'required|string',
+            'code' => 'required|string',
+            'name' => 'required|string'
         ]);
 
         $unit = New Unit();
@@ -69,7 +70,8 @@ class UnitController extends Controller
         $title = "Unit Organisasi";
         $unit = Crypt::decrypt($unit);
         $unit = Unit::where('id',$unit)->first();
-        $view=view('admin.unit.edit', compact('title','unit'));
+        $get_unit = Unit::get();
+        $view=view('admin.unit.edit', compact('title','unit','get_unit'));
         $view=$view->render();
         return $view;
     }
@@ -82,8 +84,8 @@ class UnitController extends Controller
         $unit = Unit::where('id',$unit)->first();
 
         $this->validate($request, [
-            'name' => 'required|string',
-            'type' => 'required|string',
+            'code' => 'required|string',
+            'name' => 'required|string'
         ]);
 
         $unit->fill($request->all());

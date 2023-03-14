@@ -44,13 +44,23 @@
 								</div>
 
 								<div class="mb-10">
-									<label class="form-label required">{{ __('Esselon') }}</label>
-									<input type="text" class="form-control" placeholder="Esselon" name="esselon" value="{{ old('esselon') }}" />
-									@if ($errors->has('esselon'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('esselon') }}</div>
-										</div>
-									@endif
+									<label for="exampleFormControlInput1" class="form-label">{{ __('Unor Induk') }}</label>
+									<select class="form-select" aria-label="Select example" name="parent_code">
+										<option value="">- Pilih Unor Induk -</option>
+										@foreach($get_unit as $v)
+											<option value="{{ $v->code }}" @if(old('parent_code')==$v->code) selected @endif>{{ $v->name }}</option>
+										@endforeach
+									</select>
+								</div>
+
+								<div class="mb-10">
+									<label for="exampleFormControlInput1" class="form-label">{{ __('Unor Atasan') }}</label>
+									<select class="form-select" aria-label="Select example" name="leader_code">
+										<option value="">- Pilih Unor Atasan -</option>
+										@foreach($get_unit as $v)
+											<option value="{{ $v->code }}" @if(old('leader_code')==$v->code) selected @endif>{{ $v->name }}</option>
+										@endforeach
+									</select>
 								</div>
 
 								<div class="mb-10">
