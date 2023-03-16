@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\PositionController;
@@ -74,6 +75,16 @@ Route::get('/backup_database', function() {
 
 Route::middleware(['user_access','verified'])->group(function () {
     
+    ## Pegawai
+    Route::get('/employee', [EmployeeController::class, 'index']);
+    Route::get('/employee/search', [EmployeeController::class, 'search']);
+    Route::get('/employee/create', [EmployeeController::class, 'create']);
+    Route::post('/employee', [EmployeeController::class, 'store']);
+    Route::get('/employee/edit/{employee}', [EmployeeController::class, 'edit']);
+    Route::put('/employee/edit/{employee}', [EmployeeController::class, 'update']);
+    Route::get('/employee/hapus/{employee}',[EmployeeController::class, 'delete']);
+
+
     ## Pendidikan
     Route::get('/education', [EducationController::class, 'index']);
     Route::get('/education/search', [EducationController::class, 'search']);

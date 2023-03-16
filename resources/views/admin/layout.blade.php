@@ -26,6 +26,9 @@ $setting = SiteHelpers::setting();
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
 		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
 		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+		<!-- Datepicker -->
+		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css"/>
+		<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
 		<!--end::Global Stylesheets Bundle-->
 	</head>
 	
