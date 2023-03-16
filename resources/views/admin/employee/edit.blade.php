@@ -63,7 +63,13 @@
 
 								<div class="col-xl-6">
 									<label class="form-label">{{ __('Tanggal Lahir') }}</label>
-									<input type="text" class="form-control" placeholder="Tanggal Lahir" name="date_of_birth" value="{{ $employee->date_of_birth }}" id="kt_daterangepicker_3"/>
+									@php
+										$d = substr($employee->date_of_birth,8,2);
+										$m = substr($employee->date_of_birth,5,2);
+										$y = substr($employee->date_of_birth,0,4);
+										$date_of_birth = $m.'/'.$d.'/'.$y;
+									@endphp
+									<input type="text" class="form-control" placeholder="Tanggal Lahir" name="date_of_birth" value="{{ $date_of_birth }}" id="kt_daterangepicker_3"/>
 								</div>
 
 								<div class="col-xl-6">
@@ -100,8 +106,8 @@
 								</div>
 
 								<div class="col-xl-6">
-									<label class="form-label">{{ __('Tempat Lahir') }}</label>
-									<input type="text" class="form-control" placeholder="Tempat Lahir" name="address" value="{{ $employee->address }}" />
+									<label class="form-label">{{ __('Alamat') }}</label>
+									<input type="text" class="form-control" placeholder="Alamat" name="address" value="{{ $employee->address }}" />
 								</div>
 
 								<hr>
@@ -131,10 +137,8 @@
 									<input type="text" class="form-control" placeholder="No. NPWP" name="no_npwp" value="{{ $employee->no_npwp }}" />
 								</div>
 
-								<div class="col-xl-6">
-								</div>
-
 								<hr>
+								
 								<div class="col-xl-6">
 									<label class="form-label">{{ __('Golongan') }}</label>
 									<select class="form-select" aria-label="Select example" name="class_id">
@@ -203,6 +207,7 @@
 <script>
 	$("#kt_daterangepicker_3").daterangepicker({
         singleDatePicker: true,
+        showDropdowns: true,
         minYear: 1900,
         maxYear: parseInt(moment().format("YYYY"),10)
     }

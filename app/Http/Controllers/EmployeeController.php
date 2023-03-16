@@ -64,6 +64,7 @@ class EmployeeController extends Controller
  
          $employee = New Employee();
          $employee->fill($request->all());
+         
          $employee->save();
          
          activity()->log('Tambah Data Pegawai');
@@ -93,12 +94,17 @@ class EmployeeController extends Controller
          $employee = Employee::where('id',$employee)->first();
  
          $this->validate($request, [
-             'code' => 'required|numeric|digits:2',
-             'employee' => 'required|string',
-             'rank' => 'required|string',
-         ]);
+            'nip' => 'required|numeric|digits:18',
+            'name' => 'required|string'
+        ]);
  
          $employee->fill($request->all());
+         
+         $d = substr($request->date_of_birth,3,2);
+         $m = substr($request->date_of_birth,0,2);
+         $y = substr($request->date_of_birth,6,4);
+         $employee->date_of_birth = $y.'-'.$m.'-'.$d;
+
          $employee->save();
          
          activity()->log('Ubah Data Pegawai dengan ID = '.$employee->id);
