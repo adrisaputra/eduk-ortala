@@ -6,6 +6,7 @@ use App\Models\Employee;   //nama model
 use App\Models\Classes;   //nama model
 use App\Models\Position;   //nama model
 use App\Models\Education;   //nama model
+use App\Models\Unit;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -47,7 +48,8 @@ class EmployeeController extends Controller
          $class = Classes::get();
          $position = Position::get();
          $education = Education::get();
-         $view=view('admin.employee.create',compact('title','class','position','education'));
+         $unit = Unit::get();
+         $view=view('admin.employee.create',compact('title','class','position','education','unit'));
          $view=$view->render();
          return $view;
      }
@@ -56,9 +58,8 @@ class EmployeeController extends Controller
      public function store(Request $request)
      {
          $this->validate($request, [
-             'code' => 'required|numeric|digits:2',
-             'employee' => 'required|string',
-             'rank' => 'required|string',
+             'nip' => 'required|numeric|digits:18',
+             'name' => 'required|string'
          ]);
  
          $employee = New Employee();
@@ -75,7 +76,11 @@ class EmployeeController extends Controller
          $title = "Pegawai";
          $employee = Crypt::decrypt($employee);
          $employee = Employee::where('id',$employee)->first();
-         $view=view('admin.employee.edit', compact('title','employee'));
+         $class = Classes::get();
+         $position = Position::get();
+         $education = Education::get();
+         $unit = Unit::get();
+         $view=view('admin.employee.edit', compact('title','employee','class','position','education','unit'));
          $view=$view->render();
          return $view;
      }

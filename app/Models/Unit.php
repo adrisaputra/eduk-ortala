@@ -21,4 +21,8 @@ class Unit extends Model
         'parent_code',
         'leader_code',
     ];
+
+    public function employee(){
+        return $this->hasOne('App\Models\Employee');
+    }
 }

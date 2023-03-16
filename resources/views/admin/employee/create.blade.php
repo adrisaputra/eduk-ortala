@@ -72,11 +72,6 @@
 										<option value="cpns" @if(old('status')=="cpns") selected @endif>CPNS</option>
 										<option value="honorer" @if(old('status')=="honorer") selected @endif>Honorer</option>
 									</select>
-									@if ($errors->has('status'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('status') }}</div>
-										</div>
-									@endif
 								</div>
 
 								<div class="col-xl-6">
@@ -147,11 +142,6 @@
 											<option value="{{ $v->id }}" @if(old('class_id')==$v->id) selected @endif>{{ $v->class_id}}</option>
 										@endforeach
 									</select>
-									@if ($errors->has('class_id'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('class_id') }}</div>
-										</div>
-									@endif
 								</div>
 
 								<div class="col-xl-6">
@@ -159,14 +149,9 @@
 									<select class="form-select" aria-label="Select example" name="position_id">
 										<option value="">- Pilih Jabatan -</option>
 										@foreach($position as $v)
-											<option value="{{ $v->id }}" @if(old('position_id')==$v->id) selected @endif>{{ $v->name}}</option>
+											<option value="{{ $v->id }}" @if(old('position_id')==$v->id) selected @endif>{{ $v->class}}</option>
 										@endforeach
 									</select>
-									@if ($errors->has('position_id'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('position_id') }}</div>
-										</div>
-									@endif
 								</div>
 
 								<div class="col-xl-6">
@@ -177,13 +162,18 @@
 											<option value="{{ $v->id }}" @if(old('education_id')==$v->id) selected @endif>{{ $v->name}}</option>
 										@endforeach
 									</select>
-									@if ($errors->has('education_id'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('education_id') }}</div>
-										</div>
-									@endif
 								</div>
 
+
+								<div class="col-xl-6">
+									<label class="form-label">{{ __('Unor') }}</label>
+									<select class="form-select" aria-label="Select example" name="unit_id">
+										<option value="">- Pilih Unor -</option>
+										@foreach($unit as $v)
+											<option value="{{ $v->id }}" @if(old('unit_id')==$v->id) selected @endif>{{ $v->name}}</option>
+										@endforeach
+									</select>
+								</div>
 
 								<div class="mb-10">
 									<button type="submit" class="btn btn-primary btn-flat btn-sm" title="Tambah Data"> Simpan</button>

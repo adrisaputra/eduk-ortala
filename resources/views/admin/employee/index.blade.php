@@ -93,7 +93,7 @@
 							<td>{{ $v->nip }}</td>
 							<td>{{ $v->name }}</td>
 							<td>{{ $v->status }}</td>
-							<td>{{ $v->unit->name }}</td>
+							<td>@if($v->unit){{ $v->unit->name }}@endif</td>
 							<td>
 								@can('ubah-data')
 									<a href="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($v->id) ) }}" class="btn btn-icon btn-sm btn-warning"><i class="fa fa-edit"></i></a>

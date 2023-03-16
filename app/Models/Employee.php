@@ -31,18 +31,18 @@ class Employee extends Model
     ];
 
     public function class(){
-        return $this->hasOne('App\Models\Class');
+        return $this->belongsTo('App\Models\Class');
     }
 
     public function position(){
-        return $this->hasOne('App\Models\Position');
+        return $this->belongsTo('App\Models\Position');
     }
     
     public function education(){
-        return $this->hasOne('App\Models\Education');
+        return $this->belongsTo('App\Models\Education');
     }
     
     public function unit(){
-        return $this->hasOne('App\Models\Unit');
+        return $this->belongsTo('App\Models\Unit');
     }
 }
