@@ -1,200 +1,170 @@
 @extends('admin/layout')
 @section('konten')
 
-<div class="toolbar">
-	<!--begin::Toolbar-->
-	<div class="container-fluid py-6 py-lg-0 d-flex flex-column flex-lg-row align-items-lg-stretch justify-content-lg-between">
-		<div class="page-title d-flex flex-column me-5">
+<!--  BEGIN CONTENT AREA  -->
+<div id="content" class="main-content">
+	<div class="layout-px-spacing">
+
+		<div class="row layout-top-spacing">
+
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers " style="background: #445ede;">
+				<div class="widget-heading">
+					<h3 style="color: #ffffff;margin-top: 8px;">Selamat Datang "Administrator"</h3>
+				</div>
+			</div>
 		</div>
-		<div class="overflow-auto pt-3 pt-lg-0">
-			<!--begin::Action wrapper-->
-			<div class="">
-				<div class="ms-lg-12" id="kt_header_user_menu_toggle" style="text-align: right;">
-					<div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-					@if (Auth::user()->foto)
-						<img src="{{ asset('upload/foto/' . Auth::user()->foto) }}" alt="user">
-					@else
-						<img src="{{ asset('assets/profile-1-20210205190338.png') }}" alt="user">
-					@endif
+
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers" style="background: #2196f3;">
+				<div class="widget-heading">
+					<div class="row" style="color: #ffffff;">
+						<div class="col-md-8">
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<h6 style="color: #ffffff;">Jumlah Pegawai</h6>
+						</div>
+						<div class="col-md-4">
+							<center>
+								<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+							</center>
+						</div>
 					</div>
-					<!--begin::Menu-->
-					<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px" data-kt-menu="true">
-						<div class="menu-item px-3">
-							<div class="menu-content d-flex align-items-center px-3">
-								<div class="symbol symbol-50px me-5">
-									@if (Auth::user()->foto)
-										<img src="{{ asset('upload/foto/' . Auth::user()->foto) }}" alt="logo">
-									@else
-										<img src="{{ asset('assets/profile-1-20210205190338.png') }}" alt="logo">
-									@endif
-								</div>
-								<div class="d-flex flex-column">
-									<div class="fw-bolder d-flex align-items-center fs-5">{{ Auth::user()->name }}</div>
-								</div>
-							</div>
-						</div>
-						<div class="separator my-2"></div>
-						<div class="menu-item px-5">
-							<a href="{{ url('/user/edit_profil/' . Crypt::encrypt(Auth::user()->id)) }}" class="menu-link px-5">Profil</a>
-						</div>
-						{{--<div class="menu-item px-5">
-							<a href="../../demo1/dist/pages/projects/list.html" class="menu-link px-5">
-								<span class="menu-text">My Projects</span>
-								<span class="menu-badge">
-									<span class="badge badge-light-danger badge-circle fw-bolder fs-7">3</span>
-								</span>
-							</a>
-						</div>--}}
-						<div class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
-							<a href="#" class="menu-link px-5">
-								<span class="menu-title position-relative">Bahasa
-								<span class="fs-8 rounded bg-light px-3 py-2 position-absolute translate-middle-y top-50 end-0">{{ strtoupper(Lang::locale()) }}
-								@if(strtoupper(Lang::locale())=="ID")
-									<img class="w-15px h-15px rounded-1 ms-2" src="{{ asset('assets/media/flags/indonesia.svg') }}" alt="" /></span></span>
-								@else
-									<img class="w-15px h-15px rounded-1 ms-2" src="{{ asset('assets/media/flags/united-states.svg') }}" alt="" /></span></span>
-								@endif
-							</a>
-							<div class="menu-sub menu-sub-dropdown w-175px py-4">
-								<div class="menu-item px-3">
-									<a href="{{ url('lang/id') }}" class="menu-link d-flex px-5 active">
-									<span class="symbol symbol-20px me-4">
-										<img class="rounded-1" src="{{ asset('assets/media/flags/indonesia.svg') }}" alt="" />
-									</span>Indonesia</a>
-								</div>
-								<div class="menu-item px-3">
-									<a href="{{ url('lang/en') }}" class="menu-link d-flex px-5">
-									<span class="symbol symbol-20px me-4">
-										<img class="rounded-1" src="{{ asset('assets/media/flags/united-states.svg') }}" alt="" />
-									</span>English</a>
-								</div>
-							</div>
-						</div>
-						@if(Auth::user()->group_id == 1)
-						<div class="menu-item px-5">
-							<a href="{{ url('/setting') }}" class="menu-link px-5">Pengaturan</a>
-						</div>
-						@endif
-						<div class="menu-item px-5">
-							<a href="{{ url('logout-sistem') }}" onclick="event.preventDefault();
-									document.getElementById('logout-form').submit();" class="menu-link px-5">Keluar</a>
-							<form id="logout-form" action="{{ url('logout-sistem') }}" method="POST" style="display: none;">
-							@csrf
-							</form>
-						</div>
-						<div class="separator my-2"></div>
+				</div>
+				<div class="widget-content">    
+					<div class="w-chart">
+						<div id="hybrid_followers"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!--end::Toolbar-->
-</div>
-</div>
-<!--end::Header-->
-<!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-	<!--begin::Post-->
-	<div class="post d-flex flex-column-fluid" id="kt_post">
-		<!--begin::Container-->
-		<div id="kt_content_container" class="container-xxl">
-			<!--begin::Row-->
-			<div class="row g-5 g-xl-8">
-				<div class="col-xl-4">
-					<a href="#" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-xl-6 col-md-6 col-sm-6" >
-									<div class="text-white fw-bolder fs-2" style="font-size: 30px !important;">1</div>
-									<div class="fw-bold text-white" >Jumlah Pegawai Sekretariat Daerah</div>
-								</div>
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<i class="fa fa-list" style="float: right;color:white;font-size:50px"></i>
-								</div>
-							</div>
+
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers" style="background: #8bc34a;">
+				<div class="widget-heading">
+					<div class="row" style="color: #ffffff;">
+						<div class="col-md-8">
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<h6 style="color: #ffffff;">Jumlah Usul Naik Pangkat</h6>
 						</div>
-					</a>
-				</div>
-				<div class="col-xl-4">
-					<a href="#" class="card bg-success hoverable card-xl-stretch mb-xl-8">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<div class="text-white fw-bolder fs-2" style="font-size: 30px !important;">2</div>
-									<div class="fw-bold text-white">Jumlah Usul Naik Pangkat</div>
-								</div>
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<i class="fa fa-list" style="float: right;color:white;font-size:50px"></i>
-								</div>
-							</div>
+						<div class="col-md-4">
+							<center>
+								<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+							</center>
 						</div>
-					</a>
+					</div>
 				</div>
-				<div class="col-xl-4">
-					<a href="#" class="card bg-warning hoverable card-xl-stretch mb-xl-8">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<div class="text-white fw-bolder fs-2" style="font-size: 30px !important;">2</div>
-									<div class="fw-bold text-white">Jumlah Usul Pindah</div>
-								</div>
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<i class="fa fa-list" style="float: right;color:white;font-size:50px"></i>
-								</div>
-							</div>
-						</div>
-					</a>
+				<div class="widget-content">    
+					<div class="w-chart">
+						<div id="hybrid_followers"></div>
+					</div>
 				</div>
-				<div class="col-xl-4">
-					<a href="#" class="card bg-danger hoverable card-xl-stretch mb-xl-8">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<div class="text-white fw-bolder fs-2" style="font-size: 30px !important;">1</div>
-									<div class="fw-bold text-white">Jumlah Usul Kenaikan Gaji Berkala</div>
-								</div>
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<i class="fa fa-list" style="float: right;color:white;font-size:50px"></i>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-xl-4">
-					<a href="#" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<div class="text-white fw-bolder fs-2" style="font-size: 30px !important;">1</div>
-									<div class="fw-bold text-white">Cuti</div>
-								</div>
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<i class="fa fa-building" style="float: right;color:white;font-size:50px"></i>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-xl-4">
-					<a href="#" class="card bg-dark hoverable card-xl-stretch mb-5 mb-xl-8">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<div class="text-white fw-bolder fs-2">2</div>
-									<div class="fw-bold text-white">Tugas Luar</div>
-								</div>
-								<div class="col-xl-6 col-md-6 col-sm-6">
-									<i class="fa fa-users" style="float: right;color:white;font-size:50px"></i>
-								</div>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>	<!--end::Row-->
+			</div>
 		</div>
-		<!--end::Container-->
+
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers" style="background: #ffc107;">
+				<div class="widget-heading">
+					<div class="row" style="color: #ffffff;">
+						<div class="col-md-8">
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<h6 style="color: #ffffff;">Jumlah Usul Pindah</h6>
+						</div>
+						<div class="col-md-4">
+							<center>
+								<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+							</center>
+						</div>
+					</div>
+				</div>
+				<div class="widget-content">    
+					<div class="w-chart">
+						<div id="hybrid_followers"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers" style="background: #F44336;">
+				<div class="widget-heading">
+					<div class="row" style="color: #ffffff;">
+						<div class="col-md-8">
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<h5 style="color: #ffffff;">Jumlah Usul KGB</h5>
+						</div>
+						<div class="col-md-4">
+							<center>
+								<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+							</center>
+						</div>
+					</div>
+				</div>
+				<div class="widget-content">    
+					<div class="w-chart">
+						<div id="hybrid_followers"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers" style="background: #607d8b;">
+				<div class="widget-heading">
+					<div class="row" style="color: #ffffff;">
+						<div class="col-md-8">
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<h6 style="color: #ffffff;">Cuti</h6>
+						</div>
+						<div class="col-md-4">
+							<center>
+								<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-loader"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+							</center>
+						</div>
+					</div>
+				</div>
+				<div class="widget-content">    
+					<div class="w-chart">
+						<div id="hybrid_followers"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+			<div class="widget widget-one_hybrid widget-followers" style="background: #00bcd4;">
+				<div class="widget-heading">
+					<div class="row" style="color: #ffffff;">
+						<div class="col-md-8">
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<h6 style="color: #ffffff;">Tugas Luar</h6>
+						</div>
+						<div class="col-md-4">
+							<center>
+								<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+							</center>
+						</div>
+					</div>
+				</div>
+				<div class="widget-content">    
+					<div class="w-chart">
+						<div id="hybrid_followers"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		</div>
+
 	</div>
-	<!--end::Post-->
+	<div class="footer-wrapper">
+		<div class="footer-section f-section-1">
+		<p class="">Copyright © 2020 <a target="_blank" href="https://designreset.com">DesignReset</a>, All rights reserved.</p>
+		</div>
+		<div class="footer-section f-section-2">
+		<p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>
+		</div>
+	</div>
 </div>
-<!--end::Content-->
+<!--  END CONTENT AREA  -->
 @endsection

@@ -23,8 +23,9 @@ class UserController extends Controller
     public function index()
     {
         $title = "User";
-		$user = User::orderBy('id','DESC')->paginate(25)->onEachSide(1);
-		return view('admin.user.index',compact('title','user'));
+		$user = User::orderBy('id','DESC')->paginate(1)->onEachSide(1);
+        $group = Group::get();
+		return view('admin.user.index',compact('title','user','group'));
     }
 	
 	## Tampilkan Data Search
@@ -37,43 +38,26 @@ class UserController extends Controller
                     $query->where('name', 'LIKE', '%'.$user.'%')
                         ->orWhere('email', 'LIKE', '%'.$user.'%');
                 })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
-		return view('admin.user.index',compact('title','user'));
-    }
-	
-	## Tampilkan Form Create
-	public function create()
-    {
-        $title = "User";
         $group = Group::get();
-        $office = Office::get();
-        $view=view('admin.user.create',compact('title','group','office'));
-        $view=$view->render();
-        return $view;
+
+        if($request->input('page')){
+            return view('admin.user.index',compact('title','user','group'));
+        } else {
+            return view('admin.user.search',compact('title','user','group'));
+        }
     }
 	
 	## Simpan Data
 	public function store(Request $request)
     {
 		
-        if ($request->group_id == 3 ) {
-            $this->validate($request, [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8|confirmed',
-                'group_id' => 'required',
-                'status' => 'required',
-                'office_id' => 'required'
-            ]);
-        } else {
-            $this->validate($request, [
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8|confirmed',
-                'group_id' => 'required',
-                'status' => 'required'
-            ]);
-    
-        }
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'group_id' => 'required',
+            'status' => 'required'
+        ]);
 		
         $input['name'] = $request->name;
         $input['email'] = $request->email;
@@ -81,9 +65,6 @@ class UserController extends Controller
         $input['password'] = Hash::make($request->password);
         $input['group_id'] = $request->group_id;
         $input['status'] = $request->status;
-        if ($request->group_id == 3 ) {
-            $input['office_id'] = $request->office_id;
-        }
         User::create($input);
 		
         activity()->log('Tambah Data User');
@@ -157,7 +138,6 @@ class UserController extends Controller
     ## Hapus Data
     public function delete($user)
     {
-        $user = Crypt::decrypt($user);
         $user = User::where('id',$user)->first();
         $user->delete();
         activity()->log('Hapus Data User dengan ID = '.$user->id);

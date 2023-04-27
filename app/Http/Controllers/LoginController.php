@@ -33,9 +33,9 @@ class LoginController extends Controller
                 return redirect('/dashboard');
             } 
         } else if ($user && \Hash::check($request->password, $user->password) && $user->status == 0) {
-            return redirect('/')->with('status','User Tidak Aktif, Silahkan Hubungi Admin !');
+            return redirect('/')->with('status2','User Tidak Aktif, Silahkan Hubungi Admin !');
         } else {
-            return redirect('/')->with('status','Nama User atau Password Tidak Sesuai !');
+            return redirect('/')->with('status2','Nama User atau Password Tidak Sesuai !');
         }
 
     }

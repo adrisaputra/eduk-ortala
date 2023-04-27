@@ -5,86 +5,62 @@
 $setting = SiteHelpers::setting();
 $slider = SiteHelpers::slider();
 @endphp
+<div class="form-container outer" style="background-image: url({{ asset('upload/setting/'.$setting->background_login) }});background-size: cover;">
+        <div class="form-form">
+            <div class="form-form-wrap">
+                <div class="form-container">
+                    <div class="form-content">
 
-<link href="{{ asset('assets/css/form-1.css') }}" rel="stylesheet" type="text/css" />
-
-<div class="form-container">
-    <div class="form-image">
-        <div id="kt_carousel_1_carousel" class="carousel carousel-custom slide" data-bs-ride="carousel" data-bs-interval="5000">
-            <div class="carousel-inner">
-                @foreach($slider as $i => $v)
-                <div class="carousel-item @if($i==0) active @endif">
-                    <img src="{{ asset('upload/slider/'.$v->image) }}" style="background-size: cover;background-position: center;height: 100%;">
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    <div class="form-form">
-        <div class="form-form-wrap">
-            <div class="form-container">
-                <div class="form-content">
-
-                        <div class="text-center" style="margin-bottom:20px">
-                            <img src="{{ asset('upload/setting/'.$setting->large_icon) }}" style="height: 50%;width:100%"  />
+                        <div class="text-center">
+                            <img src="{{ asset('upload/setting/Eduk Ortala Prov. Sultra.png') }}" style="height: 50%;width:70%"  />
                         </div>
-                        <form method="POST" action="{{ url('login_w') }}" method="POST" enctype="multipart/form-data">
+                        
+                        <form  class="text-left" method="POST" action="{{ url('login_w') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                            @if ($message = Session::get('status'))
-                                <div class="alert alert-dismissible bg-danger d-flex flex-column flex-sm-row w-100 p-5 mb-10">
-                                    <div class="d-flex flex-column text-light pe-0 pe-sm-10">
-                                        <h4 class="mb-2 text-light">Gagal !</h4>
-                                        <span>{{ $message }}</span>
+                            <div class="form">
+                                <br>
+                                @if ($message = Session::get('status'))
+                                    <div class="alert alert-success mb-4" role="alert" style="margin-bottom: 0.5rem!important;"> 
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> </button> 
+                                        {{ $message }} 
                                     </div>
-                                    <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-                                        <span class="svg-icon svg-icon-2x svg-icon-light">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </div>
-                            @endif
-                            
-                            @if ($message = Session::get('status2'))
-                                <div class="alert alert-dismissible bg-success d-flex flex-column flex-sm-row w-100 p-5 mb-10">
-                                    <div class="d-flex flex-column text-light pe-0 pe-sm-10">
-                                        <h4 class="mb-2 text-light">Berhasil !</h4>
-                                        <span>{{ $message }}</span>
+                                @elseif ($message = Session::get('status2'))
+                                    <div class="alert alert-danger mb-4" role="alert" style="margin-bottom: 0.5rem!important;"> 
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> </button> 
+                                        {{ $message }} 
                                     </div>
-                                    <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-                                        <span class="svg-icon svg-icon-2x svg-icon-light">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </div>
                                 @endif
-                            
-                            <div class="fv-row mb-10">
-                                <label class="form-label fs-6 fw-bolder text-dark">Nama User</label>
-                                <input class="form-control form-control-lg form-control-solid" type="text" placeholder="Nama User" name="name" value="{{ old('name') }}" autocomplete="off" />
-                            </div>
-                            <div class="fv-row mb-10">
-                                <div class="d-flex flex-stack mb-2">
-                                    <label class="form-label fw-bolder text-dark fs-6 mb-0">Password</label>
+                                
+                                <div id="username-field" class="field-wrapper input">
+                                    <label for="username">USERNAME</label>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <input id="username" name="name" type="text" class="form-control" placeholder="e.g John_Doe">
                                 </div>
-                                <input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off" />
-                            </div>
-                            
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-lg btn-primary w-100 mb-5">
-                                    <span class="indicator-label">Continue</span>
-                                </button>
+
+                                <div id="password-field" class="field-wrapper input mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <label for="password">PASSWORD</label>
+                                        <a href="auth_pass_recovery_boxed.html" class="forgot-pass-link">Forgot Password?</a>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="toggle-password" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                </div>
+                                <div class="d-sm-flex justify-content-between">
+                                    <div class="field-wrapper">
+                                        <button type="submit" class="btn btn-primary" value="">Log In</button>
+                                    </div>
+                                </div>
+                                
+
+                                <p class="signup-link"></p>
+
                             </div>
                         </form>
-                </div>                    
+
+                    </div>                    
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 @endsection
