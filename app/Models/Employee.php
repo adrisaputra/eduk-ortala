@@ -15,6 +15,7 @@ class Employee extends Model
         'back_title',
         'birthplace',
         'date_of_birth',
+        'gender',
         'status',
         'employee_type',
         'religion',
@@ -25,13 +26,13 @@ class Employee extends Model
         'no_karis_karsu',
         'no_npwp',
         'class_id',
-        'position_id',
         'education_id',
+        'position',
         'unit_id',
     ];
 
-    public function class(){
-        return $this->belongsTo('App\Models\Class');
+    public function classes(){
+        return $this->belongsTo('App\Models\Classes');
     }
 
     public function position(){

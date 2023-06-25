@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
 
 class UnitController extends Controller
@@ -18,7 +19,7 @@ class UnitController extends Controller
     {
         $this->middleware('auth');
     }
-    
+	
     ## Tampikan Data
     public function index()
     {
@@ -32,77 +33,72 @@ class UnitController extends Controller
     {
         $title = "Unit Organisasi";
         $unit = $request->get('search');
-        $unit = Unit::where('name', 'LIKE', '%'.$unit.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $unit = Unit::
+                where(function ($query) use ($unit) {
+                    $query->where('code', 'LIKE', '%'.$unit.'%')
+                        ->orWhere('name', 'LIKE', '%'.$unit.'%')
+                        ->orWhere('parent_code', 'LIKE', '%'.$unit.'%')
+                        ->orWhere('leader_code', 'LIKE', '%'.$unit.'%');
+                })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
-        return view('admin.unit.index',compact('title','unit'));
+        if($request->input('page')){
+            return view('admin.unit.index',compact('title','unit'));
+        } else {
+            return view('admin.unit.search',compact('title','unit'));
+        }
     }
-    
-    ## Tampilkan Form Create
-    public function create()
+     
+
+	## Tampilkan Form Create
+    public function sync()
     {
-        $title = "Unit Organisasi";
-        $get_unit = Unit::get();
-        $view=view('admin.unit.create',compact('title', 'get_unit'));
-        $view=$view->render();
-        return $view;
-    }
+       // Tarik data dari API
+       $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_all_unor');
 
-    ## Simpan Data
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'code' => 'required|string',
-            'name' => 'required|string'
-        ]);
+       // Menguraikan JSON menjadi array asosiatif
+       $responseArray = json_decode($response, true);
 
-        $unit = New Unit();
-        $unit->fill($request->all());
-        $unit->save();
-        
-        activity()->log('Tambah Data Unit Organisasi');
-        return redirect('/unit')->with('status','Data Tersimpan');
-    }
+       // Memeriksa apakah status bernilai true
+       if ($responseArray['status']) {
+           $data = $responseArray['data'];
 
-    ## Tampilkan Form Edit
-    public function edit($unit)
-    {
-        $title = "Unit Organisasi";
-        $unit = Crypt::decrypt($unit);
-        $unit = Unit::where('id',$unit)->first();
-        $get_unit = Unit::get();
-        $view=view('admin.unit.edit', compact('title','unit','get_unit'));
-        $view=$view->render();
-        return $view;
-    }
+           // Mengambil nilai NIP dari setiap objek dalam array data
+           // $nips = array_column($data, 'NIP');
 
-    ## Edit Data
-    public function update(Request $request, $unit)
-    {
-        
-        $unit = Crypt::decrypt($unit);
-        $unit = Unit::where('id',$unit)->first();
+           // Menentukan ukuran setiap halaman (misalnya, 50 data per halaman)
+           $perPage = 25;
 
-        $this->validate($request, [
-            'code' => 'required|string',
-            'name' => 'required|string'
-        ]);
+           // Memecah data menjadi halaman-halaman yang lebih kecil
+           $pages = array_chunk($data, $perPage);
 
-        $unit->fill($request->all());
-        $unit->save();
-        
-        activity()->log('Ubah Data Unit Organisasi dengan ID = '.$unit->id);
-        return redirect('/unit')->with('status', 'Data Berhasil Diubah');
-    }
+           // Menampilkan nilai NIP dan Nama per halaman
+           foreach ($pages as $page) {
+               foreach ($page as $item) {
 
-    ## Hapus Data
-    public function delete($unit)
-    {
-        $unit = Crypt::decrypt($unit);
-        $unit = Unit::where('id',$unit)->first();
-        $unit->delete();
+                   $unit = Unit::where('code',$item['KdUnor'])->first();
+                   if($unit){
+                       $unit->code =  $item['KdUnor'];
+                       $unit->name =  $item['NamaUnor'];
+                       $unit->parent_code =  $item['UnorInduk'];
+                       $unit->leader_code =  $item['UnorAtasan'];
+                       $unit->save();
+                   } else {
+                       $unit = New Unit();
+                       $unit->code =  $item['KdUnor'];
+                       $unit->name =  $item['NamaUnor'];
+                       $unit->parent_code =  $item['UnorInduk'];
+                       $unit->leader_code =  $item['UnorAtasan'];
+                       $unit->save();
+                   }
+               }
+           }
 
-        activity()->log('Hapus Data Unit Organisasi dengan ID = '.$unit->id);
-        return redirect('/unit')->with('status', 'Data Berhasil Dihapus');
+           activity()->log('Sinkronisasi Data Class');
+           return redirect('/unit')->with('status', 'Data Berhasil Disinkronisasi');
+       } else {
+           // return redirect()->back()->with('error', 'Failed to pull data from API.');
+       }
+
+       // echo $response;
     }
 }

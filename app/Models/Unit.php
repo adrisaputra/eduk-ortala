@@ -11,13 +11,6 @@ class Unit extends Model
     protected $fillable =[
         'code',
         'name',
-        'eselon',
-        'leader',
-        'nip',
-        'address',
-        'phone',
-        'email',
-        'web',
         'parent_code',
         'leader_code',
     ];

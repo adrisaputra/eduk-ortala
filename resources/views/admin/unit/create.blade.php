@@ -24,8 +24,8 @@
 							<div class="rounded border p-10">
 
 								<div class="mb-10">
-									<label class="form-label required">{{ __('Kode Unor') }}</label>
-									<input type="text" class="form-control" placeholder="Kode Unor" name="code" value="{{ old('code') }}" />
+									<label class="form-label required">{{ __('Kode Pendidikan') }}</label>
+									<input type="text" class="form-control" placeholder="Kode Pendidikan" name="code" value="{{ old('code') }}" />
 									@if ($errors->has('code'))
 										<div class="fv-plugins-message-container invalid-feedback">
 											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('code') }}</div>
@@ -34,8 +34,8 @@
 								</div>
 
 								<div class="mb-10">
-									<label class="form-label required">{{ __('Nama Unor') }}</label>
-									<input type="text" class="form-control" placeholder="Nama Unor" name="name" value="{{ old('name') }}" />
+									<label class="form-label required">{{ __('Nama Pendidikan') }}</label>
+									<input type="text" class="form-control" placeholder="Nama Pendidikan" name="name" value="{{ old('name') }}" />
 									@if ($errors->has('name'))
 										<div class="fv-plugins-message-container invalid-feedback">
 											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('name') }}</div>
@@ -44,23 +44,13 @@
 								</div>
 
 								<div class="mb-10">
-									<label for="exampleFormControlInput1" class="form-label">{{ __('Unor Induk') }}</label>
-									<select class="form-select" aria-label="Select example" name="parent_code">
-										<option value="">- Pilih Unor Induk -</option>
-										@foreach($get_unit as $v)
-											<option value="{{ $v->code }}" @if(old('parent_code')==$v->code) selected @endif>{{ $v->name }}</option>
-										@endforeach
-									</select>
-								</div>
-
-								<div class="mb-10">
-									<label for="exampleFormControlInput1" class="form-label">{{ __('Unor Atasan') }}</label>
-									<select class="form-select" aria-label="Select example" name="leader_code">
-										<option value="">- Pilih Unor Atasan -</option>
-										@foreach($get_unit as $v)
-											<option value="{{ $v->code }}" @if(old('leader_code')==$v->code) selected @endif>{{ $v->name }}</option>
-										@endforeach
-									</select>
+									<label class="form-label required">{{ __('Kode Tingkat Pendidikan') }}</label>
+									<input type="text" class="form-control" placeholder="Kode Tingkat Pendidikan" name="level_code" value="{{ old('level_code') }}" />
+									@if ($errors->has('level_code'))
+										<div class="fv-plugins-message-container invalid-feedback">
+											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('level_code') }}</div>
+										</div>
+									@endif
 								</div>
 
 								<div class="mb-10">

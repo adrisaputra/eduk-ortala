@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
 class EmployeeController extends Controller
 {
@@ -33,55 +34,131 @@ class EmployeeController extends Controller
      ## Tampilkan Data Search
      public function search(Request $request)
      {
-         $title = "Pegawai";
-         $employee = $request->get('search');
-         $employee = Employee::where('name', 'LIKE', '%'.$employee.'%')
-                 ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
-         
-         return view('admin.employee.index',compact('title','employee'));
+        $title = "Pegawai";
+        $employee = $request->get('search');
+        $employee = Employee::where(function ($query) use ($employee) {
+                                $query->where('nip', 'LIKE', '%'.$employee.'%')
+                                    ->orWhere('name', 'LIKE', '%'.$employee.'%')
+                                    ->orWhere('status', 'LIKE', '%'.$employee.'%');
+                            })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        
+        if($request->input('page')){
+            return view('admin.employee.index',compact('title','employee'));
+        } else {
+            return view('admin.employee.search',compact('title','employee'));
+        }
      }
      
      ## Tampilkan Form Create
-     public function create()
+     public function sync()
      {
-         $title = "Pegawai";
-         $class = Classes::get();
-         $position = Position::get();
-         $education = Education::get();
-         $unit = Unit::get();
-         $view=view('admin.employee.create',compact('title','class','position','education','unit'));
-         $view=$view->render();
-         return $view;
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_pegawai');
+
+        // Menguraikan JSON menjadi array asosiatif
+        $responseArray = json_decode($response, true);
+
+        // Memeriksa apakah status bernilai true
+        if ($responseArray['status']) {
+            $data = $responseArray['data'];
+
+            // Mengambil nilai NIP dari setiap objek dalam array data
+            // $nips = array_column($data, 'NIP');
+
+            // Menentukan ukuran setiap halaman (misalnya, 50 data per halaman)
+            $perPage = 25;
+
+            // Memecah data menjadi halaman-halaman yang lebih kecil
+            $pages = array_chunk($data, $perPage);
+
+            // Menampilkan nilai NIP dan Nama per halaman
+            foreach ($pages as $page) {
+                foreach ($page as $item) {
+
+                    $employee = Employee::where('nip',$item['NIP'])->first();
+                    if($employee){
+                        $employee->nip =  $item['NIP'];
+                        $employee->name =  $item['Nama'];
+                        $employee->front_title =  $item['GelarDepan'];
+                        $employee->back_title =  $item['GelarBlkng'];
+                        $employee->birthplace =  $item['TmpLahir'];
+                        $employee->date_of_birth =  $item['TglLahir'];
+                        $employee->gender =  $item['Kelamin'];
+                        $employee->status =  $item['StatusPeg'];
+                        $employee->employee_type =  $item['KdJenis'];
+                        $employee->religion =  $item['Agama'];
+                        $employee->address =  $item['AlamatTinggal'];
+                        $employee->no_karpeg =  $item['NoKarpeg'];
+                        $employee->no_askes =  $item['NoAskes'];
+                        $employee->no_taspen =  $item['NoTaspen'];
+                        $employee->no_karis_karsu =  $item['NoKaris'];
+                        $employee->no_npwp =  $item['NPWP'];
+                        
+                        $class = Classes::where('code',$item['KdGol'])->first();
+                        $employee->class_id =  $class ? $class->id : null;
+
+                        $education = Education::where('code',$item['KodePend'])->first();
+                        $employee->education_id =  $education ? $education->id : null;
+
+                        $employee->position =  $item['JABATAN'];
+                        
+                        $unit = Unit::where('code',$item['KdUnor'])->first();
+                        $employee->unit_id =  $unit ? $unit->id : null;
+
+                        $employee->save();
+                    } else {
+                        $employee = New Employee();
+                        $employee->nip =  $item['NIP'];
+                        $employee->name =  $item['Nama'];
+                        $employee->front_title =  $item['GelarDepan'];
+                        $employee->back_title =  $item['GelarBlkng'];
+                        $employee->birthplace =  $item['TmpLahir'];
+                        $employee->date_of_birth =  $item['TglLahir'];
+                        $employee->gender =  $item['Kelamin'];
+                        $employee->status =  $item['StatusPeg'];
+                        $employee->employee_type =  $item['KdJenis'];
+                        $employee->religion =  $item['Agama'];
+                        $employee->address =  $item['AlamatTinggal'];
+                        $employee->no_karpeg =  $item['NoKarpeg'];
+                        $employee->no_askes =  $item['NoAskes'];
+                        $employee->no_taspen =  $item['NoTaspen'];
+                        $employee->no_karis_karsu =  $item['NoKaris'];
+                        $employee->no_npwp =  $item['NPWP'];
+                        
+                        $class = Classes::where('code',$item['KdGol'])->first();
+                        $employee->class_id =  $class ? $class->id : null;
+                        
+                        $education = Education::where('code',$item['KodePend'])->first();
+                        $employee->education_id =  $education ? $education->id : null;
+
+                        $employee->position =  $item['JABATAN'];
+                        
+                        $unit = Unit::where('code',$item['KdUnor'])->first();
+                        $employee->unit_id =  $unit ? $unit->id : null;
+
+                        $employee->save();
+                    }
+                }
+            }
+
+            activity()->log('Sinkronisasi Data Employee');
+            return redirect('/employee')->with('status', 'Data Berhasil Disinkronisasi');
+        } else {
+            // return redirect()->back()->with('error', 'Failed to pull data from API.');
+        }
+
+        // echo $response;
      }
  
-     ## Simpan Data
-     public function store(Request $request)
-     {
-         $this->validate($request, [
-             'nip' => 'required|numeric|digits:18',
-             'name' => 'required|string'
-         ]);
- 
-         $employee = New Employee();
-         $employee->fill($request->all());
-         
-         $employee->save();
-         
-         activity()->log('Tambah Data Pegawai');
-         return redirect('/employee')->with('status','Data Tersimpan');
-     }
  
      ## Tampilkan Form Edit
-     public function edit($employee)
+     public function edit(Employee $employee)
      {
          $title = "Pegawai";
-         $employee = Crypt::decrypt($employee);
-         $employee = Employee::where('id',$employee)->first();
-         $class = Classes::get();
-         $position = Position::get();
-         $education = Education::get();
+         $class = Classes::limit(10)->get();
+         $education = Education::limit(10)->get();
          $unit = Unit::get();
-         $view=view('admin.employee.edit', compact('title','employee','class','position','education','unit'));
+         $view=view('admin.employee.edit', compact('title','employee','class','education','unit'));
          $view=$view->render();
          return $view;
      }
@@ -90,25 +167,20 @@ class EmployeeController extends Controller
      public function update(Request $request, $employee)
      {
          
-         $employee = Crypt::decrypt($employee);
-         $employee = Employee::where('id',$employee)->first();
- 
-         $this->validate($request, [
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
+        $this->validate($request, [
             'nip' => 'required|numeric|digits:18',
             'name' => 'required|string'
         ]);
- 
-         $employee->fill($request->all());
-         
-         $d = substr($request->date_of_birth,3,2);
-         $m = substr($request->date_of_birth,0,2);
-         $y = substr($request->date_of_birth,6,4);
-         $employee->date_of_birth = $y.'-'.$m.'-'.$d;
 
-         $employee->save();
-         
-         activity()->log('Ubah Data Pegawai dengan ID = '.$employee->id);
-         return redirect('/employee')->with('status', 'Data Berhasil Diubah');
+        $employee->fill($request->all());
+        $employee->save();
+        
+        activity()->log('Ubah Data Pegawai dengan ID = '.$employee->id);
+        return redirect('/employee')->with('status', 'Data Berhasil Diubah');
+
      }
  
      ## Hapus Data

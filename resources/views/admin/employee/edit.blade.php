@@ -1,216 +1,269 @@
-@extends('admin.layout')
+@extends('admin/layout')
 @section('konten')
+        <!--  BEGIN CONTENT AREA  -->
+		<script src="//cdn.ckeditor.com/4.21.0/full/ckeditor.js"></script>
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
 
-@include('admin.toolbar')
-<!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-<!--begin::Post-->
-<div class="post d-flex flex-column-fluid" id="kt_post">
-	<!--begin::Container-->
-	<div id="kt_content_container" class="container-xxl">
-		<!--begin::Card-->
-		<div class="card">
-			<!--begin::Card body-->
-			<div class="card-body pt-0">
-					<!--begin::Section-->
-					
-					<form action="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($employee->id)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
-					{{ csrf_field() }}
-					<input type="hidden" name="_method" value="PUT">
-		
-					<div class="py-10">
-						<h1 class="anchor fw-bolder mb-5" id="custom-form-control">
-						<a href="#custom-form-control"></a>Ubah {{ __($title) }}</h1>
-						<div class="py-5">
-							<div class="rounded border p-10">
-							<div class="row g-5 g-xl-8">
+                <div class="row layout-top-spacing">
+                    <div id="tableHover" class="col-lg-12 col-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+							 			<h4>Ubah Data {{ __($title) }}</h4>
+                                    </div>                 
+                                </div>
+                            </div>
+					   
+                            <div class="widget-content widget-content-area" style="padding-top: 0px;">  
+								<form action="{{ url(Request::segment(1).'/edit/'.Crypt::encrypt($employee->id)) }}" method="POST" enctype="multipart/form-data">
+								{{ csrf_field() }}
+                				<input type="hidden" name="_method" value="PUT">
 
-
-							<div class="col-xl-6">
-									<label class="form-label required">{{ __('NIP') }}</label>
-									<input type="text" class="form-control" placeholder="NIP" name="nip" value="{{ $employee->nip }}" />
-									@if ($errors->has('nip'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('nip') }}</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('NIP') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input name="nip" type="text" class="form-control form-control-sm"  value="{{ $employee->nip }}">
+											@if ($errors->has('nip')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nip') }}</div>@endif
 										</div>
-									@endif
-								</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label required">{{ __('Nama Pegawai') }}</label>
-									<input type="text" class="form-control" placeholder="Nama Pegawai" name="name" value="{{ $employee->name }}" />
-									@if ($errors->has('name'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('name') }}</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Nama Pegawai') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input name="name" type="text" class="form-control form-control-sm" value="{{ $employee->name }}" >
+											@if ($errors->has('name')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('name') }}</div>@endif
 										</div>
-									@endif
-								</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Gelar Depan') }}</label>
-									<input type="text" class="form-control" placeholder="Gelar Depan" name="front_title" value="{{ $employee->front_title }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Gelar Depan') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="front_title" value="{{ $employee->front_title }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Gelar Belakang') }}</label>
-									<input type="text" class="form-control" placeholder="Gelar Belakang" name="back_title" value="{{ $employee->back_title }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Gelar Belakang') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="back_title" value="{{ $employee->back_title }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Tempat Lahir') }}</label>
-									<input type="text" class="form-control" placeholder="Tempat Lahir" name="birthplace" value="{{ $employee->birthplace }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Tempat Lahir') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="birthplace" value="{{ $employee->birthplace }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Tanggal Lahir') }}</label>
-									@php
-										$d = substr($employee->date_of_birth,8,2);
-										$m = substr($employee->date_of_birth,5,2);
-										$y = substr($employee->date_of_birth,0,4);
-										$date_of_birth = $m.'/'.$d.'/'.$y;
-									@endphp
-									<input type="text" class="form-control" placeholder="Tanggal Lahir" name="date_of_birth" value="{{ $date_of_birth }}" id="kt_daterangepicker_3"/>
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Tanggal Lahir') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input name="date_of_birth" id="basicFlatpickr" value="{{ $employee->date_of_birth }}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+											@if ($errors->has('date_of_birth')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('date_of_birth') }}</div>@endif
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Status Pegawai') }}</label>
-									<select class="form-select" aria-label="Select example" name="status">
-										<option value="">- Pilih Status Pegawai -</option>
-										<option value="pns" @if($employee->status=="pns") selected @endif>PNS</option>
-										<option value="cpns" @if($employee->status=="cpns") selected @endif>CPNS</option>
-										<option value="honorer" @if($employee->status=="honorer") selected @endif>Honorer</option>
-									</select>
-								</div>
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Jenis Kelamin') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control" name="gender">
+												<option value="">- Pilih Jenis Kelamin -</option>
+												<option value="LAKI-LAKI" @if($employee->gender=="LAKI-LAKI") selected @endif>Pria</option>
+												<option value="PEREMPUAN" @if($employee->gender=="PEREMPUAN") selected @endif>Wanita</option>
+											</select>
+											@if ($errors->has('gender')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('gender') }}</div>@endif
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Jenis Pegawai') }}</label>
-									<select class="form-select" aria-label="Select example" name="employee_type">
-										<option value="">- Pilih Jenis Pegawai -</option>
-										<option value="ASN" @if($employee->employee_type=="ASN") selected @endif>ASN</option>
-										<option value="PPPK" @if($employee->employee_type=="PPPK") selected @endif>PPPK</option>
-									</select>
-								</div>
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Status') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control" name="status">
+												<option value="">- Pilih Status -</option>
+												<option value="HONORER" @if($employee->status=="HONORER") selected @endif>HONORER</option>
+												<option value="CPNS" @if($employee->status=="CPNS") selected @endif>CPNS</option>
+												<option value="PNS" @if($employee->status=="PNS") selected @endif>PNS</option>
+												<option value="PENSIUNAN" @if($employee->status=="PENSIUNAN") selected @endif>PENSIUNAN</option>
+												<option value="ABRI" @if($employee->status=="ABRI") selected @endif>ABRI</option>
+												<option value="BERHENTI" @if($employee->status=="BERHENTI") selected @endif>BERHENTI</option>
+												<option value="MENINGGAL" @if($employee->status=="MENINGGAL") selected @endif>MENINGGAL</option>
+												<option value="PERALIHAN" @if($employee->status=="PERALIHAN") selected @endif>PERALIHAN</option>
+												<option value="PINDAH LUAR PROVINSI" @if($employee->status=="PINDAH LUAR PROVINSI") selected @endif>PINDAH LUAR PROVINSI</option>
+											</select>
+											@if ($errors->has('status')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('status') }}</div>@endif
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Agama') }}</label>
-									<select class="form-select" aria-label="Select example" name="religion">
-										<option value="">- Pilih Agama -</option>
-										<option value="Islam" @if($employee->religion=="Islam") selected @endif> Islam</option>
-										<option value="Katolik" @if($employee->religion=="Katolik") selected @endif> Katolik</option>
-										<option value="Hindu" @if($employee->religion=="Hindu") selected @endif> Hindu</option>
-										<option value="Budha" @if($employee->religion=="Budha") selected @endif> Budha</option>
-										<option value="Sinto" @if($employee->religion=="Sinto") selected @endif> Sinto</option>
-										<option value="Konghucu" @if($employee->religion=="Konghucu") selected @endif> Konghucu</option>
-										<option value="Protestan" @if($employee->religion=="Protestan") selected @endif> Protestan</option>
-									</select>
-								</div>
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Kategori Pegawai') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control" name="employee_type">
+												<option value="">- Pilih Kategori Pegawai -</option>
+												<option value="ASN" @if($employee->employee_type=="ASN") selected @endif>ASN</option>
+												<option value="PPPK" @if($employee->employee_type=="PPPK") selected @endif>PPPK</option>
+											</select>
+											@if ($errors->has('employee_type')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('employee_type') }}</div>@endif
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Alamat') }}</label>
-									<input type="text" class="form-control" placeholder="Alamat" name="address" value="{{ $employee->address }}" />
-								</div>
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Agama') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control" name="religion">
+												<option value="">- Pilih Agama -</option>
+												<option value="ISLAM" @if($employee->religion=="ISLAM") selected @endif>ISLAM</option>
+												<option value="KATHOLIK" @if($employee->religion=="KATHOLIK") selected @endif>KATHOLIK</option>
+												<option value="PROTESTAN" @if($employee->religion=="PROTESTAN") selected @endif>PROTESTAN</option>
+												<option value="HINDU" @if($employee->religion=="HINDU") selected @endif>HINDU</option>
+												<option value="BUDHA" @if($employee->religion=="BUDHA") selected @endif>BUDHA</option>
+												<option value="SINTO" @if($employee->religion=="SINTO") selected @endif>SINTO</option>
+												<option value="KONGHUCU" @if($employee->religion=="KONGHUCU") selected @endif>KONGHUCU</option>
+												<option value="LAINNYA" @if($employee->religion=="LAINNYA") selected @endif>LAINNYA</option>
+											</select>
+											@if ($errors->has('religion')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('religion') }}</div>@endif
+										</div>
+									</div>
 
-								<hr>
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Alamat') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<textarea class="form-control form-control-sm" name="address">{{ $employee->address }}</textarea>
+											@if ($errors->has('address')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('address') }}</div>@endif
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('No. Karpeg') }}</label>
-									<input type="text" class="form-control" placeholder="No. Karpeg" name="no_karpeg" value="{{ $employee->no_karpeg }}" />
-								</div>
-	
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('No. Askes') }}</label>
-									<input type="text" class="form-control" placeholder="No. Askes" name="no_askes" value="{{ $employee->no_askes }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('No. Karpeg') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="no_karpeg" value="{{ $employee->no_karpeg }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('No. Taspen') }}</label>
-									<input type="text" class="form-control" placeholder="No. Taspen" name="no_taspen" value="{{ $employee->no_taspen }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('No. Askes') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="no_askes" value="{{ $employee->no_askes }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('No. Karis/Karsu') }}</label>
-									<input type="text" class="form-control" placeholder="No. Karis/Karsu" name="no_karis_karsu" value="{{ $employee->no_karis_karsu }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('No. Taspen') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="no_taspen" value="{{ $employee->no_taspen }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('No. NPWP') }}</label>
-									<input type="text" class="form-control" placeholder="No. NPWP" name="no_npwp" value="{{ $employee->no_npwp }}" />
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('No. Karis/Karsu') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="no_karis_karsu" value="{{ $employee->no_karis_karsu }}" />
+										</div>
+									</div>
 
-								<hr>
-								
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Golongan') }}</label>
-									<select class="form-select" aria-label="Select example" name="class_id">
-										<option value="">- Pilih Golongan -</option>
-										@foreach($class as $v)
-											<option value="{{ $v->id }}" @if($employee->class_id==$v->id) selected @endif>{{ $v->class}}</option>
-										@endforeach
-									</select>
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('No. NPWP') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="no_npwp" value="{{ $employee->no_npwp }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Jabatan') }}</label>
-									<select class="form-select" aria-label="Select example" name="position_id">
-										<option value="">- Pilih Jabatan -</option>
-										@foreach($position as $v)
-											<option value="{{ $v->id }}" @if($employee->position_id==$v->id) selected @endif>{{ $v->name}}</option>
-										@endforeach
-									</select>
-								</div>
+									<div class="form-group row mb-1" style="margin-bottom: -0.6rem!important;">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Golongan') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control basic" name="class_id">
+												<option value="">- Pilih Golongan -</option>
+												@foreach($class as $v)
+													<option value="{{ $v->id }}" @if($employee->class_id==$v->id) selected @endif>{{ $v->rank }} - {{ $v->class }}</option>
+												@endforeach
+											</select>
+											@if ($errors->has('class_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('class_id') }}</div>@endif
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Pendidikan') }}</label>
-									<select class="form-select" aria-label="Select example" name="education_id">
-										<option value="">- Pilih Pendidikan -</option>
-										@foreach($education as $v)
-											<option value="{{ $v->id }}" @if($employee->education_id==$v->id) selected @endif>{{ $v->name}}</option>
-										@endforeach
-									</select>
-								</div>
+									<div class="form-group row mb-1" style="margin-bottom: -0.6rem!important;">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Pendidikan') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+										<select id='sel_emp' name="education_id">
+											<option value='{{ $employee->education_id }}'>{{ $employee->education->name }}</option>
+										</select>
+										</div>
+									</div>
 
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Jabatan') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="position" value="{{ $employee->position }}" />
+										</div>
+									</div>
 
-								<div class="col-xl-6">
-									<label class="form-label">{{ __('Unor') }}</label>
-									<select class="form-select" aria-label="Select example" name="unit_id">
-										<option value="">- Pilih Unor -</option>
-										@foreach($unit as $v)
-											<option value="{{ $v->id }}" @if($employee->unit_id==$v->id) selected @endif>{{ $v->name}}</option>
-										@endforeach
-									</select>
-								</div>
+									<div class="form-group row mb-3">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Unor') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control basic" name="unit_id">
+												<option value="">- Pilih Unor -</option>
+												@foreach($unit as $v)
+													<option value="{{ $v->id }}" @if($employee->unit_id==$v->id) selected @endif>{{ $v->name }}</option>
+												@endforeach
+											</select>
+											@if ($errors->has('unit_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('unit_id') }}</div>@endif
+										</div>
+									</div>
+<!-- 
+									<div class="form-group row mb-4 custom-file-container" data-upload-id="myFirstImage" style="display: flex;">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Gambar') }} <a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											@if ($employee->image)
+											<span class="text-red"><a href="{{ asset('upload/employee/' . $employee->image) }}"  class="btn mb-2 mr-1 btn-sm btn-info snackbar-bg-info" target="blank">Lihat Gambar Sebelumnya</a>
+											@endif
+											<label class="custom-file-container__custom-file" >
+												<input type="file" name="image" class="custom-file-container__custom-file__custom-file-input" accept="image/*">
+												<input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+												<span class="custom-file-container__custom-file__custom-file-control"></span>
+											</label>
+											<div class="custom-file-container__image-preview"></div>
+											@if ($errors->has('image')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('image') }}</div>@endif
+										</div>
+									</div> -->
+									
+									<button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Simpan"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
+									<button type="reset" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Reset"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></button>
+									<a href="{{ url(Request::segment(1)) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Kembali"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg></a>
+								</form>	
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+            </div>
 
-								<div class="mb-10">
-									<button type="submit" class="btn btn-primary btn-flat btn-sm" title="Tambah Data"> Simpan</button>
-									<button type="reset" class="btn btn-danger btn-flat btn-sm" title="Reset Data"> Reset</button>
-									<a href="{{ url('/'.Request::segment(1)) }}" class="btn btn-warning btn-flat btn-sm" title="Kembali">Kembali</a>
-								</div>
-								</div>
+<script type="text/javascript">
+   var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+   $(document).ready(function(){
+     $( "#sel_emp" ).select2({
+        ajax: { 
+          url: "{{ route('getEducation') }}",
+          type: "post",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+               _token: CSRF_TOKEN,
+               search: params.term
+            };
+          },
+          processResults: function (response) {
+            return {
+              results: response
+            };
+          },
+          cache: true
+        }
 
-							</div>
-						</div>
-					</div>
-				</form>
-				<!--end::Section-->
-			</div>
-			<!--end::Card body-->
-		</div>
-		<!--end::Card-->
-	</div>
-	<!--end::Container-->
-</div>
-<!--end::Post-->
-</div>
-<!--end::Content-->
+     })
 
-<script>
-	$("#kt_daterangepicker_3").daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        minYear: 1900,
-        maxYear: parseInt(moment().format("YYYY"),10)
-    }
-);
-</script> 
+   });
+   </script>
 @endsection

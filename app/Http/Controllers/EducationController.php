@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
 class EducationController extends Controller
 {
@@ -26,82 +27,92 @@ class EducationController extends Controller
         return view('admin.education.index',compact('title','education'));
     }
 
-	## Tampilkan Data Search
-	public function search(Request $request)
-    {
+     ## Tampilkan Data Search
+     public function search(Request $request)
+     {
         $title = "Pendidikan";
         $education = $request->get('search');
         $education = Education::where('name', 'LIKE', '%'.$education.'%')
                 ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
-        return view('admin.education.index',compact('title','education'));
-    }
-	
-    ## Tampilkan Form Create
-    public function create()
+        if($request->input('page')){
+            return view('admin.education.index',compact('title','education'));
+        } else {
+            return view('admin.education.search',compact('title','education'));
+        }
+     }
+     
+
+	## Tampilkan Form Create
+    public function sync()
     {
-        $title = "Pendidikan";
-		$view=view('admin.education.create',compact('title'));
-        $view=$view->render();
-        return $view;
+       // Tarik data dari API
+       $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_all_pendidikan');
+
+       // Menguraikan JSON menjadi array asosiatif
+       $responseArray = json_decode($response, true);
+
+       // Memeriksa apakah status bernilai true
+       if ($responseArray['status']) {
+           $data = $responseArray['data'];
+
+           // Mengambil nilai NIP dari setiap objek dalam array data
+           // $nips = array_column($data, 'NIP');
+
+           // Menentukan ukuran setiap halaman (misalnya, 50 data per halaman)
+           $perPage = 25;
+
+           // Memecah data menjadi halaman-halaman yang lebih kecil
+           $pages = array_chunk($data, $perPage);
+
+           // Menampilkan nilai NIP dan Nama per halaman
+           foreach ($pages as $page) {
+               foreach ($page as $item) {
+
+                   $education = Education::where('code',$item['KodePend'])->first();
+                   if($education){
+                       $education->code =  $item['KodePend'];
+                       $education->name =  $item['Pendidikan'];
+                       $education->level_code =  $item['KdTingkat'];
+                       $education->save();
+                   } else {
+                       $education = New Education();
+                       $education->code =  $item['KodePend'];
+                       $education->name =  $item['Pendidikan'];
+                       $education->level_code =  $item['KdTingkat'];
+                       $education->save();
+                   }
+               }
+           }
+
+           activity()->log('Sinkronisasi Data Education');
+           return redirect('/education')->with('status', 'Data Berhasil Disinkronisasi');
+       } else {
+           // return redirect()->back()->with('error', 'Failed to pull data from API.');
+       }
+
+       // echo $response;
     }
 
-    ## Simpan Data
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'code' => 'required|numeric',
-            'name' => 'required|string',
-            'level_code' => 'required|numeric|digits:2',
-        ]);
+    // Fetch records
+    public function get_education(Request $request){
+        $search = $request->search;
 
-        $education = New Education();
-        $education->fill($request->all());
-    	$education->save();
-        
-        activity()->log('Tambah Data Pendidikan');
-		return redirect('/education')->with('status','Data Tersimpan');
-    }
+        if($search == ''){
+            $education = Education::limit(25)->get();
+        }else{
+            $education = Education::where('name', 'like', '%' .$search . '%')->limit(25)->get();
+        }
 
-    ## Tampilkan Form Edit
-    public function edit($education)
-    {
-        $title = "Pendidikan";
-        $education = Crypt::decrypt($education);
-        $education = Education::where('id',$education)->first();
-        $view=view('admin.education.edit', compact('title','education'));
-        $view=$view->render();
-        return $view;
-    }
+        $response = array();
+            foreach($education as $v){
+            $response[] = array(
+                    "id"=>$v->id,
+                    "text"=>$v->name
+            );
+        }
+        return response()->json($response); 
+    } 
 
-    ## Edit Data
-    public function update(Request $request, $education)
-    {
-        
-        $education = Crypt::decrypt($education);
-        $education = Education::where('id',$education)->first();
-
-        $this->validate($request, [
-            'code' => 'required|numeric',
-            'name' => 'required|string',
-            'level_code' => 'required|numeric|digits:2',
-        ]);
-
-        $education->fill($request->all());
-    	$education->save();
-		
-        activity()->log('Ubah Data Pendidikan dengan ID = '.$education->id);
-		return redirect('/education')->with('status', 'Data Berhasil Diubah');
-    }
-
-    ## Hapus Data
-    public function delete($education)
-    {
-        $education = Crypt::decrypt($education);
-        $education = Education::where('id',$education)->first();
-    	$education->delete();
-
-        activity()->log('Hapus Data Pendidikan dengan ID = '.$education->id);
-        return redirect('/education')->with('status', 'Data Berhasil Dihapus');
-    }
+    
 }

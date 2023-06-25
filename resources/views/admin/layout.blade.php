@@ -7,31 +7,51 @@ $setting = SiteHelpers::setting();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $setting->application_name }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('upload/setting/'.$setting->small_icon) }}"/>
-    <link href="{{ asset('assets/assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
-    <script src="{{ asset('assets/assets/js/loader.js') }}"></script>
+    <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('assets/js/loader.js') }}"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
-    <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet" type="text/css">
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
-    <link href="{{ asset('assets/plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('assets/assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
     
     <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="{{ asset('assets/assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/plugins/animate/animate.css') }}" rel="stylesheet" type="text/css" />
-    <script src="{{ asset('assets/plugins/sweetalerts/promise-polyfill.js') }}"></script>
-    <link href="{{ asset('assets/plugins/sweetalerts/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/plugins/sweetalerts/sweetalert.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/assets/css/components/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/assets/css/elements/alert.css') }}">
-    <!-- END THEME GLOBAL STYLES -->
+    <link href="{{ asset('assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/animate/animate.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('plugins/sweetalerts/promise-polyfill.js') }}"></script>
+    <link href="{{ asset('plugins/sweetalerts/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/sweetalerts/sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/components/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/elements/alert.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('plugins/font-icons/fontawesome2/css/all.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('plugins/font-icons/fontawesome2/css/fontawesome.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/select2.min.css') }}">
+    <link href="{{ asset('plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('plugins/flatpickr/custom-flatpickr.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('plugins/noUiSlider/custom-nouiSlider.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('plugins/bootstrap-range-Slider/bootstrap-slider.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('plugins/notification/snackbar/snackbar.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    
+   <!-- CSS -->
+   <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
+
+    <!-- Script -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 
 </head>
 <body class="sidebar-noneoverflow">
@@ -262,8 +282,8 @@ $setting = SiteHelpers::setting();
                 <div class="shadow-bottom"></div>
                 <ul class="list-unstyled menu-categories" id="accordionExample">
                     
-                    <li class="menu active">
-                        <a href="fonticons.html" aria-expanded="true" class="dropdown-toggle">
+                    <li class="menu @if(Request::segment(1)=="dashboard") active @endif">
+                        <a href="{{ url('dashboard') }}"  @if(Request::segment(1)=="dashboard") aria-expanded="true" @endif class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                                 <span>Dashboard</span>
@@ -318,8 +338,8 @@ $setting = SiteHelpers::setting();
                         </ul>
                     </li>
 
-                    <li class="menu">
-                        <a href="#master" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <li class="menu @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") active @endif">
+                        <a href="#master" data-toggle="collapse" @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") aria-expanded="true" @endif class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 <span>Master Data</span>
@@ -328,21 +348,21 @@ $setting = SiteHelpers::setting();
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled" id="master" data-parent="#accordionExample">
-                            <li>
-                                <a href="component_tabs.html"> Daftar Pegawai </a>
+                        <ul class="collapse submenu list-unstyled @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") show @endif" id="master" data-parent="#accordionExample">
+                            <li @if(Request::segment(1)=="employee") class="active" @endif>
+                                <a href="{{ url('employee') }}"> Daftar Pegawai </a>
                             </li>
-                            <li>
-                                <a href="component_accordion.html"> Pendidikan  </a>
+                            <li @if(Request::segment(1)=="education") class="active" @endif>
+                                <a href="{{ url('education') }}"> Pendidikan</a>
                             </li>
-                            <li>
-                                <a href="component_modal.html"> Golongan </a>
-                            </li>                            
-                            <li>
-                                <a href="component_cards.html"> Jabatan </a>
+                            <li @if(Request::segment(1)=="class") class="active" @endif>
+                                <a href="{{ url('class') }}"> Golongan</a>
                             </li>
-                            <li>
-                                <a href="component_bootstrap_carousel.html">Unit Organisasi</a>
+                            <!-- <li>
+                                <a href="{{ url('position') }}"> Jabatan</a>
+                            </li> -->
+                            <li @if(Request::segment(1)=="unit") class="active" @endif>
+                                <a href="{{ url('unit') }}">Unit Organisasi</a>
                             </li>
                         </ul>
                     </li>
@@ -359,7 +379,7 @@ $setting = SiteHelpers::setting();
                         </a>
                         <ul class="collapse submenu list-unstyled" id="riwayat" data-parent="#accordionExample">
                             <li>
-                                <a href="component_tabs.html"> Golongan </a>
+                                <a href="{{ url('class_employee') }}"> Golongan </a>
                             </li>
                             <li>
                                 <a href="component_accordion.html"> Pendidikan  </a>
@@ -423,30 +443,80 @@ $setting = SiteHelpers::setting();
     <!-- END MAIN CONTAINER -->
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-    <script src="{{ asset('assets/assets/js/libs/jquery-3.1.1.min.js') }}"></script>
-    <script src="{{ asset('assets/bootstrap/js/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('assets/assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/js/popper.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
     <script>
         $(document).ready(function() {
             App.init();
         });
     </script>
-    <script src="assets/js/custom.js"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
     <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="{{ asset('assets/plugins/apex/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('assets/assets/js/dashboard/dash_1.js') }}"></script>
+    <script src="{{ asset('plugins/apex/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dashboard/dash_1.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
     
     <!-- BEGIN THEME GLOBAL STYLE -->
-    <script src="{{ asset('assets/assets/js/scrollspyNav.js') }}"></script>
-    <script src="{{ asset('assets/plugins/sweetalerts/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/sweetalerts/custom-sweetalert.js') }}"></script>
+    <script src="{{ asset('assets/js/scrollspyNav.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalerts/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalerts/custom-sweetalert.js') }}"></script>
+    <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('plugins/select2/custom-select2.js') }}"></script>
+    <script src="{{ asset('plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
+    <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('plugins/noUiSlider/nouislider.min.js') }}"></script>
+    <script src="{{ asset('plugins/flatpickr/custom-flatpickr.js') }}"></script>
+    <script src="{{ asset('plugins/noUiSlider/custom-nouiSlider.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js') }}"></script>
+    <!-- <script src="{{ asset('plugins/notification/snackbar/snackbar.min.js') }}"></script> -->
+    <!-- END PAGE LEVEL PLUGINS -->
+
+    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+    <script src="{{ asset('assets/js/components/notification/custom-snackbar.js') }}"></script>
+    <!--  END CUSTOM SCRIPTS FILE  -->
+    
+
     <!-- END THEME GLOBAL STYLE -->    
+    <script>
+        //First upload
+        var firstUpload = new FileUploadWithPreview('myFirstImage')
+        //Second upload
+        var secondUpload = new FileUploadWithPreview('mySecondImage')
+
+        function formatRupiah(objek, separator) {
+            a = objek.value;
+            b = a.replace(/[^\d]/g, "");
+            c = "";
+            panjang = b.length;
+            j = 0;
+            for (i = panjang; i > 0; i--) {
+                j = j + 1;
+                if (((j % 3) == 1) && (j != 1)) {
+                    c = b.substr(i - 1, 1) + separator + c;
+                } else {
+                    c = b.substr(i - 1, 1) + c;
+                }
+            }
+            objek.value = c;
+        }
+
+        // Get the Toast button
+        var toastButton = document.getElementById("toast-btn");
+        // Get the Toast element
+        var toastElement = document.getElementsByClassName("toast")[0];
+
+        toastButton.onclick = function() {
+            $('.toast').toast('show');
+        }
+
+    </script>
+    <!-- END PAGE LEVEL PLUGINS -->    
 
 </body>
 </html>

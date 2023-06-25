@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Classes;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; //untuk membuat query di controller
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Crypt;
+// use Illuminate\Support\Facades\DB; //untuk membuat query di controller
+// use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
 class ClassController extends Controller
 {
@@ -21,87 +22,80 @@ class ClassController extends Controller
     ## Tampikan Data
     public function index()
     {
-        $title = "Golongan";
-        $class = Classes::orderBy('id','DESC')->paginate(25)->onEachSide(1);
-        return view('admin.class.index',compact('title','class'));
+        $title = "Jabatan";
+        $classes = Classes::orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        return view('admin.classes.index',compact('title','classes'));
     }
 
-	## Tampilkan Data Search
-	public function search(Request $request)
+    ## Tampilkan Data Search
+    public function search(Request $request)
     {
-        $title = "Golongan";
-        $class = $request->get('search');
-        $class = Classes::where('name', 'LIKE', '%'.$class.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $title = "Jabatan";
+        $classes = $request->get('search');
+        $classes = Classes::
+                where(function ($query) use ($classes) {
+                    $query->where('code', 'LIKE', '%'.$classes.'%')
+                        ->orWhere('class', 'LIKE', '%'.$classes.'%')
+                        ->orWhere('rank', 'LIKE', '%'.$classes.'%');
+                })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
-        return view('admin.class.index',compact('title','class'));
+        if($request->input('page')){
+            return view('admin.classes.index',compact('title','classes'));
+        } else {
+            return view('admin.classes.search',compact('title','classes'));
+        }
     }
-	
-    ## Tampilkan Form Create
-    public function create()
+     
+
+	## Tampilkan Form Create
+    public function sync()
     {
-        $title = "Golongan";
-		$view=view('admin.class.create',compact('title'));
-        $view=$view->render();
-        return $view;
+       // Tarik data dari API
+       $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_all_golongan');
+
+       // Menguraikan JSON menjadi array asosiatif
+       $responseArray = json_decode($response, true);
+
+       // Memeriksa apakah status bernilai true
+       if ($responseArray['status']) {
+           $data = $responseArray['data'];
+
+           // Mengambil nilai NIP dari setiap objek dalam array data
+           // $nips = array_column($data, 'NIP');
+
+           // Menentukan ukuran setiap halaman (misalnya, 50 data per halaman)
+           $perPage = 25;
+
+           // Memecah data menjadi halaman-halaman yang lebih kecil
+           $pages = array_chunk($data, $perPage);
+
+           // Menampilkan nilai NIP dan Nama per halaman
+           foreach ($pages as $page) {
+               foreach ($page as $item) {
+
+                   $classes = Classes::where('code',$item['KdGol'])->first();
+                   if($classes){
+                       $classes->code =  $item['KdGol'];
+                       $classes->class =  $item['Golongan'];
+                       $classes->rank =  $item['Pangkat'];
+                       $classes->save();
+                   } else {
+                       $classes = New Classes();
+                       $classes->code =  $item['KdGol'];
+                       $classes->class =  $item['Golongan'];
+                       $classes->rank =  $item['Pangkat'];
+                       $classes->save();
+                   }
+               }
+           }
+
+           activity()->log('Sinkronisasi Data Class');
+           return redirect('/class')->with('status', 'Data Berhasil Disinkronisasi');
+       } else {
+           // return redirect()->back()->with('error', 'Failed to pull data from API.');
+       }
+
+       // echo $response;
     }
-
-    ## Simpan Data
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'code' => 'required|numeric|digits:2',
-            'class' => 'required|string',
-            'rank' => 'required|string',
-        ]);
-
-        $class = New Classes();
-        $class->fill($request->all());
-    	$class->save();
-        
-        activity()->log('Tambah Data Golongan');
-		return redirect('/class')->with('status','Data Tersimpan');
-    }
-
-    ## Tampilkan Form Edit
-    public function edit($class)
-    {
-        $title = "Golongan";
-        $class = Crypt::decrypt($class);
-        $class = Classes::where('id',$class)->first();
-        $view=view('admin.class.edit', compact('title','class'));
-        $view=$view->render();
-        return $view;
-    }
-
-    ## Edit Data
-    public function update(Request $request, $class)
-    {
-        
-        $class = Crypt::decrypt($class);
-        $class = Classes::where('id',$class)->first();
-
-        $this->validate($request, [
-            'code' => 'required|numeric|digits:2',
-            'class' => 'required|string',
-            'rank' => 'required|string',
-        ]);
-
-        $class->fill($request->all());
-    	$class->save();
-		
-        activity()->log('Ubah Data Golongan dengan ID = '.$class->id);
-		return redirect('/class')->with('status', 'Data Berhasil Diubah');
-    }
-
-    ## Hapus Data
-    public function delete($class)
-    {
-        $class = Crypt::decrypt($class);
-        $class = Classes::where('id',$class)->first();
-    	$class->delete();
-
-        activity()->log('Hapus Data Golongan dengan ID = '.$class->id);
-        return redirect('/class')->with('status', 'Data Berhasil Dihapus');
-    }
+    
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\PositionController;
@@ -73,7 +74,7 @@ Route::get('/backup_database', function() {
     return response()->download(public_path().'/db_backup/eduk-backup-' . Carbon::now()->format('Y-m-d') . '.sql');
 });
 
-Route::middleware(['user_access','verified'])->group(function () {
+// Route::middleware(['user_access','verified'])->group(function () {
     
     ## Pegawai
     Route::get('/employee', [EmployeeController::class, 'index']);
@@ -83,43 +84,28 @@ Route::middleware(['user_access','verified'])->group(function () {
     Route::get('/employee/edit/{employee}', [EmployeeController::class, 'edit']);
     Route::put('/employee/edit/{employee}', [EmployeeController::class, 'update']);
     Route::get('/employee/hapus/{employee}',[EmployeeController::class, 'delete']);
-
+    Route::get('/employee/sync', [EmployeeController::class, 'sync']);
 
     ## Pendidikan
     Route::get('/education', [EducationController::class, 'index']);
     Route::get('/education/search', [EducationController::class, 'search']);
-    Route::get('/education/create', [EducationController::class, 'create']);
-    Route::post('/education', [EducationController::class, 'store']);
-    Route::get('/education/edit/{education}', [EducationController::class, 'edit']);
-    Route::put('/education/edit/{education}', [EducationController::class, 'update']);
-    Route::get('/education/hapus/{education}',[EducationController::class, 'delete']);
+    Route::get('/education/sync', [EducationController::class, 'sync']);
+    Route::post('/get_education', [EducationController::class, 'get_education'])->name('getEducation');
 
     ## Golongan
     Route::get('/class', [ClassController::class, 'index']);
     Route::get('/class/search', [ClassController::class, 'search']);
-    Route::get('/class/create', [ClassController::class, 'create']);
-    Route::post('/class', [ClassController::class, 'store']);
-    Route::get('/class/edit/{class}', [ClassController::class, 'edit']);
-    Route::put('/class/edit/{class}', [ClassController::class, 'update']);
-    Route::get('/class/hapus/{class}',[ClassController::class, 'delete']);
+    Route::get('/class/sync', [ClassController::class, 'sync']);
 
     ## Jabatan
     Route::get('/position', [PositionController::class, 'index']);
     Route::get('/position/search', [PositionController::class, 'search']);
-    Route::get('/position/create', [PositionController::class, 'create']);
-    Route::post('/position', [PositionController::class, 'store']);
-    Route::get('/position/edit/{position}', [PositionController::class, 'edit']);
-    Route::put('/position/edit/{position}', [PositionController::class, 'update']);
-    Route::get('/position/hapus/{position}',[PositionController::class, 'delete']);
+    Route::get('/position/sync', [PositionController::class, 'sync']);
 
     ## Unor
     Route::get('/unit', [UnitController::class, 'index']);
     Route::get('/unit/search', [UnitController::class, 'search']);
-    Route::get('/unit/create', [UnitController::class, 'create']);
-    Route::post('/unit', [UnitController::class, 'store']);
-    Route::get('/unit/edit/{unit}', [UnitController::class, 'edit']);
-    Route::put('/unit/edit/{unit}', [UnitController::class, 'update']);
-    Route::get('/unit/hapus/{unit}',[UnitController::class, 'delete']);
+    Route::get('/unit/sync', [UnitController::class, 'sync']);
 
     ## Opd
     Route::get('/slider', [SliderController::class, 'index']);
@@ -170,9 +156,9 @@ Route::middleware(['user_access','verified'])->group(function () {
     Route::get('/log', [LogController::class, 'index']);
     Route::get('/log/search', [LogController::class, 'search']);
 
-});
+// });
 
-Route::middleware(['cek_status'])->group(function () {
+// Route::middleware(['cek_status'])->group(function () {
     Route::get('/report',[ReportController::class, 'index']);
 
     ## Sub Menu
@@ -206,7 +192,15 @@ Route::middleware(['cek_status'])->group(function () {
     Route::get('/setting', [SettingController::class, 'index']);
     Route::put('/setting/edit/{setting}', [SettingController::class, 'update']);
 
-});
+    
+    # Riwayat Golongan
+    Route::get('/class_employee', [EmployeeController::class, 'index']);
+    Route::get('/class_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/class_history/{employee}', [ClassHistoryController::class, 'index']);
+    Route::get('/class_history/search/{employee}', [ClassHistoryController::class, 'search']);
+    Route::get('/class_history/sync/{employee}', [ClassHistoryController::class, 'sync']);
+
+// });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
 
