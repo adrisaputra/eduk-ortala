@@ -198,6 +198,7 @@ Route::get('/backup_database', function() {
     Route::get('/class_employee/search', [EmployeeController::class, 'search']);
     Route::get('/class_history/{employee}', [ClassHistoryController::class, 'index']);
     Route::get('/class_history/search/{employee}', [ClassHistoryController::class, 'search']);
+    Route::get('/class_history_sync_all', [ClassHistoryController::class, 'sync_all']);
     Route::get('/class_history/sync/{employee}', [ClassHistoryController::class, 'sync']);
 
 // });

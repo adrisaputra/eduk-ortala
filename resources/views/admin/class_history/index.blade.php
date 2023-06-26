@@ -25,8 +25,8 @@
 								<div class="row">
 									<div class="col-xl-8 col-md-12 col-sm-12 col-12">
 										<a href="{{ url(Request::segment(1).'/sync/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
-										<a href="{{ url(Request::segment(1).'/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-warning snackbar-bg-warning" data-toggle="tooltip" data-placement="top" title="Refresh">Refresh</a>
-										<!-- <a id="editButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Edit Data" disabled>Edit</a> -->
+										<a href="{{ url(Request::segment(1).'/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
+										<a href="{{ url('class_employee') }}" class="btn mb-2 mr-1 btn-danger" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></a>
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 										<div class="input-group" >
@@ -43,6 +43,14 @@
 									<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="alert"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 									</button> <h4 style="color: #ffffff;"><i class="image fa fa-check"></i> Berhasil !</h4>
+									{{ $message }}
+								</div>     
+							@endif
+							@if ($message = Session::get('status2'))
+								<div class="alert alert-danger mb-4" role="alert"> 
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="alert"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+									</button> <h4 style="color: #ffffff;"><i class="image fa fa-check"></i> Gagal !</h4>
 									{{ $message }}
 								</div>     
 							@endif
@@ -70,7 +78,6 @@
 												<th>TMT Pangkat</th>
 												<th>SK. Pejabat</th>
 												<th>No. SK</th>
-												<th>Tanggal. SK</th>
 												<th>Tanggal. SK</th>
 												<th>Masa Kerja Tahun</th>
 												<th>Masa Kerja Bulan</th>
