@@ -7,6 +7,7 @@
 				<th>NIP</th>
 				<th>Nama</th>
 				<th>Status Pegawai</th>
+				<th>Unor</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -16,6 +17,7 @@
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->nip }}</td>
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->name }}</td>
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->status }}</td>
+				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->unit->name }}</td>
 			</tr>
 		@endforeach
 		</tbody>

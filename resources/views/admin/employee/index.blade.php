@@ -15,7 +15,12 @@
                             <div class="widget-header">
                                 <div class="row">
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-							 		<h4>Data {{ __($title) }} @if(Request::segment(1)=="class_employee") (Riwayat Golongan) @endif</h4>
+							 		<h4>Data {{ __($title) }} 
+										@if(Request::segment(1)=="class_employee") 
+											(Riwayat Golongan) 
+										@elseif(Request::segment(1)=="education_employee") 
+											(Riwayat Pendidikan) 
+										@endif</h4>
                                     </div>                 
                                 </div>
                             </div>
@@ -33,6 +38,10 @@
 											<a href="{{ url('class_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowClassButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Golongan" disabled>Lihat Riwayat Golongan</a>
+										@elseif(Request::segment(1)=="education_employee")
+											<a href="{{ url('class_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
+											<a id="ShowEducationButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Pendidikan" disabled>Lihat Riwayat Pendidikan</a>
 										@endif
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
@@ -121,6 +130,18 @@
 			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
 			url = "{{ url('/class_history/') }}"
 			ShowClassButton.href = ""+url+"/"+employeeId;
+
+		@elseif(Request::segment(1)=="education_employee")
+		
+			var ShowEducationButton = document.getElementById("ShowEducationButton");
+			ShowEducationButton.removeAttribute("disabled");
+			// Mengubah kelas tombol edit
+			ShowEducationButton.classList.remove("btn-default");
+			ShowEducationButton.classList.add("btn-success");
+
+			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
+			url = "{{ url('/education_history/') }}"
+			ShowEducationButton.href = ""+url+"/"+employeeId;
 
 		@endif
 	}

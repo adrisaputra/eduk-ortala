@@ -382,7 +382,7 @@ $setting = SiteHelpers::setting();
                                 <a href="{{ url('class_employee') }}"> Golongan </a>
                             </li>
                             <li>
-                                <a href="component_accordion.html"> Pendidikan  </a>
+                                <a href="{{ url('education_employee') }}"> Pendidikan  </a>
                             </li>
                             <li>
                                 <a href="component_cards.html"> Jabatan </a>
