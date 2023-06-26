@@ -26,12 +26,7 @@
 									<div class="col-xl-8 col-md-12 col-sm-12 col-12">
 										<a href="{{ url(Request::segment(1).'/sync/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 										<a href="{{ url(Request::segment(1).'/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
-										<a href="{{ url('education_employee') }}" class="btn mb-2 mr-1 btn-danger" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></a>
-									</div>
-									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
-										<div class="input-group" >
-											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()">
-										</div>
+										<a href="{{ url('position_employee') }}" class="btn mb-2 mr-1 btn-danger" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></a>
 									</div>
 								</div>
 							</div>
@@ -73,26 +68,36 @@
 											<tr>
 												<th style="width: 2%">No</th>
 												<th>NIP</th>
-												<th>Nama Pejabat</th>
-												<th>No. Ijazah</th>
-												<th>Tanggal. Ijazah</th>
-												<th>Nama Sekolah</th>
+												<th>Unit Kerja</th>
+												<th>Jenis Jabatan</th>
+												<th>Jabatan</th>
+												<th>Eselon</th>
+												<th>TMT. Jabatan</th>
+												<th>No. SK</th>
+												<th>Tgl SK</th>
+												<!-- <th>Pejabat</th>
+												<th>Status Sumpah</th> -->
 											</tr>
 										</thead>
 										<tbody>
-										@foreach($education_history as $v)
+										@foreach($position_history as $v)
 											<tr onclick="selectRow(this)">
-												<td id="education_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($education_history ->currentpage()-1) * $education_history ->perpage() + $loop->index + 1 }}</td>
-												<td id="education_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->nip }}</td>
-												<td id="education_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->official_name }}</td>
-												<td id="education_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->diploma_number }}</td>
-												<td id="education_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->diploma_date }}</td>
-												<td id="education_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->school_name }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($position_history ->currentpage()-1) * $position_history ->perpage() + $loop->index + 1 }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->nip }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->unit }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->position_type }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->position }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->eselon }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->tmt }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->sk_number }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->sk_date }}</td>
+												<!-- <td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->official_name }}</td>
+												<td id="position_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->sworn_status }}</td> -->
 											</tr>
 										@endforeach
 										</tbody>
 									</table>
-									<div class="paginating-container">{{ $education_history->appends(Request::only('search'))->links() }}</div>
+									<div class="paginating-container">{{ $position_history->appends(Request::only('search'))->links() }}</div>
 									</div>
 								</div>
                             </div>
@@ -108,9 +113,9 @@
 	}
 
 	function getEmployee(id){
-		// Mendapatkan nilai ID dengan menghapus "education_history-" dari awal ID
-		var education_historyId = id.replace("education_history-", "");
-		console.log("ID pegawai yang diklik:", education_historyId);
+		// Mendapatkan nilai ID dengan menghapus "position_history-" dari awal ID
+		var position_historyId = id.replace("position_history-", "");
+		console.log("ID pegawai yang diklik:", position_historyId);
 
 		// Mengaktifkan tombol edit
 		var editButton = document.getElementById("editButton");
@@ -120,8 +125,8 @@
 		editButton.classList.add("btn-success");
 
 		// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
-		url = "{{ url('/education_history/edit') }}"
-		editButton.href = ""+url+"/"+education_historyId;
+		url = "{{ url('/position_history/edit') }}"
+		editButton.href = ""+url+"/"+position_historyId;
 	}
 
 	// Menambahkan event listener untuk mendeteksi klik di luar elemen dengan ID pegawai
@@ -129,7 +134,7 @@
 		var clickedElement = event.target;
 		var editButton = getElementById("editButton");
 		// Memeriksa apakah elemen yang diklik bukanlah <td> dengan ID pegawai atau tombol edit itu sendiri
-		if (!clickedElement.matches("td[id^='education_history-']") && clickedElement !== editButton) {
+		if (!clickedElement.matches("td[id^='position_history-']") && clickedElement !== editButton) {
 			// Menonaktifkan tombol edit
 			editButton.setAttribute("disabled", "disabled");
 			// Mengubah kelas tombol edit
@@ -160,7 +165,7 @@
 <script>
 function tampil(){
     search = document.getElementById("search").value;
-    url = "{{ url('/education_history/search') }}"
+    url = "{{ url('/position_history/search') }}"
     $.ajax({
         url:""+url+"?search="+search+"",
         success: function(response){
@@ -188,7 +193,7 @@ function tampil(){
                     'Data Berita Berhasil Dihapus.',
                     'success'
                     ).then(function() {
-						url = "{{ url('/education_history/delete') }}"
+						url = "{{ url('/position_history/delete') }}"
                         $.ajax({
                             url:""+url+"/"+id+"",
                             success: function(response){

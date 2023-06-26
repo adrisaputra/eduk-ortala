@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationHistoryController;
+use App\Http\Controllers\PositionHistoryController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\PositionController;
@@ -209,6 +210,14 @@ Route::get('/backup_database', function() {
     Route::get('/education_history/search/{employee}', [EducationHistoryController::class, 'search']);
     Route::get('/education_history_sync_all', [EducationHistoryController::class, 'sync_all']);
     Route::get('/education_history/sync/{employee}', [EducationHistoryController::class, 'sync']);
+
+    # Riwayat Jabatan
+    Route::get('/position_employee', [EmployeeController::class, 'index']);
+    Route::get('/position_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/position_history/{employee}', [PositionHistoryController::class, 'index']);
+    Route::get('/position_history/search/{employee}', [PositionHistoryController::class, 'search']);
+    Route::get('/position_history_sync_all', [PositionHistoryController::class, 'sync_all']);
+    Route::get('/position_history/sync/{employee}', [PositionHistoryController::class, 'sync']);
 
 // });
 

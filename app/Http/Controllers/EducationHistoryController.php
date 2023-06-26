@@ -47,9 +47,11 @@ class EducationHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        $education_history = EducationHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
         foreach($employee as $v){
+
 
             // Tarik data dari API
             $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_riwayat_pendidikan_by_nip?nip='.$v->nip);
@@ -73,50 +75,19 @@ class EducationHistoryController extends Controller
                 // Menampilkan nilai NIP dan Nama per halaman
                 foreach ($pages as $page) {
                     foreach ($page as $item) {
-
-                        $education_history = EducationHistory::where('nip',$item['NIP'])->first();
-                        if($education_history){
-                            $education_history->employee_id =  $v->id;
-                            $education_history->nip =  $item['NIP'];
-                            
-                            $class = Education::where('code',$item['KdGol'])->first();
-                            $education_history->classes_id =  $class ? $class->id : null;
-                            
-                            $education_history->rank =  $item['Pangkat'];
-                            $education_history->class =  $item['Pendidikan'];
-                            $education_history->tmt =  $item['TMT_Pangkat'];
-                            $education_history->sk_official =  $item['SK_Pejabat'];
-                            $education_history->sk_number =  $item['SK_Nomor'];
-                            $education_history->sk_date =  $item['SK_Tanggal'];
-                            $education_history->mk_year =  $item['MKerja_Thn'];
-                            $education_history->mk_month =  $item['MKerja_bln'];
-                            $education_history->current_rank =  $item['PktSaatIni'];
-                            $education_history->no_bkn =  $item['no_bkn'];
-                            $education_history->date_bkn =  $item['tgl_bkn'];
-                            $education_history->kp_type =  $item['jenis_kp'];
-                            $education_history->save();
-                        } else {
-                            $education_history = New EducationHistory();
-                            $education_history->employee_id =  $v->id;
-                            $education_history->nip =  $item['NIP'];
-
-                            $class = Education::where('code',$item['KdGol'])->first();
-                            $education_history->classes_id =  $class ? $class->id : null;
-                            
-                            $education_history->rank =  $item['Pangkat'];
-                            $education_history->class =  $item['Pendidikan'];
-                            $education_history->tmt =  $item['TMT_Pangkat'];
-                            $education_history->sk_official =  $item['SK_Pejabat'];
-                            $education_history->sk_number =  $item['SK_Nomor'];
-                            $education_history->sk_date =  $item['SK_Tanggal'];
-                            $education_history->mk_year =  $item['MKerja_Thn'];
-                            $education_history->mk_month =  $item['MKerja_bln'];
-                            $education_history->current_rank =  $item['PktSaatIni'];
-                            $education_history->no_bkn =  $item['no_bkn'];
-                            $education_history->date_bkn =  $item['tgl_bkn'];
-                            $education_history->kp_type =  $item['jenis_kp'];
-                            $education_history->save();
-                        }
+                        $education_history = New EducationHistory();
+                        $education_history->employee_id =  $v->id;
+                        $education_history->nip =  $item['NIP'];
+    
+                        $education = Education::where('code',$item['KodePend'])->first();
+                        $education_history->education_id =  $education ? $education->id : null;
+                        
+                        $education_history->official_name =  $item['PEND_NAMAPEJABAT'];
+                        $education_history->diploma_number =  $item['PEND_NOIJAZAH'];
+                        $education_history->diploma_date =  $item['PEND_TGLIJAZAH'];
+                        $education_history->school_name =  $item['nama_sekolah'];
+                        $education_history->current_education =  $item['pend_saat_ini'];
+                        $education_history->save();
                     }
                 }
 
@@ -128,20 +99,22 @@ class EducationHistoryController extends Controller
         }
         
 
-        return redirect('/class_employee')->with('status', 'Data Berhasil Disinkronisasi');
+        return redirect('/education_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 
 	## Tampilkan Form Create
     public function sync(Employee $employee)
     {
-       // Tarik data dari API
-       $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_riwayat_pendidikan_by_nip?nip='.$employee->nip);
+        EducationHistory::where('nip',$employee->nip)->forceDelete();
 
-       // Menguraikan JSON menjadi array asosiatif
-       $responseArray = json_decode($response, true);
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_riwayat_pendidikan_by_nip?nip='.$employee->nip);
 
-       // Memeriksa apakah status bernilai true
-       if ($responseArray['status']) {
+        // Menguraikan JSON menjadi array asosiatif
+        $responseArray = json_decode($response, true);
+
+        // Memeriksa apakah status bernilai true
+        if ($responseArray['status']) {
            $data = $responseArray['data'];
 
            // Mengambil nilai NIP dari setiap objek dalam array data
@@ -157,53 +130,23 @@ class EducationHistoryController extends Controller
            foreach ($pages as $page) {
                foreach ($page as $item) {
 
-                   $education_history = EducationHistory::where('nip',$item['NIP'])->first();
-                   if($education_history){
-                       $education_history->employee_id =  $employee->id;
-                       $education_history->nip =  $item['NIP'];
-                       
-                       $class = Education::where('code',$item['KdGol'])->first();
-                       $education_history->classes_id =  $class ? $class->id : null;
-                       
-                       $education_history->rank =  $item['Pangkat'];
-                       $education_history->class =  $item['Pendidikan'];
-                       $education_history->tmt =  $item['TMT_Pangkat'];
-                       $education_history->sk_official =  $item['SK_Pejabat'];
-                       $education_history->sk_number =  $item['SK_Nomor'];
-                       $education_history->sk_date =  $item['SK_Tanggal'];
-                       $education_history->mk_year =  $item['MKerja_Thn'];
-                       $education_history->mk_month =  $item['MKerja_bln'];
-                       $education_history->current_rank =  $item['PktSaatIni'];
-                       $education_history->no_bkn =  $item['no_bkn'];
-                       $education_history->date_bkn =  $item['tgl_bkn'];
-                       $education_history->kp_type =  $item['jenis_kp'];
-                       $education_history->save();
-                   } else {
                        $education_history = New EducationHistory();
                        $education_history->employee_id =  $employee->id;
                        $education_history->nip =  $item['NIP'];
 
-                       $class = Education::where('code',$item['KdGol'])->first();
-                       $education_history->classes_id =  $class ? $class->id : null;
+                       $education = Education::where('code',$item['KodePend'])->first();
+                       $education_history->education_id =  $education ? $education->id : null;
                        
-                       $education_history->rank =  $item['Pangkat'];
-                       $education_history->class =  $item['Pendidikan'];
-                       $education_history->tmt =  $item['TMT_Pangkat'];
-                       $education_history->sk_official =  $item['SK_Pejabat'];
-                       $education_history->sk_number =  $item['SK_Nomor'];
-                       $education_history->sk_date =  $item['SK_Tanggal'];
-                       $education_history->mk_year =  $item['MKerja_Thn'];
-                       $education_history->mk_month =  $item['MKerja_bln'];
-                       $education_history->current_rank =  $item['PktSaatIni'];
-                       $education_history->no_bkn =  $item['no_bkn'];
-                       $education_history->date_bkn =  $item['tgl_bkn'];
-                       $education_history->kp_type =  $item['jenis_kp'];
+                       $education_history->official_name =  $item['PEND_NAMAPEJABAT'];
+                       $education_history->diploma_number =  $item['PEND_NOIJAZAH'];
+                       $education_history->diploma_date =  $item['PEND_TGLIJAZAH'];
+                       $education_history->school_name =  $item['nama_sekolah'];
+                       $education_history->current_education =  $item['pend_saat_ini'];
                        $education_history->save();
-                   }
                }
            }
 
-           activity()->log('Sinkronisasi Data EducationHistory');
+           activity()->log('Sinkronisasi Data Education History');
            return redirect('/education_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
        } else {
             return redirect('/education_history/'.$employee->id)->with('status2', 'Data Gagal Disinkronisasi');

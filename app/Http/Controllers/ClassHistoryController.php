@@ -47,6 +47,8 @@ class ClassHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        
+        ClassHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
         foreach($employee as $v){
@@ -73,50 +75,26 @@ class ClassHistoryController extends Controller
                 // Menampilkan nilai NIP dan Nama per halaman
                 foreach ($pages as $page) {
                     foreach ($page as $item) {
+                        $class_history = New ClassHistory();
+                        $class_history->employee_id =  $v->id;
+                        $class_history->nip =  $item['NIP'];
 
-                        $class_history = ClassHistory::where('nip',$item['NIP'])->first();
-                        if($class_history){
-                            $class_history->employee_id =  $v->id;
-                            $class_history->nip =  $item['NIP'];
-                            
-                            $class = Classes::where('code',$item['KdGol'])->first();
-                            $class_history->classes_id =  $class ? $class->id : null;
-                            
-                            $class_history->rank =  $item['Pangkat'];
-                            $class_history->class =  $item['Golongan'];
-                            $class_history->tmt =  $item['TMT_Pangkat'];
-                            $class_history->sk_official =  $item['SK_Pejabat'];
-                            $class_history->sk_number =  $item['SK_Nomor'];
-                            $class_history->sk_date =  $item['SK_Tanggal'];
-                            $class_history->mk_year =  $item['MKerja_Thn'];
-                            $class_history->mk_month =  $item['MKerja_bln'];
-                            $class_history->current_rank =  $item['PktSaatIni'];
-                            $class_history->no_bkn =  $item['no_bkn'];
-                            $class_history->date_bkn =  $item['tgl_bkn'];
-                            $class_history->kp_type =  $item['jenis_kp'];
-                            $class_history->save();
-                        } else {
-                            $class_history = New ClassHistory();
-                            $class_history->employee_id =  $v->id;
-                            $class_history->nip =  $item['NIP'];
-
-                            $class = Classes::where('code',$item['KdGol'])->first();
-                            $class_history->classes_id =  $class ? $class->id : null;
-                            
-                            $class_history->rank =  $item['Pangkat'];
-                            $class_history->class =  $item['Golongan'];
-                            $class_history->tmt =  $item['TMT_Pangkat'];
-                            $class_history->sk_official =  $item['SK_Pejabat'];
-                            $class_history->sk_number =  $item['SK_Nomor'];
-                            $class_history->sk_date =  $item['SK_Tanggal'];
-                            $class_history->mk_year =  $item['MKerja_Thn'];
-                            $class_history->mk_month =  $item['MKerja_bln'];
-                            $class_history->current_rank =  $item['PktSaatIni'];
-                            $class_history->no_bkn =  $item['no_bkn'];
-                            $class_history->date_bkn =  $item['tgl_bkn'];
-                            $class_history->kp_type =  $item['jenis_kp'];
-                            $class_history->save();
-                        }
+                        $class = Classes::where('code',$item['KdGol'])->first();
+                        $class_history->classes_id =  $class ? $class->id : null;
+                        
+                        $class_history->rank =  $item['Pangkat'];
+                        $class_history->class =  $item['Golongan'];
+                        $class_history->tmt =  $item['TMT_Pangkat'];
+                        $class_history->sk_official =  $item['SK_Pejabat'];
+                        $class_history->sk_number =  $item['SK_Nomor'];
+                        $class_history->sk_date =  $item['SK_Tanggal'];
+                        $class_history->mk_year =  $item['MKerja_Thn'];
+                        $class_history->mk_month =  $item['MKerja_bln'];
+                        $class_history->current_rank =  $item['PktSaatIni'];
+                        $class_history->no_bkn =  $item['no_bkn'];
+                        $class_history->date_bkn =  $item['tgl_bkn'];
+                        $class_history->kp_type =  $item['jenis_kp'];
+                        $class_history->save();
                     }
                 }
 
@@ -134,6 +112,9 @@ class ClassHistoryController extends Controller
 	## Tampilkan Form Create
     public function sync(Employee $employee)
     {
+        
+       ClassHistory::where('nip',$employee->nip)->forceDelete();
+
        // Tarik data dari API
        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_riwayat_golongan_by_nip?nip='.$employee->nip);
 
@@ -156,50 +137,26 @@ class ClassHistoryController extends Controller
            // Menampilkan nilai NIP dan Nama per halaman
            foreach ($pages as $page) {
                foreach ($page as $item) {
+                    $class_history = New ClassHistory();
+                    $class_history->employee_id =  $employee->id;
+                    $class_history->nip =  $item['NIP'];
 
-                   $class_history = ClassHistory::where('nip',$item['NIP'])->first();
-                   if($class_history){
-                       $class_history->employee_id =  $employee->id;
-                       $class_history->nip =  $item['NIP'];
-                       
-                       $class = Classes::where('code',$item['KdGol'])->first();
-                       $class_history->classes_id =  $class ? $class->id : null;
-                       
-                       $class_history->rank =  $item['Pangkat'];
-                       $class_history->class =  $item['Golongan'];
-                       $class_history->tmt =  $item['TMT_Pangkat'];
-                       $class_history->sk_official =  $item['SK_Pejabat'];
-                       $class_history->sk_number =  $item['SK_Nomor'];
-                       $class_history->sk_date =  $item['SK_Tanggal'];
-                       $class_history->mk_year =  $item['MKerja_Thn'];
-                       $class_history->mk_month =  $item['MKerja_bln'];
-                       $class_history->current_rank =  $item['PktSaatIni'];
-                       $class_history->no_bkn =  $item['no_bkn'];
-                       $class_history->date_bkn =  $item['tgl_bkn'];
-                       $class_history->kp_type =  $item['jenis_kp'];
-                       $class_history->save();
-                   } else {
-                       $class_history = New ClassHistory();
-                       $class_history->employee_id =  $employee->id;
-                       $class_history->nip =  $item['NIP'];
-
-                       $class = Classes::where('code',$item['KdGol'])->first();
-                       $class_history->classes_id =  $class ? $class->id : null;
-                       
-                       $class_history->rank =  $item['Pangkat'];
-                       $class_history->class =  $item['Golongan'];
-                       $class_history->tmt =  $item['TMT_Pangkat'];
-                       $class_history->sk_official =  $item['SK_Pejabat'];
-                       $class_history->sk_number =  $item['SK_Nomor'];
-                       $class_history->sk_date =  $item['SK_Tanggal'];
-                       $class_history->mk_year =  $item['MKerja_Thn'];
-                       $class_history->mk_month =  $item['MKerja_bln'];
-                       $class_history->current_rank =  $item['PktSaatIni'];
-                       $class_history->no_bkn =  $item['no_bkn'];
-                       $class_history->date_bkn =  $item['tgl_bkn'];
-                       $class_history->kp_type =  $item['jenis_kp'];
-                       $class_history->save();
-                   }
+                    $class = Classes::where('code',$item['KdGol'])->first();
+                    $class_history->classes_id =  $class ? $class->id : null;
+                    
+                    $class_history->rank =  $item['Pangkat'];
+                    $class_history->class =  $item['Golongan'];
+                    $class_history->tmt =  $item['TMT_Pangkat'];
+                    $class_history->sk_official =  $item['SK_Pejabat'];
+                    $class_history->sk_number =  $item['SK_Nomor'];
+                    $class_history->sk_date =  $item['SK_Tanggal'];
+                    $class_history->mk_year =  $item['MKerja_Thn'];
+                    $class_history->mk_month =  $item['MKerja_bln'];
+                    $class_history->current_rank =  $item['PktSaatIni'];
+                    $class_history->no_bkn =  $item['no_bkn'];
+                    $class_history->date_bkn =  $item['tgl_bkn'];
+                    $class_history->kp_type =  $item['jenis_kp'];
+                    $class_history->save();
                }
            }
 
