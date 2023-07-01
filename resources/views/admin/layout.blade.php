@@ -367,8 +367,8 @@ $setting = SiteHelpers::setting();
                         </ul>
                     </li>
 
-                    <li class="menu @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee'))) active @endif"">
-                        <a href="#riwayat" data-toggle="collapse" @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee'))) aria-expanded="true" @endif class="dropdown-toggle">
+                    <li class="menu @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee', 'absence_employee'))) active @endif"">
+                        <a href="#riwayat" data-toggle="collapse" @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee', 'absence_employee'))) aria-expanded="true" @endif class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 <span>Riwayat</span>
@@ -377,7 +377,7 @@ $setting = SiteHelpers::setting();
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee'))) show @endif"" id="riwayat" data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee', 'absence_employee'))) show @endif"" id="riwayat" data-parent="#accordionExample">
                             <li @if(Request::segment(1)=="class_employee") class="active" @endif>
                                 <a href="{{ url('class_employee') }}"> Golongan </a>
                             </li>
@@ -390,14 +390,14 @@ $setting = SiteHelpers::setting();
                             <li @if(Request::segment(1)=="punishment_employee") class="active" @endif>
                                 <a href="{{ url('punishment_employee') }}">Hukuman Disiplin</a>
                             </li>
-                            <li>
-                                <a href="component_bootstrap_carousel.html">Riwayat Absen</a>
+                            <li @if(Request::segment(1)=="absence_employee") class="active" @endif>
+                                <a href="{{ url('absence_employee') }}">Absen</a>
                             </li>
                             <li>
-                                <a href="component_bootstrap_carousel.html">Riwayat Cuti</a>
+                                <a href="component_bootstrap_carousel.html">Cuti</a>
                             </li>
                             <li>
-                                <a href="component_bootstrap_carousel.html">Riwayat Keluarga</a>
+                                <a href="component_bootstrap_carousel.html">Keluarga</a>
                             </li>
                             <li>
                                 <a href="component_bootstrap_carousel.html">Diklat</a>

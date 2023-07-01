@@ -127,7 +127,7 @@ class PunishmentHistoryController extends Controller
                foreach ($page as $item) {
 
                        $punishment_history = New PunishmentHistory();
-                       $punishment_history->employee_id =  $v->id;
+                       $punishment_history->employee_id =  $employee->id;
                        $punishment_history->nip =  $item['NIP'];
                        $punishment_history->sk_number =  $item['NoSkHukuman'];
                        $punishment_history->sk_date =  $item['TglSKHukum'];

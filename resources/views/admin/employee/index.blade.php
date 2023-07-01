@@ -24,6 +24,8 @@
 											(Riwayat Jabatan) 
 										@elseif(Request::segment(1)=="punishment_employee") 
 											(Riwayat Hukuman) 
+										@elseif(Request::segment(1)=="absence_employee") 
+											(Riwayat Absensi) 
 										@endif</h4>
                                     </div>                 
                                 </div>
@@ -54,6 +56,11 @@
 											<a href="{{ url('punishment_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowPunishmentButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Hukuman" disabled>Lihat Riwayat Hukuman</a>
+										@elseif(Request::segment(1)=="absence_employee")
+											<button type="button" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="modal" data-target="#exampleModal">Sinkronisasi</button>
+											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
+											<a id="ShowAbsenceButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Hukuman" disabled>Lihat Riwayat Absensi</a>
+
 										@endif
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
@@ -65,6 +72,58 @@
 							</div>
 						</form>
 						
+						<!-- Modal -->
+						<form action="{{ url('absence_history_sync_all') }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+						{{ csrf_field() }}
+							<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Sinkronisasi</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+											</button>
+										</div>
+										<div class="modal-body">
+											
+											<div class="row" style="margin-top:20px">
+												<div class="col-xl-6 col-lg-6 col-sm-6" style="font-size:16px">
+													<select name="month" class="form-control form-control-sm">
+														<option value="">- Pilih Bulan-</option>
+														<option value="01" @if(date('m')=="01") selected @endif>JANUARI</option>
+														<option value="02" @if(date('m')=="02") selected @endif>FEBRUARI</option>
+														<option value="03" @if(date('m')=="03") selected @endif>MARET</option>
+														<option value="04" @if(date('m')=="04") selected @endif>APRIL</option>
+														<option value="05" @if(date('m')=="05") selected @endif>MEI</option>
+														<option value="06" @if(date('m')=="06") selected @endif>JUNI</option>
+														<option value="07" @if(date('m')=="07") selected @endif>JULI</option>
+														<option value="08" @if(date('m')=="08") selected @endif>AGUSTUS</option>
+														<option value="09" @if(date('m')=="09") selected @endif>SEPTEMBER</option>
+														<option value="10" @if(date('m')=="10") selected @endif>OKTOBER</option>
+														<option value="11" @if(date('m')=="11") selected @endif>NOVEMBER</option>
+														<option value="12" @if(date('m')=="12") selected @endif>DESEMBER</option>
+													</select>
+												</div>
+												<div class="col-xl-6 col-lg-6 col-sm-6" style="font-size:16px">
+													<select name="year" class="form-control form-control-sm">
+														<option value="">- Pilih Tahun-</option>
+														@for($i=2021;$i<=date('Y');$i++)
+															<option value="{{ $i }}" @if(date('Y')==$i) selected @endif>{{ $i }}</option>
+														@endfor
+													</select>
+												</div>
+											</div>
+
+										</div>
+										<div class="modal-footer">
+											<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Batal</button>
+											<button type="submit" class="btn btn-success">Proses</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+
                             <div class="widget-content widget-content-area" style="padding-top: 0px;">
 							@if ($message = Session::get('status'))
 								<div class="alert alert-info mb-4" role="alert"> 
@@ -178,6 +237,18 @@
 			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
 			url = "{{ url('/punishment_history/') }}"
 			ShowPunishmentButton.href = ""+url+"/"+employeeId;
+
+		@elseif(Request::segment(1)=="absence_employee")
+		
+			var ShowAbsenceButton = document.getElementById("ShowAbsenceButton");
+			ShowAbsenceButton.removeAttribute("disabled");
+			// Mengubah kelas tombol edit
+			ShowAbsenceButton.classList.remove("btn-default");
+			ShowAbsenceButton.classList.add("btn-success");
+
+			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
+			url = "{{ url('/absence_history/') }}"
+			ShowAbsenceButton.href = ""+url+"/"+employeeId;
 
 		@endif
 	}

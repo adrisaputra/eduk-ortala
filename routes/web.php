@@ -10,6 +10,7 @@ use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationHistoryController;
 use App\Http\Controllers\PositionHistoryController;
 use App\Http\Controllers\PunishmentHistoryController;
+use App\Http\Controllers\AbsenceHistoryController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\PositionController;
@@ -227,6 +228,14 @@ Route::get('/backup_database', function() {
     Route::get('/punishment_history/search/{employee}', [PunishmentHistoryController::class, 'search']);
     Route::get('/punishment_history_sync_all', [PunishmentHistoryController::class, 'sync_all']);
     Route::get('/punishment_history/sync/{employee}', [PunishmentHistoryController::class, 'sync']);
+
+    # Riwayat Absensi
+    Route::get('/absence_employee', [EmployeeController::class, 'index']);
+    Route::get('/absence_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/absence_history/{employee}', [AbsenceHistoryController::class, 'index']);
+    Route::get('/absence_history/search/{employee}', [AbsenceHistoryController::class, 'search']);
+    Route::post('/absence_history_sync_all', [AbsenceHistoryController::class, 'sync_all']);
+    Route::post('/absence_history/sync/{employee}', [AbsenceHistoryController::class, 'sync']);
 
 // });
 
