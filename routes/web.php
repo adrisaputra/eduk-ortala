@@ -11,6 +11,9 @@ use App\Http\Controllers\EducationHistoryController;
 use App\Http\Controllers\PositionHistoryController;
 use App\Http\Controllers\PunishmentHistoryController;
 use App\Http\Controllers\AbsenceHistoryController;
+use App\Http\Controllers\LeaveHistoryController;
+use App\Http\Controllers\FamilyHistoryController;
+use App\Http\Controllers\TrainingHistoryController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\PositionController;
@@ -236,6 +239,30 @@ Route::get('/backup_database', function() {
     Route::get('/absence_history/search/{employee}', [AbsenceHistoryController::class, 'search']);
     Route::post('/absence_history_sync_all', [AbsenceHistoryController::class, 'sync_all']);
     Route::post('/absence_history/sync/{employee}', [AbsenceHistoryController::class, 'sync']);
+
+    # Riwayat Cuti
+    Route::get('/leave_employee', [EmployeeController::class, 'index']);
+    Route::get('/leave_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/leave_history/{employee}', [LeaveHistoryController::class, 'index']);
+    Route::get('/leave_history/search/{employee}', [LeaveHistoryController::class, 'search']);
+    Route::get('/leave_history_sync_all', [LeaveHistoryController::class, 'sync_all']);
+    Route::get('/leave_history/sync/{employee}', [LeaveHistoryController::class, 'sync']);
+
+    # Riwayat Keluarga
+    Route::get('/family_employee', [EmployeeController::class, 'index']);
+    Route::get('/family_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/family_history/{employee}', [FamilyHistoryController::class, 'index']);
+    Route::get('/family_history/search/{employee}', [FamilyHistoryController::class, 'search']);
+    Route::get('/family_history_sync_all', [FamilyHistoryController::class, 'sync_all']);
+    Route::get('/family_history/sync/{employee}', [FamilyHistoryController::class, 'sync']);
+
+    # Riwayat Diklat
+    Route::get('/training_employee', [EmployeeController::class, 'index']);
+    Route::get('/training_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/training_history/{employee}', [TrainingHistoryController::class, 'index']);
+    Route::get('/training_history/search/{employee}', [TrainingHistoryController::class, 'search']);
+    Route::get('/training_history_sync_all', [TrainingHistoryController::class, 'sync_all']);
+    Route::get('/training_history/sync/{employee}', [TrainingHistoryController::class, 'sync']);
 
 // });
 

@@ -26,6 +26,12 @@
 											(Riwayat Hukuman) 
 										@elseif(Request::segment(1)=="absence_employee") 
 											(Riwayat Absensi) 
+										@elseif(Request::segment(1)=="leave_employee") 
+											(Riwayat Cuti) 
+										@elseif(Request::segment(1)=="family_employee") 
+											(Riwayat Cuti) 
+										@elseif(Request::segment(1)=="training_employee") 
+											(Riwayat Cuti) 
 										@endif</h4>
                                     </div>                 
                                 </div>
@@ -59,8 +65,19 @@
 										@elseif(Request::segment(1)=="absence_employee")
 											<button type="button" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="modal" data-target="#exampleModal">Sinkronisasi</button>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
-											<a id="ShowAbsenceButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Hukuman" disabled>Lihat Riwayat Absensi</a>
-
+											<a id="ShowAbsenceButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Absensi" disabled>Lihat Riwayat Absensi</a>
+										@elseif(Request::segment(1)=="leave_employee")
+											<a href="{{ url('leave_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
+											<a id="ShowLeaveButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Cuti" disabled>Lihat Riwayat Cuti</a>
+										@elseif(Request::segment(1)=="family_employee")
+											<a href="{{ url('family_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
+											<a id="ShowFamilyButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Keluarga" disabled>Lihat Riwayat Keluarga</a>
+										@elseif(Request::segment(1)=="training_employee")
+											<a href="{{ url('training_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
+											<a id="ShowTrainingButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Keluarga" disabled>Lihat Riwayat Diklat</a>
 										@endif
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
@@ -85,7 +102,6 @@
 											</button>
 										</div>
 										<div class="modal-body">
-											
 											<div class="row" style="margin-top:20px">
 												<div class="col-xl-6 col-lg-6 col-sm-6" style="font-size:16px">
 													<select name="month" class="form-control form-control-sm">
@@ -249,6 +265,42 @@
 			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
 			url = "{{ url('/absence_history/') }}"
 			ShowAbsenceButton.href = ""+url+"/"+employeeId;
+
+		@elseif(Request::segment(1)=="leave_employee")
+		
+			var ShowLeaveButton = document.getElementById("ShowLeaveButton");
+			ShowLeaveButton.removeAttribute("disabled");
+			// Mengubah kelas tombol edit
+			ShowLeaveButton.classList.remove("btn-default");
+			ShowLeaveButton.classList.add("btn-success");
+
+			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
+			url = "{{ url('/leave_history/') }}"
+			ShowLeaveButton.href = ""+url+"/"+employeeId;
+
+		@elseif(Request::segment(1)=="family_employee")
+		
+			var ShowFamilyButton = document.getElementById("ShowFamilyButton");
+			ShowFamilyButton.removeAttribute("disabled");
+			// Mengubah kelas tombol edit
+			ShowFamilyButton.classList.remove("btn-default");
+			ShowFamilyButton.classList.add("btn-success");
+
+			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
+			url = "{{ url('/family_history/') }}"
+			ShowFamilyButton.href = ""+url+"/"+employeeId;
+
+		@elseif(Request::segment(1)=="training_employee")
+		
+			var ShowTrainingButton = document.getElementById("ShowTrainingButton");
+			ShowTrainingButton.removeAttribute("disabled");
+			// Mengubah kelas tombol edit
+			ShowTrainingButton.classList.remove("btn-default");
+			ShowTrainingButton.classList.add("btn-success");
+
+			// Mengubah atribut href pada tombol edit dengan menggunakan ID pegawai
+			url = "{{ url('/training_history/') }}"
+			ShowTrainingButton.href = ""+url+"/"+employeeId;
 
 		@endif
 	}
