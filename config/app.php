@@ -182,6 +182,7 @@ return [
         Spatie\Activitylog\ActivitylogServiceProvider::class,
         App\Providers\SiteHelpersServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
     ],
 
@@ -241,6 +242,7 @@ return [
         'SiteHelpers' => App\Helpers\SiteHelpers::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
 
     ],
 

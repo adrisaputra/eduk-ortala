@@ -89,6 +89,7 @@ return [
     'unique' => 'Isian :attribute sudah ada sebelumnya.',
     'uploaded' => 'Isian :attribute gagal diunggah.',
     'url' => 'Format isian :attribute tidak valid.',
+    'captcha' => 'Captcha tidak sesuai.',
     
     /*
     |--------------------------------------------------------------------------

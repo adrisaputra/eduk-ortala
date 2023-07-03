@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -23,10 +24,16 @@ class LoginController extends Controller
     
     public function authenticate(Request $request){
 
-        $user = User::where('name', $request->name)->first();
+        $this->validate($request, [
+            'email' => 'required',
+            'password' => 'required',
+            'captcha' => 'required|captcha'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
 
         if ($user && \Hash::check($request->password, $user->password) && $user->status == 1) {
-            if (Auth::attempt(['name' => $request->name, 'password' => $request->password])) {
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 // Jika berhasil login
 
                 activity()->log('Login');

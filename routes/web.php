@@ -42,7 +42,7 @@ use Carbon\Carbon;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes(['verify' => true]);
+// Auth::routes(['verify' => true]);
 
 Route::get('/buat_storage', function () {
     Artisan::call('storage:link');
@@ -51,6 +51,12 @@ Route::get('/buat_storage', function () {
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');
+    Artisan::call('route:cache');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:cache');
     dd("Cache Clear All");
 });
 
