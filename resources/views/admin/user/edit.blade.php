@@ -1,151 +1,89 @@
 @extends('admin.layout')
 @section('konten')
+ <!--  BEGIN CONTENT AREA  -->
+ <div id="content" class="main-content">
+            <div class="layout-px-spacing">
 
-@include('admin.toolbar')
-<!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-<!--begin::Post-->
-<div class="post d-flex flex-column-fluid" id="kt_post">
-	<!--begin::Container-->
-	<div id="kt_content_container" class="container-xxl">
-		<!--begin::Card-->
-		<div class="card">
-			<!--begin::Card body-->
-			<div class="card-body pt-0">
-					<!--begin::Section-->
-					
-					<form action="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($user->id)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
-					{{ csrf_field() }}
-					<input type="hidden" name="_method" value="PUT">
-		
-					<div class="py-10">
-						<h1 class="anchor fw-bolder mb-5" id="custom-form-control">
-						<a href="#custom-form-control"></a>Ubah {{ __($title) }}</h1>
-						<div class="py-5">
-							<div class="rounded border p-10">
-
-								<div class="mb-10">
-									<label class="form-label required">{{ __('Nama User') }}</label>
-									@if($user->group=="3")
-										<input type="text" class="form-control" placeholder="Nama User" value="{{ $user->name }}" disabled>
-										<input type="hidden" class="form-control" placeholder="Nama User" name="name" value="{{ $user->name }}" >
-									@else
-										<input type="text" class="form-control" placeholder="Nama User" name="name" value="{{ $user->name }}" >
-									@endif
-									<input type="hidden" class="form-control" placeholder="Nama User" name="name2" value="{{ $user->name }}" >
-									@if ($errors->has('name'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('name') }}</div>
+                <div class="row layout-top-spacing">
+                    <div id="tableHover" class="col-lg-12 col-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                        <h4>{{ __($title)}}</h4>
+                                    </div>                 
+                                </div>
+                            </div>
+                            <div class="widget-content widget-content-area" style="padding-top: 0px;">
+							<form action="{{ url('/'.Request::segment(1).'/edit/'.Crypt::encrypt($user->id)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+							{{ csrf_field() }}
+							<input type="hidden" name="_method" value="PUT">
+				
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Nama Pengguna') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+                                            <input type="text" class="form-control" placeholder="Nama User" name="name" value="{{ $user->name }}" >
+                                       		@if ($errors->has('name')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('name') }}</div>@endif
 										</div>
-									@endif
-								</div>
-
-								<div class="mb-10">
-									<label class="form-label">{{ __('Email') }}</label>
-									<input type="email" class="form-control" placeholder="Email" name="email" value="{{ $user->email }}" >
-									@if ($errors->has('email'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('email') }}</div>
-										</div>
-									@endif
-								</div>
-
-								<div class="mb-10 fv-row" data-kt-password-meter="true">
-									<div class="mb-1">
-										<label class="form-label fw-bold fs-6 mb-2 required">{{ __('Password Baru') }}</label>
-										<div class="position-relative mb-3">
-											<input class="form-control form-control-lg form-control-solid" type="password" placeholder="Password" name="password" autocomplete="off" />
-											<span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
-												<i class="bi bi-eye-slash fs-2"></i>
-												<i class="bi bi-eye fs-2 d-none"></i>
-											</span>
-										</div>
-										<div class="d-flex align-items-center mb-3" data-kt-password-meter-control="highlight">
-											<div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-											<div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-											<div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-											<div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px"></div>
-										</div>
-										@if ($errors->has('password'))
-											<div class="fv-plugins-message-container invalid-feedback">
-												<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('password') }}</div>
-											</div>
-										@endif
 									</div>
-								</div>
-
-								<div class="mb-10">
-									<label class="form-label">{{ __('Konfirmasi Password') }}</label>
-									<input type="password" class="form-control" placeholder="Konfirmasi Password" name="password_confirmation" >
-								</div>
-								
-								<div class="mb-10">
-									<label for="exampleFormControlInput1" class="form-label">{{ __('Group') }}</label>
-									<select class="form-select" aria-label="Select example" name="group_id" onchange=" if (this.selectedIndex==2){ 
-												document.getElementById('office').style.display = 'inline'; 
-											} else {
-												document.getElementById('office').style.display = 'none'; 
-											} ;">
-										<option value="">- Pilih Group -</option>
-										@foreach($group as $v)
-											<option value="{{ $v->id }}" @if($user->group_id=="$v->id") selected @endif>{{ $v->group_name }}</option>
-										@endforeach
-									</select>
-									@if ($errors->has('group_id'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('group_id') }}</div>
+									
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Email') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="email" class="form-control" name="email" value="{{ $user->email }}">
+											@if ($errors->has('email')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('email') }}</div>@endif
 										</div>
-									@endif
-								</div>
-
-								@if($user->group_id =="3" )
-									<span id="office" style="display:inline;">
-								@else
-									<span id="office" style="display:none;">
-								@endif
-									<div class="mb-10">
-									<label for="exampleFormControlInput1" class="form-label required">{{ __('OPD') }}</label>
-									<select class="form-select form-select-solid" data-control="select2"  aria-label="Select example" name="office_id" data-placeholder="Select an option" data-allow-clear="true" >
-										<option value="">- Pilih OPD -</option>
-										@foreach($office as $v)
-											<option value="{{ $v->id }}" @if($user->office_id=="$v->id") selected @endif>{{ $v->office_name }}</option>
-										@endforeach
-									</select>
-									@if ($errors->has('office_id'))
-										<div class="fv-plugins-message-container invalid-feedback">
-											<div data-field="email_input" data-validator="notEmpty">{{ $errors->first('office_id') }}</div>
+									</div>
+									
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Password') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="password" class="form-control" name="password">
+											@if ($errors->has('password')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('password') }}</div>@endif
 										</div>
-									@endif
-								</div>
-								</span>
-								<div class="mb-10">
-									<label for="exampleFormControlInput1" class="form-label">{{ __('Status') }}</label>
-									<select class="form-select" aria-label="Select example" name="status">
-										<option value="">- Pilih Status -</option>
-										<option value="1" @if($user->status=="1") selected @endif>Aktif</option>
-										<option value="0" @if($user->status=="0") selected @endif>Tidak Aktif</option>
-									</select>
-								</div>
+									</div>
+									
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Konfirmasi Password') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="password" class="form-control" name="password_confirmation">
+											@if ($errors->has('password_confirmation')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('password_confirmation') }}</div>@endif
+										</div>
+									</div>
+											
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Group') }}<span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control" name="group_id">
+												<option value="">- Pilih Group -</option>
+												@foreach($group as $v)
+													<option value="{{ $v->id }}" @if($user->group_id=="$v->id") selected @endif>{{ $v->group_name }}</option>
+												@endforeach
+											</select>
+											@if ($errors->has('group_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('group_id') }}</div>@endif
+										</div>
+									</div>
+									
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Status') }}<span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control" name="status">
+												<option value="0" @if($user->status=="0") selected @endif>Tidak Aktif</option>
+												<option value="1" @if($user->status=="1") selected @endif>Aktif</option>
+											</select>
+											@if ($errors->has('status')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('status') }}</div>@endif
+										</div>
+									</div>
+									
+									<button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Simpan"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
+									<button type="reset" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Reset"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></button>
+									<a href="{{ url(Request::segment(1)) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Kembali"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg></a>
+								</form>	
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-								<div class="mb-10">
-									<button type="submit" class="btn btn-primary btn-flat btn-sm" title="Tambah Data"> Simpan</button>
-									<button type="reset" class="btn btn-danger btn-flat btn-sm" title="Reset Data"> Reset</button>
-									<a href="{{ url('/'.Request::segment(1)) }}" class="btn btn-warning btn-flat btn-sm" title="Kembali">Kembali</a>
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</form>
-				<!--end::Section-->
-			</div>
-			<!--end::Card body-->
-		</div>
-		<!--end::Card-->
-	</div>
-	<!--end::Container-->
-</div>
-<!--end::Post-->
-</div>
-<!--end::Content-->
+            </div>
+<script src="{{ asset('assets/js/libs/jquery-3.1.1.min.js') }}"></script>			
 @endsection

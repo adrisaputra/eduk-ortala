@@ -47,6 +47,16 @@ class UserController extends Controller
         }
     }
 	
+    ## Tampilkan Form Create
+    public function create()
+    {
+        $title = "User";
+        $group = Group::get();
+		$view=view('admin.user.create',compact('title','group'));
+        $view=$view->render();
+        return $view;
+    }
+
 	## Simpan Data
 	public function store(Request $request)
     {
