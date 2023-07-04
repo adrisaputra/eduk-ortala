@@ -87,7 +87,7 @@ Route::get('/backup_database', function() {
     return response()->download(public_path().'/db_backup/eduk-backup-' . Carbon::now()->format('Y-m-d') . '.sql');
 });
 
-// Route::middleware(['user_access','verified'])->group(function () {
+Route::middleware(['admin_biro'])->group(function () {
     
     ## Pegawai
     Route::get('/employee', [EmployeeController::class, 'index']);
@@ -156,56 +156,17 @@ Route::get('/backup_database', function() {
     Route::put('/menu/edit/{menu}', [MenuController::class, 'update']);
     Route::get('/menu/hapus/{menu}',[MenuController::class, 'delete']);
 
-    ## User
-    Route::get('/user', [UserController::class, 'index']);
-    Route::get('/user/search', [UserController::class, 'search']);
-    Route::get('/user/create', [UserController::class, 'create']);
-    Route::post('/user', [UserController::class, 'store']);
-    Route::get('/user/edit/{user}', [UserController::class, 'edit']);
-    Route::put('/user/edit/{user}', [UserController::class, 'update']);
-    Route::get('/user/hapus/{user}',[UserController::class, 'delete']);
-
     ## Log Activity
     Route::get('/log', [LogController::class, 'index']);
     Route::get('/log/search', [LogController::class, 'search']);
 
-// });
-
-// Route::middleware(['cek_status'])->group(function () {
+    ## Report
     Route::get('/report',[ReportController::class, 'index']);
-
-    ## Sub Menu
-    Route::get('/sub_menu/{id}', [SubMenuController::class, 'index']);
-    Route::get('/sub_menu/search/{id}', [SubMenuController::class, 'search']);
-    Route::get('/sub_menu/create/{id}', [SubMenuController::class, 'create']);
-    Route::post('/sub_menu/{id}', [SubMenuController::class, 'store']);
-    Route::get('/sub_menu/edit/{id}/{sub_menu}', [SubMenuController::class, 'edit']);
-    Route::put('/sub_menu/edit/{id}/{sub_menu}', [SubMenuController::class, 'update']);
-    Route::get('/sub_menu/hapus/{id}/{sub_menu}',[SubMenuController::class, 'delete']);
-
-    ## Menu Akses
-    Route::get('/menu_akses/{group}', [MenuAccessController::class, 'index']);
-    Route::get('/menu_akses/search/{group}', [MenuAccessController::class, 'search']);
-    Route::get('/menu_akses/create/{group}', [MenuAccessController::class, 'create']);
-    Route::post('/menu_akses/{group}', [MenuAccessController::class, 'store']);
-    Route::get('/menu_akses/edit/{group}/{menu_access}', [MenuAccessController::class, 'edit']);
-    Route::put('/menu_akses/edit/{group}/{menu_access}', [MenuAccessController::class, 'update']);
-    Route::get('/menu_akses/hapus/{group}/{menu_access}',[MenuAccessController::class, 'delete']);
-
-    ## Sub Menu Akses
-    Route::get('/sub_menu_akses/{group}/{menu}', [SubMenuAccessController::class, 'index']);
-    Route::get('/sub_menu_akses/search/{group}/{menu}', [SubMenuAccessController::class, 'search']);
-    Route::get('/sub_menu_akses/create/{group}/{menu}', [SubMenuAccessController::class, 'create']);
-    Route::post('/sub_menu_akses/{group}/{menu}', [SubMenuAccessController::class, 'store']);
-    Route::get('/sub_menu_akses/edit/{group}/{menu}/{sub_menu_access}', [SubMenuAccessController::class, 'edit']);
-    Route::put('/sub_menu_akses/edit/{group}/{menu}/{sub_menu_access}', [SubMenuAccessController::class, 'update']);
-    Route::get('/sub_menu_akses/hapus/{group}/{menu}/{sub_menu_access}',[SubMenuAccessController::class, 'delete']);
 
     ## Setting
     Route::get('/setting', [SettingController::class, 'index']);
     Route::put('/setting/edit/{setting}', [SettingController::class, 'update']);
 
-    
     # Riwayat Golongan
     Route::get('/class_employee', [EmployeeController::class, 'index']);
     Route::get('/class_employee/search', [EmployeeController::class, 'search']);
@@ -270,8 +231,18 @@ Route::get('/backup_database', function() {
     Route::get('/training_history_sync_all', [TrainingHistoryController::class, 'sync_all']);
     Route::get('/training_history/sync/{employee}', [TrainingHistoryController::class, 'sync']);
 
-// });
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('verified');
+Route::middleware(['administrator'])->group(function () {
 
+    ## User
+    Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user/search', [UserController::class, 'search']);
+    Route::get('/user/create', [UserController::class, 'create']);
+    Route::post('/user', [UserController::class, 'store']);
+    Route::get('/user/edit/{user}', [UserController::class, 'edit']);
+    Route::put('/user/edit/{user}', [UserController::class, 'update']);
+    Route::get('/user/hapus/{user}',[UserController::class, 'delete']);
+    
+});
 

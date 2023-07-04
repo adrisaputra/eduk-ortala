@@ -3,7 +3,6 @@
 @section('content')
 @php
 $setting = SiteHelpers::setting();
-$slider = SiteHelpers::slider();
 @endphp
 <div class="form-container outer" style="background-image: url({{ asset('upload/setting/'.$setting->background_login) }});background-size: cover;">
         <div class="form-form">
@@ -51,12 +50,12 @@ $slider = SiteHelpers::slider();
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div id="username-field" class="field-wrapper input">
-                                            <label for="username"><?=captcha_img('math');?></label>
+                                            <label for="username"><?=captcha_img('flat');?></label>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <div id="username-field" class="field-wrapper input">
-                                            <input id="username" name="captcha" type="text" class="form-control" placeholder="Masukkan Captcha">
+                                        <div class="field-wrapper input">
+                                            <input id="username" name="captcha" type="text" class="form-control" placeholder="Masukkan Captcha" style="padding: 13px 15px 13px 15px;">
                                             @if ($errors->has('captcha')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('captcha') }}</div>@endif
                                         </div>
                                     </div>

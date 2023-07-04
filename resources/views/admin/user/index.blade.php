@@ -19,10 +19,8 @@
 							<div class="widget-content widget-content-area">
 								<div class="row">
 									<div class="col-xl-8 col-md-12 col-sm-12 col-12">
-										@can('tambah-data')
 											<a href="#" class="btn mb-2 mr-1 btn-success snackbar-bg-success" data-toggle="modal" data-target=".bd-example-modal-lg">Tambah Data</a>
 											@include('admin.user.create')
-										@endcan
 										<a href="{{ url('user') }}" class="btn mb-2 mr-1 btn-warning snackbar-bg-warning">Refresh</a>
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
@@ -81,13 +79,9 @@
 												@endif
 											</td>
 											<td class="col-md-3">
-												@can('ubah-data')
-													<a href="{{ url('/user/edit/'.$v->id) }}" class="btn mb-2 mr-1 btn-sm btn-warning snackbar-bg-warning btn-block">Edit</href><br>
-												@endcan
+												<a href="{{ url('/user/edit/'.$v->id) }}" class="btn mb-2 mr-1 btn-sm btn-warning snackbar-bg-warning btn-block">Edit</href><br>
 												@if($v->id !=1)
-													@can('hapus-data')
 														<a href="#" class="btn mb-2 mr-1 btn-sm btn-danger snackbar-bg-danger btn-block warning confirm" onclick="DeleteData(this.id)" id="{{ $v->id }}">Hapus</href>
-													@endcan
 												@endif
 											</td>
 										</tr>

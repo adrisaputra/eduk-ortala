@@ -74,9 +74,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Group::class, 'group_id');
     }
 
-    public function access()
+    public function isAdmin()
     {
-        return $this->hasOne('App\Models\Access');
+        return $this->group_id === 1;
+    }
+    
+    public function isAdminBiro()
+    {
+        return $this->group_id === 2;
     }
     
 }

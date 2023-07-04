@@ -20,7 +20,7 @@
 				<div class="widget-heading">
 					<div class="row" style="color: #ffffff;">
 						<div class="col-md-8">
-							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
+							<p class="w-value" style="color: #ffffff;font-size: 35px;">{{ $employee }}</p>
 							<h6 style="color: #ffffff;">Jumlah Pegawai</h6>
 						</div>
 						<div class="col-md-4">
@@ -90,7 +90,7 @@
 					<div class="row" style="color: #ffffff;">
 						<div class="col-md-8">
 							<p class="w-value" style="color: #ffffff;font-size: 35px;">12</p>
-							<h5 style="color: #ffffff;">Jumlah Usul KGB</h5>
+							<h6 style="color: #ffffff;">Jumlah Usul KGB</h6>
 						</div>
 						<div class="col-md-4">
 							<center>

@@ -23,7 +23,7 @@ class UserController extends Controller
     public function index()
     {
         $title = "User";
-		$user = User::orderBy('id','DESC')->paginate(1)->onEachSide(1);
+		$user = User::orderBy('id','DESC')->paginate(25)->onEachSide(1);
         $group = Group::get();
 		return view('admin.user.index',compact('title','user','group'));
     }
