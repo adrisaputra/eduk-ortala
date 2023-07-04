@@ -1,110 +1,123 @@
-@extends('admin.layout')
+@extends('admin/layout')
 @section('konten')
+<style>
+    .selected-row td {
+        background-color: #bbeaff;
+    }
+</style>
+        <!--  BEGIN CONTENT AREA  -->
+        <div id="content" class="main-content">
+            <div class="layout-px-spacing">
 
-@include('admin.toolbar')
-<!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-<!--begin::Post-->
-<div class="post d-flex flex-column-fluid" id="kt_post">
-	<!--begin::Container-->
-	<div id="kt_content_container" class="container-xxl">
-		<!--begin::Card-->
-		<div class="card">
-			<!--begin::Card header-->
-			<div class="card-header border-0 pt-6">
-				<!--begin::Card title-->
-				<div class="card-title">
-					<!--begin::Search-->
-					
-					<form action="{{ url('/'.Request::segment(1).'/search') }}" method="GET">
-					<div class="d-flex align-items-center position-relative my-1">
-						<span class="svg-icon svg-icon-1 position-absolute ms-6">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-								<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-								<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-							</svg>
-						</span>
-						<input type="text" data-kt-office-table-filter="search" class="form-control form-control-solid w-300px ps-14 btn-sm " name="search" placeholder="Cari" />
-					</div>
-					</form>
-					<!--end::Search-->
-				</div>
-				<!--begin::Card title-->
-				<!--begin::Card toolbar-->
-				<div class="card-toolbar">
-					<!--begin::Toolbar-->
-					<div class="d-flex justify-content-end" data-kt-office-table-toolbar="base">
-						<a href="{{ url('/'.Request::segment(1)) }}" class="btn btn-warning btn-icon btn-sm me-2 mb-2" title="Refresh Halaman"><i class="fa fa-undo"></i></a>
-					</div>
-				</div>
-				<!--end::Card toolbar-->
-			</div>
-			<!--end::Card header-->
-			<!--begin::Card body-->
-			<div class="card-body pt-0">
-				
-				<!--begin::Alert-->
-				@if ($message = Session::get('status'))
-				<div class="alert alert-dismissible bg-primary d-flex flex-column flex-sm-row w-100 p-5">
-					<div class="d-flex flex-column text-light pe-0 pe-sm-10">
-						<h4 class="mb-2 text-light">
-						<i class="icon fa fa-check" style="color:white"></i> Berhasil !</h4>
-						<span>{{ $message }}</span>
-					</div>
-					<button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
-						<span class="svg-icon svg-icon-2x svg-icon-light">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-								<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-								<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-							</svg>
-						</span>
-					</button>
-				</div>
-				@endif
-				<!--end::Alert-->
+                <div class="row layout-top-spacing">
+                    <div id="tableHover" class="col-lg-12 col-12 layout-spacing">
+                        <div class="statbox widget box box-shadow">
+                            <div class="widget-header">
+                                <div class="row">
+                                    <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+							 		<h4>Data {{ __($title) }}</h4>
+                                    </div>                 
+                                </div>
+                            </div>
 
-				<!--begin::Table-->
-				<div class="table-responsive">
-				<table class="table table-striped table-rounded border border-gray-300 table-row-bordered table-row-gray-300 gy-7 gs-7" id="kt_table_offices">
-					<!--begin::Table head-->
-					<thead>
-						<!--begin::Table row-->
-						<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-							<th style="width: 60px">No</th>
-							<th>Eksekutor</th>
-							<th>Deskripsi</th>
-							<th>Waktu Eksekusi</th>
-							<th style="width: 20%">#aksi</th>
-						</tr>
-						<!--end::Table row-->
-					</thead>
-					<!--end::Table head-->
-					<!--begin::Table body-->
-					<tbody class="text-gray-600 fw-bold">
-						@foreach($log as $v)
-						<tr>
-							<td>{{ ($log ->currentpage()-1) * $log ->perpage() + $loop->index + 1 }}</td>
-							<td>{{ $v->user ? $v->user->name : '' }} </td>
-							<td>{{ $v->description }}</td>
-							<td>{{ \Carbon\Carbon::parse($v->created_at)->diffForHumans(); }}</td>
-							<td><a href="#" class="btn btn-sm btn-info"><i class="fa fa-list"></i>Detail</a></td>
-						</tr>
-						@endforeach
-					</tbody>
-					<!--end::Table body-->
-				</table>
-				<!-- PAGINATION -->
-				<div style="div-align:right">{{ $log->appends(Request::only('search'))->links() }}</div>
-				</div>
-				<!--end::Table-->
-			</div>
-			<!--end::Card body-->
-		</div>
-		<!--end::Card-->
-	</div>
-	<!--end::Container-->
-</div>
-<!--end::Post-->
-</div>
-<!--end::Content-->
+							<form action="{{ url(Request::segment(1).'/search') }}" method="GET">		
+								<div class="widget-content widget-content-area">
+									<div class="row">
+										<div class="col-xl-8 col-md-12 col-sm-12 col-12">
+											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning snackbar-bg-warning" data-toggle="tooltip" data-placement="top" title="Refresh">Refresh</a>
+										</div>
+										<div class="col-xl-4 col-md-12 col-sm-12 col-12">
+											<div class="input-group" >
+												<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()">
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						
+                            <div class="widget-content widget-content-area" style="padding-top: 0px;">
+							@if ($message = Session::get('status'))
+								<div class="alert alert-info mb-4" role="alert"> 
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="alert"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+									</button> <h4 style="color: #ffffff;"><i class="image fa fa-check"></i> Berhasil !</h4>
+									{{ $message }}
+								</div>     
+							@endif
+								<div id="hasil">
+									<div class="table-responsive">
+									<table class="table table-bordered table-hover mb-4">
+										<thead>
+											<tr>
+												<th style="width: 60px">No</th>
+												<th>Eksekutor</th>
+												<th>Deskripsi</th>
+												<th>Waktu Eksekusi</th>
+												<th style="width: 20%">#aksi</th>
+											</tr>
+										</thead>
+										<tbody>
+										@foreach($log as $v)
+											<tr>
+												<td id="log-{{ $v->id }}" onClick="getLog(this.id)">{{ ($log ->currentpage()-1) * $log ->perpage() + $loop->index + 1 }}</td>
+												<td id="log-{{ $v->id }}" onClick="getLog(this.id)">{{ $v->user ? $v->user->name : '' }} </td>
+												<td id="log-{{ $v->id }}" onClick="getLog(this.id)">{{ $v->description }}</td>
+												<td id="log-{{ $v->id }}" onClick="getLog(this.id)">{{ \Carbon\Carbon::parse($v->created_at)->diffForHumans(); }}</td>
+												<td id="log-{{ $v->id }}" onClick="getLog(this.id)"><a href="#" class="btn btn-sm btn-info"><i class="fa fa-list"></i>Detail</a></td>
+											</tr>
+										@endforeach
+										</tbody>
+									</table>
+									<div class="paginating-container">{{ $log->appends(Request::only('search'))->links() }}</div>
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<script>
+function tampil(){
+    search = document.getElementById("search").value;
+    url = "{{ url('/log/search') }}"
+    $.ajax({
+        url:""+url+"?search="+search+"",
+        success: function(response){
+            $("#hasil").html(response);
+        }
+    });
+    return false;
+}
+</script>
+<script>
+    function DeleteData(id) {
+
+        $('.widget-content .warning.confirm').on('click', function () {
+        swal({
+            title: 'Apakah Kamu Yakin?',
+            text: "Anda tidak akan dapat mengembalikan ini!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            padding: '2em'
+            }).then(function(result) {
+            if (result.value) {
+                    swal(
+                    'Deleted!',
+                    'Data Berita Berhasil Dihapus.',
+                    'success'
+                    ).then(function() {
+						url = "{{ url('/log/delete') }}"
+                        $.ajax({
+                            url:""+url+"/"+id+"",
+                            success: function(response){
+                                location.reload();
+                            }
+                        });
+					});
+                }
+            })
+        })
+    }
+</script>
 @endsection

@@ -21,7 +21,11 @@ class LogController extends Controller
     public function index()
     {
         $title = "Log";
-        $log = Log::orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        if(Auth::user()->group_id == 1){
+            $log = Log::orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        } else {
+            $log = Log::where('causer_id', Auth::user()->id)->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        }
         return view('admin.log.index',compact('title','log'));
     }
 
@@ -30,16 +34,33 @@ class LogController extends Controller
     {
         $title = "Log";
         $log = $request->get('search');
-        $log = Log::where(function ($query) use ($log) {
+
+        if(Auth::user()->group_id == 1){
+            $log =  Log::where(function ($query) use ($log) {
                         $query->where(function ($query) use ($log) {
                             $query->where('description', 'LIKE', '%'.$log.'%');
                         })
                         ->orwhereHas('user', function ($query) use ($log) {
                             $query->where('name', 'LIKE', '%'. $log .'%');
                         });
-                    })
-                ->orderBy('activity_log.id','DESC')->paginate(25)->onEachSide(1);
+                    })->orderBy('activity_log.id','DESC')->paginate(25)->onEachSide(1);
+        } else {
+            $log =  Log::where('causer_id', Auth::user()->id)
+                    ->where(function ($query) use ($log) {
+                        $query->where(function ($query) use ($log) {
+                            $query->where('description', 'LIKE', '%'.$log.'%');
+                        })
+                        ->orwhereHas('user', function ($query) use ($log) {
+                            $query->where('name', 'LIKE', '%'. $log .'%');
+                        });
+                    })->orderBy('activity_log.id','DESC')->paginate(25)->onEachSide(1);
+        }
         
-        return view('admin.log.index',compact('title','log'));
+        
+        if($request->input('page')){
+            return view('admin.log.index',compact('title','log'));
+        } else {
+            return view('admin.log.search',compact('title','log'));
+        }
     }
 }
