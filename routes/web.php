@@ -65,15 +65,8 @@ if (file_exists(app_path('Http/Controllers/LocalizationController.php')))
     Route::get('lang/{locale}', [App\Http\Controllers\LocalizationController::class , 'lang']);
 }
 
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
-
 Route::get('/', [LoginController::class, 'index']);
-
 Route::post('/login_w', [LoginController::class, 'authenticate']);
-Route::get('registrasi_w', [RegistrasiController::class, 'registrasi']);
-Route::post('registrasi_w', [RegistrasiController::class, 'store']);
 Route::post('/logout-sistem', [LoginController::class, 'logout']);
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware('verified');
@@ -230,6 +223,9 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::get('/training_history/search/{employee}', [TrainingHistoryController::class, 'search']);
     Route::get('/training_history_sync_all', [TrainingHistoryController::class, 'sync_all']);
     Route::get('/training_history/sync/{employee}', [TrainingHistoryController::class, 'sync']);
+        
+    Route::get('/edit_profil/{user}',[UserController::class, 'edit_profil']);
+    Route::put('/edit_profil/{user}',[UserController::class, 'update_profil']);
 
 });
 

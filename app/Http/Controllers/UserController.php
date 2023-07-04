@@ -199,9 +199,8 @@ class UserController extends Controller
         if($request->password){
             $user->password = Hash::make($request->password);
         } else {
-            $cek_user = User::where('id', Auth::user()->id)->get();
-            $cek_user->toArray();
-            $user->password = $cek_user[0]->password;
+            $cek_user = User::where('id', Auth::user()->id)->first();
+            $user->password = $cek_user->password;
         }
         
         if($request->file('foto') == ""){}
