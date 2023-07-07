@@ -93,6 +93,8 @@ class EmployeeController extends Controller
                         $employee->no_taspen =  $item['NoTaspen'];
                         $employee->no_karis_karsu =  $item['NoKaris'];
                         $employee->no_npwp =  $item['NPWP'];
+                        $employee->mk_month =  $item['MK_Bulan'];
+                        $employee->mk_year =  $item['MK_Tahun'];
                         
                         $class = Classes::where('code',$item['KdGol'])->first();
                         $employee->class_id =  $class ? $class->id : null;
@@ -124,6 +126,8 @@ class EmployeeController extends Controller
                         $employee->no_taspen =  $item['NoTaspen'];
                         $employee->no_karis_karsu =  $item['NoKaris'];
                         $employee->no_npwp =  $item['NPWP'];
+                        $employee->mk_month =  $item['MK_Bulan'];
+                        $employee->mk_year =  $item['MK_Tahun'];
                         
                         $class = Classes::where('code',$item['KdGol'])->first();
                         $employee->class_id =  $class ? $class->id : null;

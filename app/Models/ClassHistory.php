@@ -24,4 +24,9 @@ class ClassHistory extends Model
         'date_bkn',
         'kp_type'
     ];
+
+    public function classes(){
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
+    
 }

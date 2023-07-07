@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DukController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationHistoryController;
@@ -82,6 +83,10 @@ Route::get('/backup_database', function() {
 
 Route::middleware(['admin_biro'])->group(function () {
     
+    ## DUK
+    Route::get('/duk', [DukController::class, 'index']);
+    Route::get('/duk/search', [DukController::class, 'search']);
+
     ## Pegawai
     Route::get('/employee', [EmployeeController::class, 'index']);
     Route::get('/employee/search', [EmployeeController::class, 'search']);

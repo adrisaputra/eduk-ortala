@@ -25,6 +25,8 @@ class Employee extends Model
         'no_taspen',
         'no_karis_karsu',
         'no_npwp',
+        'mk_month',
+        'mk_year',
         'class_id',
         'education_id',
         'position',
@@ -32,7 +34,23 @@ class Employee extends Model
     ];
 
     public function classes(){
-        return $this->belongsTo('App\Models\Classes');
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
+
+    public function class_history_first($nip){
+        return $this->belongsTo(ClassHistory::class, 'nip', 'nip')->where('nip',$nip)->orderBy('classes_id','ASC');
+    }
+
+    public function position_history($nip){
+        return $this->belongsTo(PositionHistory::class, 'nip', 'nip')->where('current_position','Ya')->where('nip',$nip);
+    }
+
+    public function training_history_first($nip){
+        return $this->belongsTo(TrainingHistory::class, 'nip', 'nip')->where('nip',$nip)->where('name', 'like', '%PIM%')->orderBy('start','DESC');
+    }
+
+    public function education_history_last($nip){
+        return $this->belongsTo(EducationHistory::class, 'nip', 'nip')->where('current_education','Ya')->where('nip',$nip);
     }
 
     public function position(){

@@ -13,4 +13,15 @@ class Classes extends Model
         'class',
         'rank'
     ];
+
+    public function employee(){
+        return $this->hasOne('App\Models\Employee');
+    }
+    
+    public function class_history($nip){
+        return $this->hasMany('App\Models\ClassHistory')->where('nip',$nip);
+    }
+    
+
+
 }

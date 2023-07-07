@@ -87,6 +87,7 @@ class EducationHistoryController extends Controller
                         $education_history->diploma_date =  $item['PEND_TGLIJAZAH'];
                         $education_history->school_name =  $item['nama_sekolah'];
                         $education_history->current_education =  $item['pend_saat_ini'];
+                        $education_history->level =  $item['level'];
                         $education_history->save();
                     }
                 }
@@ -142,6 +143,7 @@ class EducationHistoryController extends Controller
                        $education_history->diploma_date =  $item['PEND_TGLIJAZAH'];
                        $education_history->school_name =  $item['nama_sekolah'];
                        $education_history->current_education =  $item['pend_saat_ini'];
+                       $education_history->level =  $item['level'];
                        $education_history->save();
                }
            }
