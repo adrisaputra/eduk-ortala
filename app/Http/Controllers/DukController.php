@@ -180,7 +180,15 @@ class DukController extends Controller
         $rows = 7;
         $no = 1;
 
-        $employee = Employee::orderBy('id','DESC')->get();
+        $employee = Employee::select('employees.*')
+                    ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                    ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                    ->groupBy('employees.nip')
+                    ->orderBy('class_id','DESC')
+                    ->orderBy('class_histories.tmt','DESC')
+                    ->orderBy('unit_id','ASC')
+                    ->orderBy('class_histories.mk_month','DESC')
+                    ->orderBy('date_of_birth','ASC')->get();
         $masa_kerja = array();
         $usia = array();
 
@@ -226,7 +234,7 @@ class DukController extends Controller
         // $sheet->getStyle('F' . $rows)->getNumberFormat()->setFormatCode('#,##0');
         // $sheet->getStyle('A' . $rows.':F4'. $rows)->getFont()->setBold(true);
 
-        $sheet->getStyle('A4:F'.$rows)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle('A4:S'.$rows)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A1:F4')->getFont()->setBold(true);
         
