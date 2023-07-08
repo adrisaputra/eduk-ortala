@@ -27,7 +27,16 @@ class EmployeeController extends Controller
      public function index()
      {
          $title = "Pegawai";
-         $employee = Employee::orderBy('id','DESC')->paginate(25)->onEachSide(1);
+         $employee = Employee::select('employees.*')
+                    ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                    ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                    ->groupBy('employees.nip')
+                    ->orderBy('class_id','DESC')
+                    ->orderBy('class_histories.tmt','DESC')
+                    ->orderBy('unit_id','ASC')
+                    ->orderBy('class_histories.mk_month','DESC')
+                    ->orderBy('date_of_birth','ASC')
+                    ->paginate(25)->onEachSide(1);
          return view('admin.employee.index',compact('title','employee'));
      }
  
@@ -36,11 +45,20 @@ class EmployeeController extends Controller
      {
         $title = "Pegawai";
         $employee = $request->get('search');
-        $employee = Employee::where(function ($query) use ($employee) {
-                                $query->where('nip', 'LIKE', '%'.$employee.'%')
-                                    ->orWhere('name', 'LIKE', '%'.$employee.'%')
-                                    ->orWhere('status', 'LIKE', '%'.$employee.'%');
-                            })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $employee = Employee::select('employees.*')
+                    ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                    ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                    ->where(function ($query) use ($employee) {
+                        $query->where('nip', 'LIKE', '%'.$employee.'%')
+                        ->orWhere('name', 'LIKE', '%'.$employee.'%')
+                        ->orWhere('status', 'LIKE', '%'.$employee.'%');
+                    })->groupBy('employees.nip')
+                    ->orderBy('class_id','DESC')
+                    ->orderBy('class_histories.tmt','DESC')
+                    ->orderBy('unit_id','ASC')
+                    ->orderBy('class_histories.mk_month','DESC')
+                    ->orderBy('date_of_birth','ASC')
+                    ->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
             return view('admin.employee.index',compact('title','employee'));

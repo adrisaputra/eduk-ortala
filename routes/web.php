@@ -86,6 +86,7 @@ Route::middleware(['admin_biro'])->group(function () {
     ## DUK
     Route::get('/duk', [DukController::class, 'index']);
     Route::get('/duk/search', [DukController::class, 'search']);
+    Route::get('/duk/print', [DukController::class, 'print']);
 
     ## Pegawai
     Route::get('/employee', [EmployeeController::class, 'index']);

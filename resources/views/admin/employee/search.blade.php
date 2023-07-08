@@ -15,7 +15,7 @@
 			<tr onclick="selectRow(this)">
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($employee ->currentpage()-1) * $employee ->perpage() + $loop->index + 1 }}</td>
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->nip }}</td>
-				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->name }}</td>
+				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->front_title }} {{ $v->name }} {{ $v->back_title }}</td>
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->status }}</td>
 				<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->unit->name }}</td>
 			</tr>

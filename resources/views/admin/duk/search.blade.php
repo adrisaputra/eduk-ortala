@@ -1,40 +1,3 @@
-
-<style>
-	.table-container {
-	position: relative;
-	max-height: 100%; /* Atur tinggi maksimal sesuai kebutuhan */
-	/* overflow: hidden; */
-	}
-
-	.table-scroll {
-	overflow-x: auto;
-	/* max-height: inherit; */
-	padding-bottom: 17px; /* Atur nilai sesuai lebar scrollbar */
-	}
-
-	table {
-	width: 100%;
-	/* table-layout: fixed; */
-	}
-
-	.table-scroll::-webkit-scrollbar {
-	height: 17px; /* Atur tinggi scrollbar */
-	}
-
-	.table-scroll::-webkit-scrollbar-track {
-	background-color: #f1f1f1; /* Warna latar belakang track scrollbar */
-	}
-
-	.table-scroll::-webkit-scrollbar-thumb {
-	background-color: #888; /* Warna scrollbar */
-	border-radius: 10px; /* Atur border radius scrollbar */
-	}
-
-	.table-scroll::-webkit-scrollbar-thumb:hover {
-	background-color: #555; /* Warna scrollbar saat dihover */
-	}
-</style>
-
 <div id="hasil">
 	<div class="table-responsive"> 
 		<div class="table-scroll">
@@ -75,7 +38,7 @@
 				<tr>
 					<td class="text-center">{{ ($employee ->currentpage()-1) * $employee ->perpage() + $loop->index + 1 }}</td>
 					<td>{{ $v->nip }}</td>
-					<td>{{ $v->name }}</td>
+					<td>{{ $v->front_title }} {{ $v->name }} {{ $v->back_title }}</td>
 					<td>{{ $v->classes ? $v->classes->class : '' }}</td>
 					<td>{{ $v->classes && $v->classes->class_history($v->nip)->first() ? date('d-m-Y', strtotime($v->classes->class_history($v->nip)->first()->tmt)) : '' }}</td>
 					<td>{{ $v->position_history($v->nip)->first() ? $v->position_history($v->nip)->first()->position : '' }} </td>
