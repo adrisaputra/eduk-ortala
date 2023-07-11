@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;   //nama model
 use App\Models\PunishmentHistory;   //nama model
-use App\Models\Punishment;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -47,11 +47,20 @@ class PunishmentHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_hukuman_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data = $data['data'];
+
+        $synchronization = Synchronization::where('category','punishment_history')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data;
+        $synchronization->save();
+
         $punishment_history = PunishmentHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
         foreach($employee as $v){
-
 
             // Tarik data dari API
             $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_riwayat_hukuman_by_nip?nip='.$v->nip);
@@ -94,7 +103,10 @@ class PunishmentHistoryController extends Controller
             }
         }
         
-
+        $synchronization = Synchronization::where('category','punishment_history')->first();
+        $synchronization->status =  'Done';
+        $synchronization->save();
+        
         return redirect('/punishment_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 

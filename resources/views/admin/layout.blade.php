@@ -34,6 +34,7 @@ $setting = SiteHelpers::setting();
     <link href="{{ asset('plugins/sweetalerts/sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/components/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/elements/alert.css') }}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ asset('css/dashboard/dash_2.css') }}"> -->
     <!-- <link rel="stylesheet" href="{{ asset('plugins/font-icons/fontawesome2/css/all.css') }}"> -->
     <!-- <link rel="stylesheet" href="{{ asset('plugins/font-icons/fontawesome2/css/fontawesome.css') }}"> -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/select2.min.css') }}">
@@ -65,14 +66,12 @@ $setting = SiteHelpers::setting();
     <div class="header-container fixed-top">
         <header class="header navbar navbar-expand-sm">
             
-            <ul class="navbar-nav theme-brand flex-row  text-center">
+            <ul class="navbar-nav theme-brand flex-row ">
                 <li class="nav-item theme-logo">
                     <a href="index.html">
-                        <img src="{{ asset('upload/setting/'.$setting->small_icon) }}" class="navbar-logo" alt="logo">
+                        <img src="{{ asset('upload/setting/'.$setting->large_icon) }}" style="width:90%">
+                        <!-- <p style="font-size:18px;font-weight:bold;color:white;margin-top: 10px;">{{ $setting->short_application_name }}</p> -->
                     </a>
-                </li>
-                <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link"> {{ $setting->short_application_name }} </a>
                 </li>
                 <li class="nav-item toggle-sidebar">
                     <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></a>
@@ -103,9 +102,16 @@ $setting = SiteHelpers::setting();
                                 </div>
                             </div>
                         </div>
+                        @if(Auth::user()->group_id == 1)
+                            <div class="dropdown-item">
+                                <a href="{{ url('setting') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> <span>Pengaturan</span>
+                                </a>
+                            </div>
+                        @endif
                         <div class="dropdown-item">
                             <a href="{{ url('edit_profil/'.Crypt::encrypt(Auth::user()->id)) }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span>My Profile</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span>Profil Saya</span>
                             </a>
                         </div>
                         <div class="dropdown-item">
@@ -176,7 +182,7 @@ $setting = SiteHelpers::setting();
                         </a>
                     </li>
 
-                    <li class="menu">
+                    <!-- <li class="menu">
                         <a href="#layanan" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
@@ -203,7 +209,7 @@ $setting = SiteHelpers::setting();
                                 <a href="{{ url('absence_employee') }}">Tugas Luar</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <li class="menu @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") active @endif">
                         <a href="#master" data-toggle="collapse" @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") aria-expanded="true" @endif class="dropdown-toggle">
@@ -234,8 +240,8 @@ $setting = SiteHelpers::setting();
                         </ul>
                     </li>
 
-                    <li class="menu @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee', 'absence_employee', 'leave_employee', 'leave_history'))) active @endif"">
-                        <a href="#riwayat" data-toggle="collapse" @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee', 'absence_employee', 'leave_employee', 'leave_history'))) aria-expanded="true" @endif class="dropdown-toggle">
+                    <li class="menu @if(in_array(Request::segment(1), array('class_employee','class_history','education_employee','education_history','position_employee','position_history','punishment_employee','punishment_history','absence_employee','absence_history','family_employee','family_history','leave_employee','leave_history','training_employee','training_history'))) active @endif">
+                        <a href="#riwayat" data-toggle="collapse" @if(in_array(Request::segment(1), array('class_employee','class_history','education_employee','education_history','position_employee','position_history','punishment_employee','punishment_history','absence_employee','absence_history','family_employee','family_history','leave_employee','leave_history','training_employee','training_history'))) aria-expanded="true" @endif class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 <span>Riwayat</span>
@@ -244,47 +250,56 @@ $setting = SiteHelpers::setting();
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('class_employee', 'education_employee', 'position_employee', 'punishment_employee', 'absence_employee', 'leave_employee', 'leave_history'))) show @endif"" id="riwayat" data-parent="#accordionExample">
-                            <li @if(Request::segment(1)=="class_employee") class="active" @endif>
+                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('class_employee','class_history','education_employee','education_history','position_employee','position_history','punishment_employee','punishment_history','absence_employee','absence_history','family_employee','family_history','leave_employee','leave_history','training_employee','training_history'))) show @endif" id="riwayat" data-parent="#accordionExample">
+                            <li @if(in_array(Request::segment(1), array('class_employee','class_history'))) class="active" @endif>
                                 <a href="{{ url('class_employee') }}"> Golongan </a>
                             </li>
-                            <li @if(Request::segment(1)=="education_employee") class="active" @endif>
+                            <li @if(in_array(Request::segment(1), array('education_employee','education_history'))) class="active" @endif>
                                 <a href="{{ url('education_employee') }}"> Pendidikan  </a>
                             </li>
-                            <li @if(Request::segment(1)=="position_employee") class="active" @endif>
+                            <li @if(in_array(Request::segment(1), array('position_employee','position_history'))) class="active" @endif>
                                 <a href="{{ url('position_employee') }}"> Jabatan </a>
                             </li>
-                            <li @if(Request::segment(1)=="punishment_employee") class="active" @endif>
+                            <!-- <li @if(in_array(Request::segment(1), array('punishment_employee','punishment_history'))) class="active" @endif>
                                 <a href="{{ url('punishment_employee') }}">Hukuman Disiplin</a>
-                            </li>
-                            <li @if(Request::segment(1)=="absence_employee") class="active" @endif>
+                            </li> -->
+                            <li @if(in_array(Request::segment(1), array('absence_employee','absence_history'))) class="active" @endif>
                                 <a href="{{ url('absence_employee') }}">Absen</a>
                             </li>
-                            <li @if(Request::segment(1)=="leave_employee" || Request::segment(1)=="leave_history") class="active" @endif>
+                            <li @if(in_array(Request::segment(1), array('leave_employee','leave_history'))) class="active" @endif>
                                 <a href="{{ url('leave_employee') }}">Cuti</a>
                             </li>
-                            <li @if(Request::segment(1)=="family_employee") class="active" @endif>
+                            <li @if(in_array(Request::segment(1), array('family_employee','family_history'))) class="active" @endif>
                                 <a href="{{ url('family_employee') }}">Keluarga</a>
                             </li>
-                            <li @if(Request::segment(1)=="training_employee") class="active" @endif>
+                            <li @if(in_array(Request::segment(1), array('training_employee','training_history'))) class="active" @endif>
                                 <a href="{{ url('training_employee') }}">Diklat</a>
                             </li>
                         </ul>
-                    </li>
-
-                    <li class="menu @if(Request::segment(1)=="log") active @endif">
-                        <a href="{{ url('log') }}" @if(Request::segment(1)=="log") aria-expanded="true" @endif class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
-                                <span>Log Aktifitas</span>
-                            </div>
-                        </a>
                     </li>
 
                     @if(Auth::user()->group_id == 1)
                         <li class="menu menu-heading">
                             <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>PENGATURAN</span></div>
                         </li>                    
+
+                        <li class="menu @if(Request::segment(1)=="constitution") active @endif">
+                            <a href="{{ url('constitution') }}" @if(Request::segment(1)=="constitution") aria-expanded="true" @endif class="dropdown-toggle">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                                    <span>Undang-undang</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="menu @if(Request::segment(1)=="log") active @endif">
+                            <a href="{{ url('log') }}" @if(Request::segment(1)=="log") aria-expanded="true" @endif class="dropdown-toggle">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                                    <span>Log Aktifitas</span>
+                                </div>
+                            </a>
+                        </li>
 
                         <li class="menu @if(Request::segment(1)=="user") active @endif">
                             <a href="{{ url('user') }}" @if(Request::segment(1)=="user") aria-expanded="true" @endif class="dropdown-toggle">

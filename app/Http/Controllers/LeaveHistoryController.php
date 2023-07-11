@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;   //nama model
 use App\Models\LeaveHistory;   //nama model
-use App\Models\Leave;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -34,8 +34,12 @@ class LeaveHistoryController extends Controller
     {
         $title = "Riwayat Cuti";
         $leave_history = $request->get('search');
-        $leave_history = LeaveHistory::where('NIP',$employee->nip)->where('info', 'LIKE', '%'.$leave_history.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $leave_history = LeaveHistory::where('NIP',$employee->nip)
+                            ->where(function ($query) use ($leave_history) {
+                                $query->where('type', 'LIKE', '%'.$leave_history.'%')
+                                        ->orWhere('info', 'LIKE', '%'.$leave_history.'%')
+                                        ->orWhere('status', 'LIKE', '%'.$leave_history.'%');
+                            })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
             return view('admin.leave_history.index',compact('title','leave_history'));
@@ -48,6 +52,17 @@ class LeaveHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_cuti_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data = $data['data'];
+
+        $synchronization = Synchronization::where('category','leave_history')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data;
+        $synchronization->save();
+
         $leave_history = LeaveHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
@@ -101,7 +116,10 @@ class LeaveHistoryController extends Controller
             }
         }
         
-
+        $synchronization = Synchronization::where('category','leave_history')->first();
+        $synchronization->status =  'Done';
+        $synchronization->save();
+        
         return redirect('/leave_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 

@@ -4,22 +4,34 @@
 		<thead>
 			<tr>
 				<th style="width: 2%">No</th>
-				<th>Kode Pendidikan</th>
-				<th>Nama Pendidikan</th>
-				<th>Kode Tingkat</th>
+				<th>NIP</th>
+				<th>Pangkat</th>
+				<th>Golongan</th>
+				<th>TMT Pangkat</th>
+				<th>SK. Pejabat</th>
+				<th>No. SK</th>
+				<th>Tanggal. SK</th>
+				<th>Masa Kerja Tahun</th>
+				<th>Masa Kerja Bulan</th>
 			</tr>
 		</thead>
 		<tbody>
-		@foreach($education as $v)
+		@foreach($class_history as $v)
 			<tr onclick="selectRow(this)">
-				<td id="education-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($education ->currentpage()-1) * $education ->perpage() + $loop->index + 1 }}</td>
-				<td id="education-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->code }}</td>
-				<td id="education-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->name }}</td>
-				<td id="education-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->level_code }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($class_history ->currentpage()-1) * $class_history ->perpage() + $loop->index + 1 }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->nip }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->rank }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->class }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->tmt }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->sk_official }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->sk_number }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->sk_date }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->mk_year }}</td>
+				<td id="class_history-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->mk_month }}</td>
 			</tr>
 		@endforeach
 		</tbody>
 	</table>
-	<div class="paginating-container">{{ $education->appends(Request::only('search'))->links() }}</div>
+	<div class="paginating-container">{{ $class_history->appends(Request::only('search'))->links() }}</div>
 	</div>
 </div>

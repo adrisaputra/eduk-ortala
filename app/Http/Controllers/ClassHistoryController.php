@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;   //nama model
 use App\Models\ClassHistory;   //nama model
 use App\Models\Classes;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -30,12 +31,15 @@ class ClassHistoryController extends Controller
     }
 
      ## Tampilkan Data Search
-     public function search(Request $request)
+     public function search(Employee $employee, Request $request)
      {
         $title = "Riwayat Golongan";
         $class_history = $request->get('search');
-        $class_history = ClassHistory::where('name', 'LIKE', '%'.$class_history.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $class_history = ClassHistory::where('NIP',$employee->nip)
+                        ->where(function ($query) use ($class_history) {
+                            $query->where('rank', 'LIKE', '%'.$class_history.'%')
+                                ->orWhere('class', 'LIKE', '%'.$class_history.'%');
+                        })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
             return view('admin.class_history.index',compact('title','class_history'));
@@ -48,6 +52,16 @@ class ClassHistoryController extends Controller
     public function sync_all()
     {
         
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_golongan_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data = $data['data'];
+
+        $synchronization = Synchronization::where('category','class_history')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data;
+        $synchronization->save();
+
         ClassHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
@@ -105,7 +119,10 @@ class ClassHistoryController extends Controller
             }
         }
         
-
+        $synchronization = Synchronization::where('category','class_history')->first();
+        $synchronization->status =  'Done';
+        $synchronization->save();
+        
         return redirect('/class_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 

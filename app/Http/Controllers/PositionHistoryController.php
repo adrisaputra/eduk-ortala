@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;   //nama model
 use App\Models\PositionHistory;   //nama model
-use App\Models\Position;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -30,12 +30,17 @@ class PositionHistoryController extends Controller
     }
 
      ## Tampilkan Data Search
-     public function search(Request $request)
+     public function search(Employee $employee, Request $request)
      {
         $title = "Riwayat Jabatan";
         $position_history = $request->get('search');
-        $position_history = PositionHistory::where('name', 'LIKE', '%'.$position_history.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $position_history = PositionHistory::where('NIP',$employee->nip)
+                            ->where(function ($query) use ($position_history) {
+                                $query->where('unit', 'LIKE', '%'.$position_history.'%')
+                                ->orWhere('position_type', 'LIKE', '%'.$position_history.'%')
+                                ->orWhere('position', 'LIKE', '%'.$position_history.'%')
+                                ->orWhere('eselon', 'LIKE', '%'.$position_history.'%');
+                            })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
             return view('admin.position_history.index',compact('title','position_history'));
@@ -47,6 +52,16 @@ class PositionHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_jabatan_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data = $data['data'];
+
+        $synchronization = Synchronization::where('category','position_history')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data;
+        $synchronization->save();
+
         $position_history = PositionHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
@@ -100,7 +115,10 @@ class PositionHistoryController extends Controller
             }
         }
         
-
+        $synchronization = Synchronization::where('category','position_history')->first();
+        $synchronization->status =  'Done';
+        $synchronization->save();
+        
         return redirect('/position_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 

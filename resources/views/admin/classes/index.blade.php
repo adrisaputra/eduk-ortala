@@ -34,22 +34,22 @@
                                 </div>
                             </div>
 
-					   	<form action="{{ url(Request::segment(1).'/search') }}" method="GET">		
-							<div class="widget-content widget-content-area">
-								<div class="row">
-									<div class="col-xl-8 col-md-12 col-sm-12 col-12">
-										<a href="{{ url(Request::segment(1).'/sync') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
-										<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning snackbar-bg-warning" data-toggle="tooltip" data-placement="top" title="Refresh">Refresh</a>
-										<!-- <a id="editButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Edit Data" disabled>Edit</a> -->
-									</div>
-									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
-										<div class="input-group" >
-											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()">
-										</div>
-									</div>
-								</div>
-							</div>
-						</form>
+                            <form action="{{ url(Request::segment(1).'/search') }}" method="GET">		
+                                <div class="widget-content widget-content-area">
+                                    <div class="row">
+                                        <div class="col-xl-8 col-md-12 col-sm-12 col-12">
+                                            <a href="{{ url(Request::segment(1).'/sync') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+                                            <a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning snackbar-bg-warning" data-toggle="tooltip" data-placement="top" title="Refresh">Refresh</a>
+                                            <!-- <a id="editButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Edit Data" disabled>Edit</a> -->
+                                        </div>
+                                        <div class="col-xl-4 col-md-12 col-sm-12 col-12">
+                                            <div class="input-group" >
+                                                <input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()" onkeypress="disableEnterKey(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
 						
                             <div class="widget-content widget-content-area" style="padding-top: 0px;">
 							@if ($message = Session::get('status'))
@@ -60,6 +60,7 @@
 									{{ $message }}
 								</div>     
 							@endif
+                            
 							<div id="loading-message">Loading data...</div>
 								<div id="hasil">
 									<div class="table-responsive">
@@ -92,6 +93,13 @@
                 </div>
 
             </div>
+<script>
+    function disableEnterKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
+</script>
 <script>
 	// Fungsi untuk mendapatkan elemen dengan ID tertentu
 	function getElementById(elementId) {

@@ -26,10 +26,8 @@ use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\MenuAccessController;
+use App\Http\Controllers\ConstitutionController;
 use App\Http\Controllers\MenuController;
-use App\Http\Controllers\SubMenuAccessController;
-use App\Http\Controllers\SubMenuController;
 use App\Http\Controllers\UserController;
 use Carbon\Carbon;
 
@@ -70,19 +68,12 @@ Route::get('/', [LoginController::class, 'index']);
 Route::post('/login_w', [LoginController::class, 'authenticate']);
 Route::post('/logout-sistem', [LoginController::class, 'logout']);
 
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware('verified');
-Route::get('/user/edit_profil/{user}', [UserController::class, 'edit_profil'])->middleware('verified');
-Route::put('/user/edit_profil/{user}', [UserController::class, 'update_profil'])->middleware('verified');
-
-Route::get('database',[DatabaseController::class, 'index']);
-Route::post('import_database',[DatabaseController::class, 'store']);
-Route::get('/backup_database', function() {
-    Artisan::call('database:backup');
-    return response()->download(public_path().'/db_backup/eduk-backup-' . Carbon::now()->format('Y-m-d') . '.sql');
-});
-
 Route::middleware(['admin_biro'])->group(function () {
-    
+        
+    Route::get('/dashboard', [HomeController::class, 'index'])->middleware('verified');
+    Route::get('/user/edit_profil/{user}', [UserController::class, 'edit_profil'])->middleware('verified');
+    Route::put('/user/edit_profil/{user}', [UserController::class, 'update_profil'])->middleware('verified');
+
     ## DUK
     Route::get('/duk', [DukController::class, 'index']);
     Route::get('/duk/search', [DukController::class, 'search']);
@@ -97,6 +88,7 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::put('/employee/edit/{employee}', [EmployeeController::class, 'update']);
     Route::get('/employee/hapus/{employee}',[EmployeeController::class, 'delete']);
     Route::get('/employee/sync', [EmployeeController::class, 'sync']);
+    Route::get('/employee/refresh', [EmployeeController::class, 'refresh']);
 
     ## Pendidikan
     Route::get('/education', [EducationController::class, 'index']);
@@ -155,20 +147,13 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::put('/menu/edit/{menu}', [MenuController::class, 'update']);
     Route::get('/menu/hapus/{menu}',[MenuController::class, 'delete']);
 
-    ## Log Activity
-    Route::get('/log', [LogController::class, 'index']);
-    Route::get('/log/search', [LogController::class, 'search']);
-
     ## Report
     Route::get('/report',[ReportController::class, 'index']);
-
-    ## Setting
-    Route::get('/setting', [SettingController::class, 'index']);
-    Route::put('/setting/edit/{setting}', [SettingController::class, 'update']);
 
     # Riwayat Golongan
     Route::get('/class_employee', [EmployeeController::class, 'index']);
     Route::get('/class_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/class_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/class_history/{employee}', [ClassHistoryController::class, 'index']);
     Route::get('/class_history/search/{employee}', [ClassHistoryController::class, 'search']);
     Route::get('/class_history_sync_all', [ClassHistoryController::class, 'sync_all']);
@@ -177,6 +162,7 @@ Route::middleware(['admin_biro'])->group(function () {
     # Riwayat Pendidikan
     Route::get('/education_employee', [EmployeeController::class, 'index']);
     Route::get('/education_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/education_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/education_history/{employee}', [EducationHistoryController::class, 'index']);
     Route::get('/education_history/search/{employee}', [EducationHistoryController::class, 'search']);
     Route::get('/education_history_sync_all', [EducationHistoryController::class, 'sync_all']);
@@ -185,22 +171,25 @@ Route::middleware(['admin_biro'])->group(function () {
     # Riwayat Jabatan
     Route::get('/position_employee', [EmployeeController::class, 'index']);
     Route::get('/position_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/position_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/position_history/{employee}', [PositionHistoryController::class, 'index']);
     Route::get('/position_history/search/{employee}', [PositionHistoryController::class, 'search']);
     Route::get('/position_history_sync_all', [PositionHistoryController::class, 'sync_all']);
     Route::get('/position_history/sync/{employee}', [PositionHistoryController::class, 'sync']);
 
-    # Riwayat Hukuman
-    Route::get('/punishment_employee', [EmployeeController::class, 'index']);
-    Route::get('/punishment_employee/search', [EmployeeController::class, 'search']);
-    Route::get('/punishment_history/{employee}', [PunishmentHistoryController::class, 'index']);
-    Route::get('/punishment_history/search/{employee}', [PunishmentHistoryController::class, 'search']);
-    Route::get('/punishment_history_sync_all', [PunishmentHistoryController::class, 'sync_all']);
-    Route::get('/punishment_history/sync/{employee}', [PunishmentHistoryController::class, 'sync']);
+    // # Riwayat Hukuman
+    // Route::get('/punishment_employee', [EmployeeController::class, 'index']);
+    // Route::get('/punishment_employee/search', [EmployeeController::class, 'search']);
+    // Route::get('/punishment_employee/refresh', [EmployeeController::class, 'refresh']);
+    // Route::get('/punishment_history/{employee}', [PunishmentHistoryController::class, 'index']);
+    // Route::get('/punishment_history/search/{employee}', [PunishmentHistoryController::class, 'search']);
+    // Route::get('/punishment_history_sync_all', [PunishmentHistoryController::class, 'sync_all']);
+    // Route::get('/punishment_history/sync/{employee}', [PunishmentHistoryController::class, 'sync']);
 
     # Riwayat Absensi
     Route::get('/absence_employee', [EmployeeController::class, 'index']);
     Route::get('/absence_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/absence_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/absence_history/{employee}', [AbsenceHistoryController::class, 'index']);
     Route::get('/absence_history/search/{employee}', [AbsenceHistoryController::class, 'search']);
     Route::post('/absence_history_sync_all', [AbsenceHistoryController::class, 'sync_all']);
@@ -209,6 +198,7 @@ Route::middleware(['admin_biro'])->group(function () {
     # Riwayat Cuti
     Route::get('/leave_employee', [EmployeeController::class, 'index']);
     Route::get('/leave_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/leave_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/leave_history/{employee}', [LeaveHistoryController::class, 'index']);
     Route::get('/leave_history/search/{employee}', [LeaveHistoryController::class, 'search']);
     Route::get('/leave_history_sync_all', [LeaveHistoryController::class, 'sync_all']);
@@ -217,6 +207,7 @@ Route::middleware(['admin_biro'])->group(function () {
     # Riwayat Keluarga
     Route::get('/family_employee', [EmployeeController::class, 'index']);
     Route::get('/family_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/family_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/family_history/{employee}', [FamilyHistoryController::class, 'index']);
     Route::get('/family_history/search/{employee}', [FamilyHistoryController::class, 'search']);
     Route::get('/family_history_sync_all', [FamilyHistoryController::class, 'sync_all']);
@@ -225,6 +216,7 @@ Route::middleware(['admin_biro'])->group(function () {
     # Riwayat Diklat
     Route::get('/training_employee', [EmployeeController::class, 'index']);
     Route::get('/training_employee/search', [EmployeeController::class, 'search']);
+    Route::get('/training_employee/refresh', [EmployeeController::class, 'refresh']);
     Route::get('/training_history/{employee}', [TrainingHistoryController::class, 'index']);
     Route::get('/training_history/search/{employee}', [TrainingHistoryController::class, 'search']);
     Route::get('/training_history_sync_all', [TrainingHistoryController::class, 'sync_all']);
@@ -237,6 +229,23 @@ Route::middleware(['admin_biro'])->group(function () {
 
 Route::middleware(['administrator'])->group(function () {
 
+    ## Setting
+    Route::get('/setting', [SettingController::class, 'index']);
+    Route::put('/setting/edit/{setting}', [SettingController::class, 'update']);
+
+    ## Log Activity
+    Route::get('/log', [LogController::class, 'index']);
+    Route::get('/log/search', [LogController::class, 'search']);
+
+    ## Constitution
+    Route::get('/constitution', [ConstitutionController::class, 'index']);
+    Route::get('/constitution/search', [ConstitutionController::class, 'search']);
+    Route::get('/constitution/create', [ConstitutionController::class, 'create']);
+    Route::post('/constitution', [ConstitutionController::class, 'store']);
+    Route::get('/constitution/edit/{constitution}', [ConstitutionController::class, 'edit']);
+    Route::put('/constitution/edit/{constitution}', [ConstitutionController::class, 'update']);
+    Route::get('/constitution/delete/{constitution}',[ConstitutionController::class, 'delete']);
+     
     ## User
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/user/search', [UserController::class, 'search']);
@@ -246,5 +255,12 @@ Route::middleware(['administrator'])->group(function () {
     Route::put('/user/edit/{user}', [UserController::class, 'update']);
     Route::get('/user/hapus/{user}',[UserController::class, 'delete']);
     
+    Route::get('database',[DatabaseController::class, 'index']);
+    Route::post('import_database',[DatabaseController::class, 'store']);
+    Route::get('/backup_database', function() {
+        Artisan::call('database:backup');
+        return response()->download(public_path().'/db_backup/eduk-backup-' . Carbon::now()->format('Y-m-d') . '.sql');
+    });
+
 });
 

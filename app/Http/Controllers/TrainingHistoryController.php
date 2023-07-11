@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;   //nama model
 use App\Models\TrainingHistory;   //nama model
-use App\Models\Training;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -30,12 +30,17 @@ class TrainingHistoryController extends Controller
     }
 
     ## Tampilkan Data Search
-    public function search(Request $request, Employee $employee)
+    public function search(Employee $employee, Request $request)
     {
         $title = "Riwayat Diklat";
         $training_history = $request->get('search');
-        $training_history = TrainingHistory::where('nip',$employee->nip)->where('name', 'LIKE', '%'.$training_history.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $training_history = TrainingHistory::where('NIP',$employee->nip)
+                            ->where(function ($query) use ($training_history) {
+                                $query->where('name', 'LIKE', '%'.$training_history.'%')
+                                        ->orWhere('place', 'LIKE', '%'.$training_history.'%')
+                                        ->orWhere('organizer', 'LIKE', '%'.$training_history.'%')
+                                        ->orWhere('generation', 'LIKE', '%'.$training_history.'%');
+                            })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
             return view('admin.training_history.index',compact('title','training_history'));
@@ -48,6 +53,16 @@ class TrainingHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_diklat_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data = $data['data'];
+
+        $synchronization = Synchronization::where('category','training_history')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data;
+        $synchronization->save();
+
         $training_history = TrainingHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
@@ -99,7 +114,10 @@ class TrainingHistoryController extends Controller
             }
         }
         
-
+        $synchronization = Synchronization::where('category','training_history')->first();
+        $synchronization->status =  'Done';
+        $synchronization->save();
+        
         return redirect('/training_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 

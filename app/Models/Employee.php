@@ -31,6 +31,7 @@ class Employee extends Model
         'education_id',
         'position',
         'unit_id',
+        'parent_id',
     ];
 
     public function classes(){
@@ -63,5 +64,9 @@ class Employee extends Model
     
     public function unit(){
         return $this->belongsTo('App\Models\Unit');
+    }
+
+    public function parent(){
+        return $this->belongsTo('App\Models\Unit', 'parent_id');
     }
 }

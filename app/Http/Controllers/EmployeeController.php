@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;   //nama model
 use App\Models\Classes;   //nama model
-use App\Models\Position;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Models\Education;   //nama model
 use App\Models\Unit;   //nama model
+use App\Models\EducationHistory;
+use App\Models\ClassHistory;
+use App\Models\PositionHistory;
+use App\Models\PunishmentHistory;
+use App\Models\AbsenceHistory;
+use App\Models\LeaveHistory;
+use App\Models\ParentHistory;
+use App\Models\ChildHistory;
+use App\Models\TrainingHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -37,7 +46,26 @@ class EmployeeController extends Controller
                     ->orderBy('class_histories.mk_month','DESC')
                     ->orderBy('date_of_birth','ASC')
                     ->paginate(25)->onEachSide(1);
-         return view('admin.employee.index',compact('title','employee'));
+         if(request()->segment(1)=='employee'){
+            $synchronization = Synchronization::where('category','employee')->first();   
+         } else if(request()->segment(1)=='class_employee'){
+            $synchronization = Synchronization::where('category','class_history')->first(); 
+         } else if(request()->segment(1)=='education_employee'){
+            $synchronization = Synchronization::where('category','education_history')->first(); 
+         } else if(request()->segment(1)=='position_employee'){
+            $synchronization = Synchronization::where('category','position_history')->first(); 
+         }else if(request()->segment(1)=='punishment_employee'){
+            $synchronization = Synchronization::where('category','punishment_history')->first(); 
+         }else if(request()->segment(1)=='absence_employee'){
+            $synchronization = Synchronization::where('category','absence_history')->first(); 
+         }else if(request()->segment(1)=='leave_employee'){
+            $synchronization = Synchronization::where('category','leave_history')->first(); 
+         }else if(request()->segment(1)=='family_employee'){
+            $synchronization = Synchronization::where('category','family_history')->first(); 
+         }else if(request()->segment(1)=='training_employee'){
+            $synchronization = Synchronization::where('category','training_history')->first(); 
+         }
+         return view('admin.employee.index',compact('title','employee','synchronization'));
      }
  
      ## Tampilkan Data Search
@@ -49,9 +77,9 @@ class EmployeeController extends Controller
                     ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
                     ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
                     ->where(function ($query) use ($employee) {
-                        $query->where('nip', 'LIKE', '%'.$employee.'%')
-                        ->orWhere('name', 'LIKE', '%'.$employee.'%')
-                        ->orWhere('status', 'LIKE', '%'.$employee.'%');
+                        $query->where('employees.nip', 'LIKE', '%'.$employee.'%')
+                        ->orWhere('employees.name', 'LIKE', '%'.$employee.'%')
+                        ->orWhere('employees.status', 'LIKE', '%'.$employee.'%');
                     })->groupBy('employees.nip')
                     ->orderBy('class_id','DESC')
                     ->orderBy('class_histories.tmt','DESC')
@@ -71,10 +99,20 @@ class EmployeeController extends Controller
      public function sync()
      {
         // Tarik data dari API
-        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_pegawai');
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_pegawai');
+        $data = json_decode($response, true);
+        $count_all_data = $data['data'];
+
+        $synchronization = Synchronization::where('category','employee')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data;
+        $synchronization->save();
+
+        // Tarik data dari API
+        $response2 = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_pegawai');
 
         // Menguraikan JSON menjadi array asosiatif
-        $responseArray = json_decode($response, true);
+        $responseArray = json_decode($response2, true);
 
         // Memeriksa apakah status bernilai true
         if ($responseArray['status']) {
@@ -125,6 +163,12 @@ class EmployeeController extends Controller
                         $unit = Unit::where('code',$item['KdUnor'])->first();
                         $employee->unit_id =  $unit ? $unit->id : null;
 
+                        if($unit){
+                           $unit2 = Unit::where('id', $unit->id)->first();
+                           $parent = Unit::where('code',$unit2->parent_code)->first();
+                           $employee->parent_id = $parent->id;
+                        }
+
                         $employee->save();
                     } else {
                         $employee = New Employee();
@@ -158,18 +202,28 @@ class EmployeeController extends Controller
                         $unit = Unit::where('code',$item['KdUnor'])->first();
                         $employee->unit_id =  $unit ? $unit->id : null;
 
+                        if($unit){
+                           $unit2 = Unit::where('id', $unit->id)->first();
+                           $parent = Unit::where('code',$unit2->parent_code)->first();
+                           $employee->parent_id = $parent->id;
+                        }
+
                         $employee->save();
                     }
                 }
             }
 
             activity()->log('Sinkronisasi Data Employee');
+            
+            $synchronization = Synchronization::where('category','employee')->first();
+            $synchronization->status =  'Done';
+            $synchronization->save();
+
             return redirect('/employee')->with('status', 'Data Berhasil Disinkronisasi');
         } else {
             // return redirect()->back()->with('error', 'Failed to pull data from API.');
         }
 
-        // echo $response;
      }
  
  
@@ -215,4 +269,42 @@ class EmployeeController extends Controller
          activity()->log('Hapus Data Pegawai dengan ID = '.$employee->id);
          return redirect('/employee')->with('status', 'Data Berhasil Dihapus');
      }
+
+     ## Tampikan Data
+    public function refresh()
+    {
+        if(request()->segment(1)=='employee'){
+            $nilai = Employee::count(); 
+            $synchronization = Synchronization::where('category','employee')->first();   
+         } else if(request()->segment(1)=='class_employee'){
+            $nilai = ClassHistory::count(); 
+            $synchronization = Synchronization::where('category','class_history')->first();
+         } else if(request()->segment(1)=='education_employee'){
+            $nilai = EducationHistory::count(); 
+            $synchronization = Synchronization::where('category','education_history')->first();
+         } else if(request()->segment(1)=='position_employee'){
+            $nilai = PositionHistory::count(); 
+            $synchronization = Synchronization::where('category','position_history')->first();
+         } else if(request()->segment(1)=='punishment_employee'){
+            $nilai = PunishmentHistory::count(); 
+            $synchronization = Synchronization::where('category','punishment_history')->first(); 
+         }else if(request()->segment(1)=='absence_employee'){
+            $nilai = AbsenceHistory::count(); 
+            $synchronization = Synchronization::where('category','absence_history')->first(); 
+         }else if(request()->segment(1)=='leave_employee'){
+            $nilai = LeaveHistory::count(); 
+            $synchronization = Synchronization::where('category','leave_history')->first(); 
+         }else if(request()->segment(1)=='family_employee'){
+            $nilai1 = ParentHistory::count(); 
+            $nilai2 = ChildHistory::count(); 
+            $nilai = $nilai1 + $nilai2; 
+            $synchronization = Synchronization::where('category','family_history')->first(); 
+         }else if(request()->segment(1)=='training_employee'){
+            $nilai = TrainingHistory::count(); 
+            $synchronization = Synchronization::where('category','training_history')->first(); 
+         }
+         
+         $persentase = ($nilai / $synchronization->count_all_data) * 100; 
+         return view('admin.employee.refresh',compact('synchronization','persentase'));
+    }
 }

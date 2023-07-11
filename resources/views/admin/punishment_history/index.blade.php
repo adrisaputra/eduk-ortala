@@ -99,6 +99,13 @@
 
             </div>
 <script>
+    function disableEnterKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
+</script>
+<script>
 	// Fungsi untuk mendapatkan elemen dengan ID tertentu
 	function getElementById(elementId) {
 		return document.getElementById(elementId);

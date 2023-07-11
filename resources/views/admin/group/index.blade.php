@@ -115,4 +115,11 @@
 <!--end::Post-->
 </div>
 <!--end::Content-->
+<script>
+    function disableEnterKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
+</script>
 @endsection

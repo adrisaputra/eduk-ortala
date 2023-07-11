@@ -30,7 +30,7 @@
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 										<div class="input-group" >
-											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()">
+											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()" onkeypress="disableEnterKey(event)">
 										</div>
 									</div>
 								</div>
@@ -105,6 +105,13 @@
                 </div>
 
             </div>
+<script>
+    function disableEnterKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
+</script>
 <script>
 	// Fungsi untuk mendapatkan elemen dengan ID tertentu
 	function getElementById(elementId) {

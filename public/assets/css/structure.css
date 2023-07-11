@@ -221,10 +221,11 @@ code {
   .header-container .navbar-nav.theme-brand .theme-logo {
     align-self: center;
     opacity: 1;
-    width: 47px; }
+    /* width: 47px;  */
+  }
     .header-container .navbar-nav.theme-brand .theme-logo img {
       width: 48px;
-      height: 48px;
+      height: 55px;
       border-radius: 5px; }
 
 .header-container .navbar-nav .theme-text {

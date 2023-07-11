@@ -28,6 +28,11 @@
 										<a href="{{ url(Request::segment(1).'/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 										<a href="{{ url('position_employee') }}" class="btn mb-2 mr-1 btn-danger" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></a>
 									</div>
+									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
+										<div class="input-group" >
+											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()" onkeypress="disableEnterKey(event)">
+										</div>
+									</div>
 								</div>
 							</div>
 						</form>
@@ -107,6 +112,13 @@
 
             </div>
 <script>
+    function disableEnterKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
+</script>
+<script>
 	// Fungsi untuk mendapatkan elemen dengan ID tertentu
 	function getElementById(elementId) {
 		return document.getElementById(elementId);
@@ -165,7 +177,7 @@
 <script>
 function tampil(){
     search = document.getElementById("search").value;
-    url = "{{ url('/position_history/search') }}"
+    url = "{{ url('/position_history/search/'.Request::segment(2)) }}"
     $.ajax({
         url:""+url+"?search="+search+"",
         success: function(response){

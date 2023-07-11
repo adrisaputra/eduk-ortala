@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;   //nama model
 use App\Models\ParentHistory;   //nama model
 use App\Models\ChildHistory;   //nama model
+use App\Models\Synchronization;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -33,6 +34,21 @@ class FamilyHistoryController extends Controller
     ## Tampilkan Form Create
     public function sync_all()
     {
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_orang_tua_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data1 = $data['data'];
+
+        // Tarik data dari API
+        $response = Http::get('https://simponi.sultraprov.go.id/api/eduk/get_count_all_riwayat_anak_by_nip');
+        $data = json_decode($response, true);
+        $count_all_data2 = $data['data'];
+
+        $synchronization = Synchronization::where('category','family_history')->first();
+        $synchronization->status =  'Process';
+        $synchronization->count_all_data =  $count_all_data1 + $count_all_data2;
+        $synchronization->save();
+
         $parent_history = ParentHistory::truncate();
         $employee = Employee::select('id','nip')->get();
 
@@ -102,6 +118,10 @@ class FamilyHistoryController extends Controller
         
         $this->sync_all_child();
 
+        $synchronization = Synchronization::where('category','family_history')->first();
+        $synchronization->status =  'Done';
+        $synchronization->save();
+        
         return redirect('/training_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 

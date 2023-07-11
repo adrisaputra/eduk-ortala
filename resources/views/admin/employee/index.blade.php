@@ -30,7 +30,7 @@
 											(Riwayat Cuti) 
 										@elseif(Request::segment(1)=="family_employee") 
 											(Riwayat Keluarga) 
-										@elseif(Request::segment(1)=="training_employee") 
+										@elseif(Request::segment(1)=="family_employee") 
 											(Riwayat Diklat) 
 										@endif</h4>
                                     </div>                 
@@ -43,46 +43,46 @@
 									<div class="col-xl-8 col-md-12 col-sm-12 col-12">
 										<!-- <a href="{{ url(Request::segment(1).'/create') }}" class="btn mb-2 mr-1 btn-success snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Tambah Data"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></a> -->
 										@if(Request::segment(1)=="employee")
-											<a href="{{ url(Request::segment(1).'/sync') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()" class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning snackbar-bg-warning" data-toggle="tooltip" data-placement="top" title="Refresh">Refresh</a>
 											<a id="editButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Edit Data" disabled>Edit</a>
 										@elseif(Request::segment(1)=="class_employee")
-											<a href="{{ url('class_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()"class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowClassButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Golongan" disabled>Lihat Riwayat Golongan</a>
 										@elseif(Request::segment(1)=="education_employee")
-											<a href="{{ url('education_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()" class="btn mb-2 mr-1 btn-info  warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowEducationButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Pendidikan" disabled>Lihat Riwayat Pendidikan</a>
 										@elseif(Request::segment(1)=="position_employee")
-											<a href="{{ url('position_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()"class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowPositionButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Jabatan" disabled>Lihat Riwayat Jabatan</a>
 										@elseif(Request::segment(1)=="punishment_employee")
-											<a href="{{ url('punishment_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()"class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowPunishmentButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Hukuman" disabled>Lihat Riwayat Hukuman</a>
 										@elseif(Request::segment(1)=="absence_employee")
-											<button type="button" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="modal" data-target="#exampleModal">Sinkronisasi</button>
+										<button type="button" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="modal" data-target="#exampleModal">Sinkronisasi</button>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowAbsenceButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Absensi" disabled>Lihat Riwayat Absensi</a>
 										@elseif(Request::segment(1)=="leave_employee")
-											<a href="{{ url('leave_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()"class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowLeaveButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Cuti" disabled>Lihat Riwayat Cuti</a>
 										@elseif(Request::segment(1)=="family_employee")
-											<a href="{{ url('family_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()"class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowFamilyButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Keluarga" disabled>Lihat Riwayat Keluarga</a>
 										@elseif(Request::segment(1)=="training_employee")
-											<a href="{{ url('training_history_sync_all') }}" class="btn mb-2 mr-1 btn-info snackbar-bg-info" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
+											<a href="#" onclick="sync()"class="btn mb-2 mr-1 btn-info warning confirm" data-toggle="tooltip" data-placement="top" title="Sinkronisasi Data">Sinkronisasi</a>
 											<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning" data-toggle="tooltip" data-placement="top" title="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg></a>
 											<a id="ShowTrainingButton" href="#" class="btn mb-2 mr-1 btn-default snackbar-bg-success" data-toggle="tooltip" data-placement="top" title="Lihat Riwayat Keluarga" disabled>Lihat Riwayat Diklat</a>
 										@endif
 									</div>
 									<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 										<div class="input-group" >
-											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()">
+											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()" onkeypress="disableEnterKey(event)">
 										</div>
 									</div>
 								</div>
@@ -140,15 +140,31 @@
 							</div>
 						</form>
 
+
                             <div class="widget-content widget-content-area" style="padding-top: 0px;">
-							@if ($message = Session::get('status'))
-								<div class="alert alert-info mb-4" role="alert"> 
-									<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="alert"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-									</button> <h4 style="color: #ffffff;"><i class="image fa fa-check"></i> Berhasil !</h4>
-									{{ $message }}
-								</div>     
-							@endif
+
+								@if($synchronization->status == "Process")
+									<div class="w-browser-details" id="synchronization">
+										<div class="w-browser-info">
+											<h6>Proses Sinkronisasi <b>(0%)</b></h6>
+										</div>
+										<div class="w-browser-stats">
+											<div class="progress">
+												<div class="progress-bar bg-gradient-success" role="progressbar" style="background-image: linear-gradient(to right, #8BC34A 0%, #4CAF50 100%);width: 0%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+									</div>
+								@endif
+                    
+								@if ($message = Session::get('status'))
+									<div class="alert alert-info mb-4" role="alert"> 
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="alert"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+										</button> <h4 style="color: #ffffff;"><i class="image fa fa-check"></i> Berhasil !</h4>
+										{{ $message }}
+									</div>     
+								@endif
+
 								<div id="hasil">
 									<div class="table-responsive">
 									<table class="table table-bordered table-hover mb-4">
@@ -158,8 +174,9 @@
 												<th rowspan=2>NIP</th>
 												<th rowspan=2>Nama</th>
 												<th colspan=2>Pangkat</th>
+												<!-- <th rowspan=2>Unor</th> -->
+												<th rowspan=2>Unor Induk</th>
 												<th rowspan=2>Status Pegawai</th>
-												<th rowspan=2>Unor</th>
 											</tr>
 											<tr>
 												<th>Gol.</th>
@@ -174,8 +191,9 @@
 												<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->front_title }} {{ $v->name }} {{ $v->back_title }}</td>
 												<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->classes ? $v->classes->class : '' }}</td>
 												<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->classes && $v->classes->class_history($v->nip)->first() ? date('d-m-Y', strtotime($v->classes->class_history($v->nip)->first()->tmt)) : '' }}</td>
+												<!-- <td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->unit ? $v->unit->name : '' }}</td> -->
+												<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->parent->name }}</td>
 												<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->status }}</td>
-												<td id="employee-{{ $v->id }}" onClick="getEmployee(this.id)"> {{ $v->unit ? $v->unit->name : '' }}</td>
 											</tr>
 										@endforeach
 										</tbody>
@@ -189,6 +207,13 @@
                 </div>
 
             </div>
+<script>
+    function disableEnterKey(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+      }
+    }
+</script>
 <script>
 	// Fungsi untuk mendapatkan elemen dengan ID tertentu
 	function getElementById(elementId) {
@@ -310,6 +335,7 @@
 			ShowTrainingButton.href = ""+url+"/"+employeeId;
 
 		@endif
+
 	}
 
 	// Menambahkan event listener untuk mendeteksi klik di luar elemen dengan ID pegawai
@@ -359,34 +385,64 @@ function tampil(){
 }
 </script>
 <script>
-    function DeleteData(id) {
+function sync(){
 
-        $('.widget-content .warning.confirm').on('click', function () {
+	$('.widget-content .warning.confirm').on('click', function () {
         swal({
-            title: 'Apakah Kamu Yakin?',
-            text: "Anda tidak akan dapat mengembalikan ini!",
+            title: 'Apakah Anda Yakin Akan Melakukan Sinkronisasi Data ?',
+            // text: "Anda tidak akan dapat mengembalikan ini!",
             type: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Delete',
+            confirmButtonText: 'Sinkronisasi',
             padding: '2em'
             }).then(function(result) {
             if (result.value) {
                     swal(
-                    'Deleted!',
-                    'Data Berita Berhasil Dihapus.',
+                    'Success!',
+                    'Data Sedang Disinkronisasi.',
                     'success'
                     ).then(function() {
-						url = "{{ url('/employee/delete') }}"
-                        $.ajax({
-                            url:""+url+"/"+id+"",
-                            success: function(response){
-                                location.reload();
-                            }
-                        });
+						@if(Request::segment(1)=="employee")
+							var url = "{{ url(Request::segment(1).'/sync') }}";
+						@elseif(Request::segment(1)=="class_employee")
+							var url = "{{ url('class_history_sync_all') }}";
+						@elseif(Request::segment(1)=="education_employee")
+							var url = "{{ url('education_history_sync_all') }}";
+						@elseif(Request::segment(1)=="position_employee")
+							var url = "{{ url('position_history_sync_all') }}";
+						@elseif(Request::segment(1)=="punishment_employee")
+							var url = "{{ url('punishment_history_sync_all') }}";
+						@elseif(Request::segment(1)=="absence_employee")
+							var url = "{{ url('absence_history_sync_all') }}";
+						@elseif(Request::segment(1)=="leave_employee")
+							var url = "{{ url('leave_history_sync_all') }}";
+						@elseif(Request::segment(1)=="family_employee")
+							var url = "{{ url('family_history_sync_all') }}";
+						@elseif(Request::segment(1)=="training_employee")
+							var url = "{{ url('training_history_sync_all') }}";
+						@endif
+						$.ajax({
+							url:url,
+							success: function(response){
+								// $("#hasil").html(response);
+								console.log("berhasil");
+							}
+						});
+						
+						window.setTimeout(function() {
+							window.location.href = "{{ url(Request::segment(1)) }}";
+						}, 1000); // 10000 milidetik = 1 detik
 					});
                 }
             })
         })
-    }
+}
+</script>
+<script> 
+	$(document).ready(function(){
+		setInterval(function(){
+			$("#synchronization").load(window.location.href + "/refresh" );
+		}, 1000);
+	});
 </script>
 @endsection

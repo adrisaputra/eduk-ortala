@@ -61,8 +61,8 @@ class DukController extends Controller
                     ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
                     ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
                     ->where(function ($query) use ($employee) {
-                        $query->where('nip', 'LIKE', '%'.$employee.'%')
-                            ->orWhere('name', 'LIKE', '%'.$employee.'%');
+                        $query->where('employees.nip', 'LIKE', '%'.$employee.'%')
+                            ->orWhere('employees.name', 'LIKE', '%'.$employee.'%');
                     })->groupBy('employees.nip')
                     ->orderBy('class_id','DESC')
                     ->orderBy('class_histories.tmt','DESC')
@@ -205,7 +205,7 @@ class DukController extends Controller
             $sheet->setCellValue('A' . $rows, $no++);
             $sheet->setCellValue('B' . $rows, "'".$v->nip);
             $sheet->getStyle('B' . $rows)->getNumberFormat()->setFormatCode('0');
-            $sheet->setCellValue('C' . $rows, $v->name);
+            $sheet->setCellValue('C' . $rows, $v->front_title.' '.$v->name.' '.$v->back_title);
             $sheet->setCellValue('D' . $rows, $v->classes ? $v->classes->class : '');
             $sheet->setCellValue('E' . $rows, $v->classes && $v->classes->class_history($v->nip)->first() ? date('d-m-Y', strtotime($v->classes->class_history($v->nip)->first()->tmt)) : '');
             $sheet->setCellValue('F' . $rows, $v->position_history($v->nip)->first() ? $v->position_history($v->nip)->first()->position : '');

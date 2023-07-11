@@ -11,7 +11,7 @@ $setting = SiteHelpers::setting();
                     <div class="form-content">
 
                         <div class="text-center">
-                            <img src="{{ asset('upload/setting/Eduk Ortala Prov. Sultra.png') }}" style="height: 50%;width:70%"  />
+                            <img src="{{ asset('upload/setting/'.$setting->large_icon) }}" style="width:90%"  />
                         </div>
                         
                         <form  class="text-left" method="POST" action="{{ url('login_w') }}" method="POST" enctype="multipart/form-data">
