@@ -10,7 +10,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationHistoryController;
 use App\Http\Controllers\PositionHistoryController;
-use App\Http\Controllers\PunishmentHistoryController;
+// use App\Http\Controllers\PunishmentHistoryController;
 use App\Http\Controllers\AbsenceHistoryController;
 use App\Http\Controllers\LeaveHistoryController;
 use App\Http\Controllers\FamilyHistoryController;
@@ -21,8 +21,8 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DatabaseController;
-use App\Http\Controllers\SliderController;
-use App\Http\Controllers\OfficeController;
+use App\Http\Controllers\PromotionFileController;
+use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\GroupController;
@@ -68,7 +68,7 @@ Route::get('/', [LoginController::class, 'index']);
 Route::post('/login_w', [LoginController::class, 'authenticate']);
 Route::post('/logout-sistem', [LoginController::class, 'logout']);
 
-Route::middleware(['admin_biro'])->group(function () {
+Route::middleware(['all_admin'])->group(function () {
         
     Route::get('/dashboard', [HomeController::class, 'index'])->middleware('verified');
     Route::get('/user/edit_profil/{user}', [UserController::class, 'edit_profil'])->middleware('verified');
@@ -89,6 +89,7 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::get('/employee/hapus/{employee}',[EmployeeController::class, 'delete']);
     Route::get('/employee/sync', [EmployeeController::class, 'sync']);
     Route::get('/employee/refresh', [EmployeeController::class, 'refresh']);
+    Route::get('/employee/get_class/{employee}', [EmployeeController::class, 'get_class']);
 
     ## Pendidikan
     Route::get('/education', [EducationController::class, 'index']);
@@ -110,24 +111,6 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::get('/unit', [UnitController::class, 'index']);
     Route::get('/unit/search', [UnitController::class, 'search']);
     Route::get('/unit/sync', [UnitController::class, 'sync']);
-
-    ## Opd
-    Route::get('/slider', [SliderController::class, 'index']);
-    Route::get('/slider/search', [SliderController::class, 'search']);
-    Route::get('/slider/create', [SliderController::class, 'create']);
-    Route::post('/slider', [SliderController::class, 'store']);
-    Route::get('/slider/edit/{slider}', [SliderController::class, 'edit']);
-    Route::put('/slider/edit/{slider}', [SliderController::class, 'update']);
-    Route::get('/slider/hapus/{slider}',[SliderController::class, 'delete']);
-
-    ## Opd
-    Route::get('/office', [OfficeController::class, 'index']);
-    Route::get('/office/search', [OfficeController::class, 'search']);
-    Route::get('/office/create', [OfficeController::class, 'create']);
-    Route::post('/office', [OfficeController::class, 'store']);
-    Route::get('/office/edit/{office}', [OfficeController::class, 'edit']);
-    Route::put('/office/edit/{office}', [OfficeController::class, 'update']);
-    Route::get('/office/hapus/{office}',[OfficeController::class, 'delete']);
 
     ## Group
     Route::get('/group', [GroupController::class, 'index']);
@@ -222,9 +205,33 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::get('/training_history_sync_all', [TrainingHistoryController::class, 'sync_all']);
     Route::get('/training_history/sync/{employee}', [TrainingHistoryController::class, 'sync']);
         
+    ## Naik Pangkat
+    Route::get('/promotion', [PromotionController::class, 'index']);
+    Route::get('/promotion/search', [PromotionController::class, 'search']);
+
+    ## File Naik Pangkat
+    Route::get('/promotion_file/{promotion}', [PromotionFileController::class, 'index']);
+    Route::get('/promotion_file/{promotion}/search', [PromotionFileController::class, 'search']);
+    Route::get('/promotion_file/{promotion}/create', [PromotionFileController::class, 'create']);
+    Route::post('/promotion_file/{promotion}', [PromotionFileController::class, 'store']);
+    Route::get('/promotion_file/edit/{promotion}/{promotion_file}', [PromotionFileController::class, 'edit']);
+    Route::put('/promotion_file/edit/{promotion}/{promotion_file}', [PromotionFileController::class, 'update']);
+    Route::get('/promotion_file/delete/{promotion}/{promotion_file}',[PromotionFileController::class, 'delete']);
+
+    ## Edit Profil
     Route::get('/edit_profil/{user}',[UserController::class, 'edit_profil']);
     Route::put('/edit_profil/{user}',[UserController::class, 'update_profil']);
 
+});
+
+Route::middleware(['admin_biro'])->group(function () {
+    
+    Route::get('/promotion/create', [PromotionController::class, 'create']);
+    Route::post('/promotion', [PromotionController::class, 'store']);
+    Route::get('/promotion/edit/{promotion}', [PromotionController::class, 'edit']);
+    Route::put('/promotion/edit/{promotion}', [PromotionController::class, 'update']);
+    Route::get('/promotion/hapus/{promotion}',[PromotionController::class, 'delete']);
+    Route::get('/promotion/send/{promotion}',[PromotionController::class, 'process']);
 });
 
 Route::middleware(['administrator'])->group(function () {
@@ -237,7 +244,7 @@ Route::middleware(['administrator'])->group(function () {
     Route::get('/log', [LogController::class, 'index']);
     Route::get('/log/search', [LogController::class, 'search']);
 
-    ## Constitution
+    ## Undang-undang
     Route::get('/constitution', [ConstitutionController::class, 'index']);
     Route::get('/constitution/search', [ConstitutionController::class, 'search']);
     Route::get('/constitution/create', [ConstitutionController::class, 'create']);
@@ -246,6 +253,9 @@ Route::middleware(['administrator'])->group(function () {
     Route::put('/constitution/edit/{constitution}', [ConstitutionController::class, 'update']);
     Route::get('/constitution/delete/{constitution}',[ConstitutionController::class, 'delete']);
      
+    Route::get('/promotion/accept/{promotion}',[PromotionController::class, 'process']);
+    Route::get('/promotion/reject/{promotion}',[PromotionController::class, 'process']);
+
     ## User
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/user/search', [UserController::class, 'search']);

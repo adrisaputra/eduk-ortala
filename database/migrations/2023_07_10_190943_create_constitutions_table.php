@@ -15,8 +15,21 @@ class CreateConstitutionsTable extends Migration
     {
         Schema::create('constitutions', function (Blueprint $table) {
             $table->increments('id',11);
+            
+            $table->unsignedBigInteger('employee_id');
+            $table->foreign("employee_id")->references('id')->on("employees");
+
+            $table->string('nip')->nullable();
             $table->string('name')->nullable();
-            $table->string('file')->nullable();
+            $table->string('place')->nullable();
+            $table->string('organizer')->nullable();
+            $table->string('generation')->nullable();
+            $table->date('start')->nullable();
+            $table->date('finish')->nullable();
+            $table->string('hours')->nullable();
+            $table->string('diploma_number')->nullable();
+            $table->date('diploma_date')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

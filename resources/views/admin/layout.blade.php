@@ -182,7 +182,7 @@ $setting = SiteHelpers::setting();
                         </a>
                     </li>
 
-                    <!-- <li class="menu">
+                    <li class="menu">
                         <a href="#layanan" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
@@ -193,13 +193,13 @@ $setting = SiteHelpers::setting();
                             </div>
                         </a>
                         <ul class="collapse submenu list-unstyled" id="layanan" data-parent="#accordionExample">
-                            <li>
+                            <!-- <li>
                                 <a href="component_tabs.html"> Pindah Instansi </a>
-                            </li>
+                            </li> -->
                             <li>
-                                <a href="component_accordion.html"> Naik Pangkat  </a>
+                                <a href="{{ url('promotion') }}"> Naik Pangkat  </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a href="component_modal.html"> KGB </a>
                             </li>                            
                             <li>
@@ -207,9 +207,9 @@ $setting = SiteHelpers::setting();
                             </li>
                             <li>
                                 <a href="{{ url('absence_employee') }}">Tugas Luar</a>
-                            </li>
+                            </li> -->
                         </ul>
-                    </li> -->
+                    </li>
 
                     <li class="menu @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") active @endif">
                         <a href="#master" data-toggle="collapse" @if(Request::segment(1)=="employee" || Request::segment(1)=="education" || Request::segment(1)=="class" || Request::segment(1)=="unit") aria-expanded="true" @endif class="dropdown-toggle">

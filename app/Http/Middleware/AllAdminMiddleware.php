@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminBiroMiddleware
+class AllAdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class AdminBiroMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->isAdminBiro()) {
+        if (Auth::check() && Auth::user()->isAdminBiro() || Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
         

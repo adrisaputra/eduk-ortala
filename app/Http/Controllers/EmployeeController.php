@@ -307,4 +307,16 @@ class EmployeeController extends Controller
          $persentase = ($nilai / $synchronization->count_all_data) * 100; 
          return view('admin.employee.refresh',compact('synchronization','persentase'));
     }
+
+    function get_class(Employee $employee)
+    {
+         $res = array();
+         $class_history = ClassHistory::where('employee_id',$employee->id)->orderBy('classes_id','DESC')->limit(1)->first();
+         $next_class = Classes::where('id','>',$class_history->classes_id)->orderBy('id','ASC')->limit(1)->first();
+         
+         $res['last_promotion'] = $class_history->class;
+         $res['new_promotion'] = $next_class->class;
+
+         return $res;
+    }
 }
