@@ -11,6 +11,8 @@ class Promotion extends Model
     protected $fillable =[
         'employee_id',
         'nip',
+        'year',
+        'period',
         'last_promotion',
         'new_promotion',
         'promotion_type',

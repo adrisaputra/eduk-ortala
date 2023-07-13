@@ -60,7 +60,7 @@
 			@endforeach
 			</tbody>
 		</table>
-			<div class="paginating-container">{{ $employee->appends(Request::only('search'))->links() }}</div>
+			<div class="paginating-container">{{ $employee->appends(Request::only('search','parent_code'))->links() }}</div>
 		</div>
 	</div>
 </div>

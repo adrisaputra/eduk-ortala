@@ -40,6 +40,8 @@ class EmployeeController extends Controller
                     ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
                     ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
                     ->groupBy('employees.nip')
+                    ->orderByRaw("FIELD(status, 'PNS', 'CPNS') DESC")
+                    ->orderBy('status', 'ASC')
                     ->orderBy('class_id','DESC')
                     ->orderBy('class_histories.tmt','DESC')
                     ->orderBy('unit_id','ASC')
@@ -81,6 +83,8 @@ class EmployeeController extends Controller
                         ->orWhere('employees.name', 'LIKE', '%'.$employee.'%')
                         ->orWhere('employees.status', 'LIKE', '%'.$employee.'%');
                     })->groupBy('employees.nip')
+                    ->orderByRaw("FIELD(status, 'PNS', 'CPNS') DESC")
+                    ->orderBy('status', 'ASC')
                     ->orderBy('class_id','DESC')
                     ->orderBy('class_histories.tmt','DESC')
                     ->orderBy('unit_id','ASC')

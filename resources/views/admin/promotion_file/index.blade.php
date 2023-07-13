@@ -23,7 +23,7 @@
 											<a href="{{ url(Request::segment(1).'/'.Request::segment(2).'/create') }}" class="btn mb-2 mr-1 btn-success">Tambah Data</a>	
 										@endif
 										<a href="{{ url(Request::segment(1).'/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-warning ">Refresh</a>
-										<a href="{{ url('promotion') }}" class="btn mb-2 mr-1 btn-danger ">Kembali</a>
+										<a href="{{ url('promotion?year='.$promotion->year.'&&period='.$promotion->period) }}" class="btn mb-2 mr-1 btn-danger ">Kembali</a>
 									</div>
 								</div>
 							</div>
@@ -40,6 +40,14 @@
 							@endif
 					
                                 <div class="row">
+
+									@if($promotion->status=="Diperbaiki" || $promotion->note==TRUE && $promotion->status=="Dikirim")
+										<div class="col-md-12 mb-3">
+											<label class="form-label required" style="font-size:20px;color:black;font-weight:bold;">{{ __('Catatan Perbaikan') }} :</label>
+											<p style="font-size:20px;color:red;font-weight:bold;margin-top:-10px;">{{ $promotion->note }}</p>
+										</div>
+									@endif
+
 									<div class="col-md-6 mb-3">
 										<label class="form-label required">{{ __('NIP') }}</label>
 										<input type="text" class="form-control" value="{{ $promotion->nip }}" readonly/>
@@ -94,13 +102,42 @@
 												<tr>
 													<td colspan=4>
 														<center>
+															
 															@if(Auth::user()->group_id=="2")
-																<a href="{{ url('promotion/send/'.Crypt::encrypt($promotion->id))}}" class="btn mr-1 btn-success" onclick="return confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');">Kirim Pengajuan</a>
+																<!-- <a href="#" class="btn mr-1 btn-success" onclick="confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');add_to_cart({{ $promotion->id }})">Kirim Pengajuan</a> -->
 															@elseif(Auth::user()->group_id=="1")
 																<a href="{{ url('promotion/accept/'.Crypt::encrypt($promotion->id))}}" class="btn mr-1 btn-success" onclick="return confirm('Apakah Anda Yakin Akan Menerima Pengajuan Ini ?');">Terima</a>
-																<a href="{{ url('promotion/send/'.Crypt::encrypt($promotion->id))}}" class="btn mr-1 btn-info" onclick="return confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');">Perbaiki</a>
-																<a href="{{ url('promotion/reject/'.Crypt::encrypt($promotion->id))}}" class="btn mr-1 btn-danger" onclick="return confirm('Apakah Anda Yakin Akan Menolak Pengajuan Ini ?');">Tolak</a>
+																<button type="button" class="btn mr-1 btn-info" data-toggle="modal" data-target="#exampleModal">Perbaiki</button>
+																<!-- <a href="{{ url('promotion/reject/'.Crypt::encrypt($promotion->id))}}" class="btn mr-1 btn-danger" onclick="return confirm('Apakah Anda Yakin Akan Menolak Pengajuan Ini ?');">Tolak</a> -->
 															@endif
+
+															<!-- Modal -->
+															<form action="{{ url('promotion/fix_document/'.Crypt::encrypt($promotion->id))}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+															{{ csrf_field() }}
+																<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+																	<div class="modal-dialog" role="document">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<h5 class="modal-title" id="exampleModalLabel">Perbaiki Dokumen</h5>
+																				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																				<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+																				</button>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-xl-12 col-lg-12 col-sm-12" style="font-size:16px">
+																						<textarea class="form-control" name="note" required></textarea>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="modal-footer">
+																				<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Batal</button>
+																				<button type="submit" class="btn btn-info">Perbaiki</button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</form>
 														</center>
 													</td>
 												</tr>
@@ -150,7 +187,7 @@ function tampil(){
             if (result.value) {
                     swal(
                     'Deleted!',
-                    'Data Undang-undang Berhasil Dihapus.',
+                    'Data File Pendukung Berhasil Dihapus.',
                     'success'
                     ).then(function() {
 						url = "{{ url('/promotion_file/delete') }}"
@@ -165,5 +202,35 @@ function tampil(){
             })
         })
     }
+</script>
+<script>
+	function add_to_cart(id){
+
+		// var quantity = document.getElementById('order_quantity' + id).value; // Mengambil nilai input
+		// console.log(quantity)
+		// $.ajax({
+		// 	url : "{{ url('/cart') }}",
+		// 	type : "POST",
+		// 	data: {
+		// 		_token: $('input[name=_token]').val(),
+		// 		user_id: user_id, // Menambahkan data input ke objek data
+		// 		product_id: id, // Menambahkan data input ke objek data
+		// 		price: price, // Menambahkan data input ke objek data
+		// 		quantity: quantity, // Menambahkan data input ke objek data
+		// 		total: price * quantity, // Menambahkan data input ke objek data
+		// 	},
+		// 	success: function(response){
+		// 	    Snackbar.show({
+		// 			pos: 'top-right',
+		// 			text: 'Pesanan Dimasukkan Dikeranjang',
+		// 			actionTextColor: '#fff',
+		// 			backgroundColor: '#8dbf42'
+		// 		});
+				
+		// 		$("#cart").load("{{ url('cart/reload')}}" );
+		// 	}
+		// })
+		console.log(id);
+	}
 </script>
 @endsection

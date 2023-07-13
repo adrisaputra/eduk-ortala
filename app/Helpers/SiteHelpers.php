@@ -2,12 +2,8 @@
 
 namespace App\Helpers;
 
-use App\Models\Menu;   //nama model
-use App\Models\SubMenu;   //nama model
-use App\Models\MenuAccess;   //nama model
-use App\Models\SubMenuAccess;   //nama model
-use App\Models\Slider;   //nama model
 use App\Models\Setting;   //nama model
+use App\Models\Promotion;   //nama model
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
@@ -18,6 +14,12 @@ class SiteHelpers
     {
         $setting = Setting::find(1);
         return $setting;
+    }
+
+    public static function notification()
+    {
+        $count = Promotion::where('status','Dikirim')->count();
+        return $count;
     }
 
 

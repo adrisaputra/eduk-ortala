@@ -20,26 +20,155 @@ class PromotionController extends Controller
     }
 	
     ## Tampikan Data
-    public function index()
+    public function index(Request $request)
     {
         $title = "Naik Pangkat";
-        if(Auth::user()->group_id==1){
-            $promotion = Promotion::whereNotIn('status',['Hold'])->orderBy('id','DESC')->paginate(25)->onEachSide(1);
-        }else{
-            $promotion = Promotion::orderBy('id','DESC')->paginate(25)->onEachSide(1);
-        }
-        return view('admin.promotion.index',compact('title','promotion'));
+        if($request->get('year')){
+            $title = "Naik Pangkat";
+            $year = $request->get('year');
+            $period = $request->get('period');
+            $promotion = $request->get('search');
+            $promotion = Promotion::
+                        where(function ($query) use ($year) {
+                            $query->where('year', $year);
+                        })
+                        ->where(function ($query) use ($period) {
+                            $query->where('period', $period);
+                        })
+                        ->when(!empty($promotion), function ($query) use ($promotion) {
+                            $query->whereHas('employee', function ($query) use ($promotion) {
+                                $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                    ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                            });
+                        })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+            
+            $count_promotion_hold = Promotion::
+                        whereIn('status',['Hold','Diperbaiki'])
+                        ->where(function ($query) use ($year) {
+                            $query->where('year', $year);
+                        })
+                        ->where(function ($query) use ($period) {
+                            $query->where('period', $period);
+                        })
+                        ->when(!empty($promotion), function ($query) use ($promotion) {
+                            $query->whereHas('employee', function ($query) use ($promotion) {
+                                $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                    ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                            });
+                        })->count();
+
+            $count_promotion_dikirim = Promotion::
+                        where('status','Dikirim')
+                        ->where(function ($query) use ($year) {
+                            $query->where('year', $year);
+                        })
+                        ->where(function ($query) use ($period) {
+                            $query->where('period', $period);
+                        })
+                        ->when(!empty($promotion), function ($query) use ($promotion) {
+                            $query->whereHas('employee', function ($query) use ($promotion) {
+                                $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                    ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                            });
+                        })->count();
+            
+            $count_promotion_accept= Promotion::
+                        where('status','Diterima')
+                        ->where(function ($query) use ($year) {
+                            $query->where('year', $year);
+                        })
+                        ->where(function ($query) use ($period) {
+                            $query->where('period', $period);
+                        })
+                        ->when(!empty($promotion), function ($query) use ($promotion) {
+                            $query->whereHas('employee', function ($query) use ($promotion) {
+                                $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                    ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                            });
+                        })->count();
+            
+            if($request->input('page')){
+                return view('admin.promotion.index',compact('title','promotion','count_promotion_hold','count_promotion_dikirim','count_promotion_accept'));
+            } else {
+                return view('admin.promotion.index',compact('title','promotion','count_promotion_hold','count_promotion_dikirim','count_promotion_accept'));
+            }
+        } else {
+            
+            return view('admin.promotion.index',compact('title'));
+        } 
     }
 
 	## Tampilkan Data Search
 	public function search(Request $request)
     {
         $title = "Naik Pangkat";
+        $year = $request->get('year');
+        $period = $request->get('period');
         $promotion = $request->get('search');
-        $promotion = Promotion::where('promotion_name', 'LIKE', '%'.$promotion.'%')
-                ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $promotion = Promotion::
+                    where(function ($query) use ($year) {
+                        $query->where('year', $year);
+                    })
+                    ->where(function ($query) use ($period) {
+                        $query->where('period', $period);
+                    })
+                    ->when(!empty($promotion), function ($query) use ($promotion) {
+                        $query->whereHas('employee', function ($query) use ($promotion) {
+                            $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                        });
+                    })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
-        return view('admin.promotion.index',compact('title','promotion'));
+        $count_promotion_hold = Promotion::
+                    whereIn('status',['Hold','Diperbaiki'])
+                    ->where(function ($query) use ($year) {
+                        $query->where('year', $year);
+                    })
+                    ->where(function ($query) use ($period) {
+                        $query->where('period', $period);
+                    })
+                    ->when(!empty($promotion), function ($query) use ($promotion) {
+                        $query->whereHas('employee', function ($query) use ($promotion) {
+                            $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                        });
+                    })->count();
+
+        $count_promotion_dikirim = Promotion::
+                    where('status','Dikirim')
+                    ->where(function ($query) use ($year) {
+                        $query->where('year', $year);
+                    })
+                    ->where(function ($query) use ($period) {
+                        $query->where('period', $period);
+                    })
+                    ->when(!empty($promotion), function ($query) use ($promotion) {
+                        $query->whereHas('employee', function ($query) use ($promotion) {
+                            $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                        });
+                    })->count();
+
+        $count_promotion_accept= Promotion::
+                    where('status','Diterima')
+                    ->where(function ($query) use ($year) {
+                        $query->where('year', $year);
+                    })
+                    ->where(function ($query) use ($period) {
+                        $query->where('period', $period);
+                    })
+                    ->when(!empty($promotion), function ($query) use ($promotion) {
+                        $query->whereHas('employee', function ($query) use ($promotion) {
+                            $query->where('name', 'LIKE', '%' . $promotion . '%')
+                                ->orWhere('name', 'LIKE', '%' . $promotion . '%');
+                        });
+                    })->count();
+
+        if($request->input('page')){
+            return view('admin.promotion.index',compact('title','promotion','count_promotion_hold','count_promotion_dikirim','count_promotion_accept'));
+        } else {
+            return view('admin.promotion.search',compact('title','promotion','count_promotion_hold','count_promotion_dikirim','count_promotion_accept'));
+        }
     }
 	
     ## Tampilkan Form Create
@@ -68,16 +197,17 @@ class PromotionController extends Controller
     	$promotion->save();
         
         activity()->log('Tambah Data Promotion');
-		return redirect('/promotion')->with('status','Data Tersimpan');
+		return redirect('/promotion?year='.$request->year.'&&period='.$request->period)->with('status','Data Tersimpan');
     }
 
     ## Tampilkan Form Edit
     public function edit($promotion)
     {
         $title = "Naik Pangkat";
+        $employee = Employee::get();
         $promotion = Crypt::decrypt($promotion);
         $promotion = Promotion::where('id',$promotion)->first();
-        $view=view('admin.promotion.edit', compact('title','promotion'));
+        $view=view('admin.promotion.edit', compact('title','employee','promotion'));
         $view=$view->render();
         return $view;
     }
@@ -90,25 +220,48 @@ class PromotionController extends Controller
         $promotion = Promotion::where('id',$promotion)->first();
 
         $this->validate($request, [
-            'promotion_name' => 'required',
+            'employee_id' => 'required',
+            'promotion_type' => 'required'
         ]);
 
+        
+        $employee = Employee::where('id',$request->employee_id)->first();
         $promotion->fill($request->all());
+        $promotion->nip = $employee->nip;
     	$promotion->save();
 		
         activity()->log('Ubah Data Promotion dengan ID = '.$promotion->id);
-		return redirect('/promotion')->with('status', 'Data Berhasil Diubah');
+		return redirect('/promotion?year='.$request->year.'&&period='.$request->period)->with('status','Data Diubah');
     }
 
     ## Hapus Data
-    public function delete($promotion)
+    public function delete(Promotion $promotion)
     {
-        $promotion = Crypt::decrypt($promotion);
-        $promotion = Promotion::where('id',$promotion)->first();
     	$promotion->delete();
 
         activity()->log('Hapus Data Promotion dengan ID = '.$promotion->id);
-        return redirect('/promotion')->with('status', 'Data Berhasil Dihapus');
+		return redirect('/promotion?year='.$promotion->year.'&&period='.$promotion->period)->with('status','Data Dihapus');
+    }
+
+    ## Kirim Pengajuan
+    public function send($year, $period, Request $request)
+    {
+        $promotion = Promotion::where('year',$year)->where('period',$period)->get();
+
+        foreach($promotion as $v){
+            $promotion = Promotion::where('id',$v->id)->first();
+            if($request->segment(2)=="send"){
+                $promotion->status = "Dikirim";
+            } elseif($request->segment(2)=="accept"){
+                $promotion->status = "Diterima";
+            } elseif($request->segment(2)=="reject"){
+                $promotion->status = "Ditolak";
+            }
+            $promotion->save();
+        }
+		
+        activity()->log('Kirim Data Promotion dengan ID = '.$promotion->id);
+		return redirect('/promotion?search=&&year='.$year.'&&period='.$period)->with('status', 'Data Berhasil Dikirim');
     }
 
     ## Kirim Pengajuan
@@ -117,16 +270,28 @@ class PromotionController extends Controller
         $promotion = Crypt::decrypt($promotion);
         $promotion = Promotion::where('id',$promotion)->first();
 
-        if($request->segment(2)=="send"){
-            $promotion->status = "Dikirim";
-        } elseif($request->segment(2)=="accept"){
+        if($request->segment(2)=="accept"){
             $promotion->status = "Diterima";
         } elseif($request->segment(2)=="reject"){
             $promotion->status = "Ditolak";
         }
+        $promotion->save();
+		
+        activity()->log('Kirim Data Promotion dengan ID = '.$promotion->id);
+		return redirect('/promotion?search=&&year='.$promotion->year.'&&period='.$promotion->period)->with('status', 'Data Berhasil Dikirim');
+    }
+
+    ## Kirim Pengajuan
+    public function fix_document($promotion, Request $request)
+    {
+        $promotion = Crypt::decrypt($promotion);
+        $promotion = Promotion::where('id',$promotion)->first();
+
+        $promotion->status = "Diperbaiki";
+        $promotion->note = $request->note;
     	$promotion->save();
 		
         activity()->log('Kirim Data Promotion dengan ID = '.$promotion->id);
-		return redirect('/promotion')->with('status', 'Data Berhasil Dikirim');
+		return redirect('/promotion?search=&&year='.$promotion->year.'&&period='.$promotion->period)->with('status', 'Data Berhasil Dikirim');
     }
 }

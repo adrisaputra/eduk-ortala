@@ -19,6 +19,31 @@
 									{{ csrf_field() }}
 									
 									<div class="form-group row mb-2">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Tahun') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control basic" name="year">
+												<option value="">- Pilih Tahun-</option>
+												@for($i=2021;$i<=date('Y');$i++)
+													<option value="{{ $i }}" @if(date('Y')==$i) selected @endif>{{ $i }}</option>
+												@endfor
+											</select>
+											@if ($errors->has('year')) <div class="invalid-feedback" style="display: block;margin-top: -20px;">{{ $errors->first('year') }}</div>@endif
+										</div>
+									</div>
+									
+									<div class="form-group row mb-2">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Periode') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<select class="form-control basic" name="period">
+												<option value="">- Pilih Periode-</option>
+												<option value="April" @if(old('period')=="April") selected @endif>April</option>
+												<option value="Oktober" @if(old('period')=="Oktober") selected @endif>Oktober</option>
+											</select>
+											@if ($errors->has('year')) <div class="invalid-feedback" style="display: block;margin-top: -20px;">{{ $errors->first('year') }}</div>@endif
+										</div>
+									</div>
+									
+									<div class="form-group row mb-2">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Nama Pegawai') }}  <span class="required" style="color: #dd4b39;">*</span></label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
 											<select class="form-control basic" name="employee_id" id="employee_id" onchange="getClass()">

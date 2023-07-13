@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         $user = User::count();
-        $employee = Employee::count();
+        $employee = Employee::whereIn("status",['PNS', 'CPNS'])->count();
         return view('admin.home', compact('user','employee'));
     }
 }

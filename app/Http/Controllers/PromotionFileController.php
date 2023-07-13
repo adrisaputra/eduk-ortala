@@ -122,13 +122,20 @@ class PromotionFileController extends Controller
     }
 
     ## Hapus Data
-    public function delete($promotion, PromotionFile $promotion_file)
+    public function delete(PromotionFile $promotion_file)
     {
         
-        $promotion = Crypt::encrypt($promotion);
+        if($promotion_file->file){
+			$pathToYourFile = public_path('upload/promotion_file/'.$promotion_file->file);
+			if(file_exists($pathToYourFile))
+			{
+				unlink($pathToYourFile);
+			}
+		}
 
-        $promotion_file->delete();
-        activity()->log('Delete PromotionFile with ID = '.$promotion_file->id);
-        return redirect('/promotion_file/'.$promotion)->with('status', 'Data Berhasil Dihapus');
+    	$promotion_file->delete();
+
+        activity()->log('Hapus Data Constitution dengan ID = '.$promotion_file->id);
+        return redirect('/promotion_file/'.Crypt::encrypt($promotion_file->promotion_id))->with('status', 'Data Berhasil Diubah');
     }
 }

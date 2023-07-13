@@ -77,7 +77,7 @@ Route::middleware(['all_admin'])->group(function () {
     ## DUK
     Route::get('/duk', [DukController::class, 'index']);
     Route::get('/duk/search', [DukController::class, 'search']);
-    Route::get('/duk/print', [DukController::class, 'print']);
+    Route::post('/duk/print', [DukController::class, 'print']);
 
     ## Pegawai
     Route::get('/employee', [EmployeeController::class, 'index']);
@@ -216,7 +216,7 @@ Route::middleware(['all_admin'])->group(function () {
     Route::post('/promotion_file/{promotion}', [PromotionFileController::class, 'store']);
     Route::get('/promotion_file/edit/{promotion}/{promotion_file}', [PromotionFileController::class, 'edit']);
     Route::put('/promotion_file/edit/{promotion}/{promotion_file}', [PromotionFileController::class, 'update']);
-    Route::get('/promotion_file/delete/{promotion}/{promotion_file}',[PromotionFileController::class, 'delete']);
+    Route::get('/promotion_file/delete/{promotion_file}',[PromotionFileController::class, 'delete']);
 
     ## Edit Profil
     Route::get('/edit_profil/{user}',[UserController::class, 'edit_profil']);
@@ -230,8 +230,8 @@ Route::middleware(['admin_biro'])->group(function () {
     Route::post('/promotion', [PromotionController::class, 'store']);
     Route::get('/promotion/edit/{promotion}', [PromotionController::class, 'edit']);
     Route::put('/promotion/edit/{promotion}', [PromotionController::class, 'update']);
-    Route::get('/promotion/hapus/{promotion}',[PromotionController::class, 'delete']);
-    Route::get('/promotion/send/{promotion}',[PromotionController::class, 'process']);
+    Route::get('/promotion/delete/{promotion}',[PromotionController::class, 'delete']);
+    Route::get('/promotion/send/{year}/{period}',[PromotionController::class, 'send']);
 });
 
 Route::middleware(['administrator'])->group(function () {
@@ -255,6 +255,7 @@ Route::middleware(['administrator'])->group(function () {
      
     Route::get('/promotion/accept/{promotion}',[PromotionController::class, 'process']);
     Route::get('/promotion/reject/{promotion}',[PromotionController::class, 'process']);
+    Route::post('/promotion/fix_document/{promotion}',[PromotionController::class, 'fix_document']);
 
     ## User
     Route::get('/user', [UserController::class, 'index']);
