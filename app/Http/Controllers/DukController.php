@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;   //nama model
 use App\Models\Employee;   //nama model
+use App\Models\ParentUnit;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -23,20 +25,21 @@ class DukController extends Controller
     public function index()
     {
         $title = "DUK";
-        $unit = Unit::groupBy('parent_code')->orderBy('parent_code','ASC')->get();
-        $employee = Employee::select('employees.*')
+        $parent_unit = ParentUnit::get();
+        
+        if(Auth::user()->group_id==1){
+            $employee = Employee::select('employees.*')
                     ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
                     ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
-                    ->whereIn("status",['PNS', 'CPNS'])
-                    ->groupBy('employees.nip')
-                    ->orderByRaw("FIELD(status, 'PNS', 'CPNS') DESC")
-                    ->orderBy('status', 'ASC')
-                    ->orderBy('class_id','DESC')
-                    ->orderBy('class_histories.tmt','DESC')
-                    ->orderBy('unit_id','ASC')
-                    ->orderBy('class_histories.mk_month','DESC')
-                    ->orderBy('date_of_birth','ASC')
-                    ->paginate(25)->onEachSide(1);
+                    ->Status()->Grouping()->Sorting()->Pagination();
+        } else {
+            $employee = Employee::select('employees.*')
+                    ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                    ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                    ->where('parent_unit_id', Auth::user()->parent_unit_id)
+                    ->Status()->Grouping()->Sorting()->Pagination();
+        }
+
         $masa_kerja = array();
         $usia = array();
 
@@ -50,11 +53,7 @@ class DukController extends Controller
             $usia[$i] = $this->hitungUsia($v->date_of_birth);
         }
 
-        foreach($unit as $i => $v){
-            $tes[$i] = Unit::where('code', $v->parent_code)->first();
-        }
-
-        return view('admin.duk.index',compact('title','unit','tes','employee','masa_kerja','usia'));
+        return view('admin.duk.index',compact('title','parent_unit','employee','masa_kerja','usia'));
 
     }
 
@@ -62,32 +61,25 @@ class DukController extends Controller
     public function search(Request $request)
     {
         $title = "Unit Organisasi";
-        $unit = Unit::groupBy('parent_code')->orderBy('parent_code','ASC')->get();
+        $parent_unit = ParentUnit::get();
         $employee = $request->get('search');
-        $parent_code = $request->get('parent_code');
-        $employee = Employee::select('employees.*')
-                    ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
-                    ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
-                    ->whereIn("status",['PNS', 'CPNS'])
-                    ->when(!empty($employee), function ($query) use ($employee) {
-                        $query->where('employees.nip', 'LIKE', '%'.$employee.'%')
-                        ->orWhere('employees.name', 'LIKE', '%'.$employee.'%');
-                    })->when(!empty($parent_code), function ($query) use ($parent_code) {
-                        $query->where('parent_id', $parent_code);
-                    })
-                    ->groupBy('employees.nip')
-                    ->orderByRaw("FIELD(status, 'PNS', 'CPNS') DESC")
-                    ->orderBy('status', 'ASC')
-                    ->orderBy('class_id','DESC')
-                    ->orderBy('class_histories.tmt','DESC')
-                    ->orderBy('unit_id','ASC')
-                    ->orderBy('class_histories.mk_month','DESC')
-                    ->orderBy('date_of_birth','ASC')
-                    ->paginate(25)->onEachSide(1);
+        $parent_unit_id = $request->get('parent_unit_id');
+
+        if(Auth::user()->group_id==1){
+            $employee = Employee::select('employees.*')
+                        ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                        ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                        ->Status()->Keyword($employee,$parent_unit_id)->Grouping()->Sorting()->Pagination();
+        } else {
+            $employee = Employee::select('employees.*')
+                        ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                        ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                        ->Status()->Keyword($employee,$parent_unit_id)->where('parent_unit_id', Auth::user()->parent_unit_id)->Grouping()->Sorting()->Pagination();
+        }
+
         $masa_kerja = array();
         $usia = array();
         
-                
         foreach($employee as $i => $v){
             if($v->class_history_first($v->nip)->first()){
                 $masa_kerja[$i] = $this->hitungSelisihBulan($v->class_history_first($v->nip)->first()->tmt);
@@ -98,14 +90,10 @@ class DukController extends Controller
             $usia[$i] = $this->hitungUsia($v->date_of_birth);
         }
         
-        foreach($unit as $i => $v){
-            $tes[$i] = Unit::where('code', $v->parent_code)->first();
-        }
-
         if($request->input('page')){
-            return view('admin.duk.index',compact('title','unit','tes','employee','masa_kerja','usia'));
+            return view('admin.duk.index',compact('title','parent_unit','employee','masa_kerja','usia'));
         } else {
-            return view('admin.duk.search',compact('title','unit','tes','employee','masa_kerja','usia'));
+            return view('admin.duk.search',compact('title','parent_unit','employee','masa_kerja','usia'));
         }
     }
 
@@ -114,7 +102,7 @@ class DukController extends Controller
     {
         
         $employee = $request->get('search');
-        $parent_code = $request->get('parent_code');
+        $parent_unit_id = $request->get('parent_unit_id');
 
         $spreadsheet = new Spreadsheet();
         $spreadsheet->setActiveSheetIndex(0);
@@ -140,11 +128,15 @@ class DukController extends Controller
         $sheet->getColumnDimension('R')->setWidth(7);
         $sheet->getColumnDimension('S')->setWidth(10);
 
-        if($parent_code){
-            $unit = Unit::where('id',$parent_code)->first();
-            $sheet->setCellValue('A1', 'DATA DUK '.$unit->name); $sheet->mergeCells('A1:S1');
+        if(Auth::user()->group_id==1){
+            if($parent_unit_id){
+                $unit = Unit::where('id',$parent_unit_id)->first();
+                $sheet->setCellValue('A1', 'DATA DUK '.$unit->name); $sheet->mergeCells('A1:S1');
+            } else {
+                $sheet->setCellValue('A1', 'DATA DUK'); $sheet->mergeCells('A1:S1');
+            }
         } else {
-            $sheet->setCellValue('A1', 'DATA DUK'); $sheet->mergeCells('A1:S1');
+            $sheet->setCellValue('A1', 'DATA DUK '.Auth::user()->parent_unit->name); $sheet->mergeCells('A1:S1');
         }
 
         $sheet->getStyle('A1:S1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -207,24 +199,19 @@ class DukController extends Controller
         $rows = 7;
         $no = 1;
 
-        $employee = Employee::select('employees.*')
-                    ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
-                    ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
-                    ->whereIn("status",['PNS', 'CPNS'])
-                    ->when(!empty($employee), function ($query) use ($employee) {
-                        $query->where('employees.nip', 'LIKE', '%'.$employee.'%')
-                        ->orWhere('employees.name', 'LIKE', '%'.$employee.'%');
-                    })->when(!empty($parent_code), function ($query) use ($parent_code) {
-                        $query->where('parent_id', $parent_code);
-                    })
-                    ->groupBy('employees.nip')
-                    ->orderByRaw("FIELD(status, 'PNS', 'CPNS') DESC")
-                    ->orderBy('status', 'ASC')
-                    ->orderBy('class_id','DESC')
-                    ->orderBy('class_histories.tmt','DESC')
-                    ->orderBy('unit_id','ASC')
-                    ->orderBy('class_histories.mk_month','DESC')
-                    ->orderBy('date_of_birth','ASC')->get();
+        
+        if(Auth::user()->group_id==1){
+            $employee = Employee::select('employees.*')
+                        ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                        ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                        ->Status()->Keyword($employee,$parent_unit_id)->Grouping()->Sorting()->get();
+        } else {
+            $employee = Employee::select('employees.*')
+                        ->leftJoin('classes', 'employees.class_id', '=', 'classes.id')
+                        ->leftJoin('class_histories', 'class_histories.classes_id', '=', 'classes.id')
+                        ->Status()->Keyword($employee,$parent_unit_id)->where('parent_unit_id', Auth::user()->parent_unit_id)->Grouping()->Sorting()->get();
+        }
+
         $masa_kerja = array();
         $usia = array();
 
@@ -270,7 +257,7 @@ class DukController extends Controller
         // $sheet->getStyle('F' . $rows)->getNumberFormat()->setFormatCode('#,##0');
         // $sheet->getStyle('A' . $rows.':F4'. $rows)->getFont()->setBold(true);
 
-        $sheet->getStyle('A4:S'.$rows)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle('A4:S'.($rows-1))->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
         $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('A1:F4')->getFont()->setBold(true);
         

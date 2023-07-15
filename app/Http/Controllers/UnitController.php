@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Unit;   //nama model
+use App\Models\ParentUnit;   //nama model
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -76,22 +77,51 @@ class UnitController extends Controller
                foreach ($page as $item) {
 
                    $unit = Unit::where('code',$item['KdUnor'])->first();
-                   if($unit){
-                       $unit->code =  $item['KdUnor'];
-                       $unit->name =  $item['NamaUnor'];
-                       $unit->parent_code =  $item['UnorInduk'];
-                       $unit->leader_code =  $item['UnorAtasan'];
-                       $unit->save();
-                   } else {
-                       $unit = New Unit();
-                       $unit->code =  $item['KdUnor'];
-                       $unit->name =  $item['NamaUnor'];
-                       $unit->parent_code =  $item['UnorInduk'];
-                       $unit->leader_code =  $item['UnorAtasan'];
-                       $unit->save();
+
+                   if($unit == NULL){
+                        $unit = New Unit();
                    }
+
+                   $unit->code =  $item['KdUnor'];
+                   $unit->name =  $item['NamaUnor'];
+                   $unit->parent_code =  $item['UnorInduk'];
+                   $unit->leader_code =  $item['UnorAtasan'];
+                   $unit->leader_eselon =  $item['Eselon'];
+                   $unit->leader_nip =  $item['NIP'];
+                   $unit->leader_name =  $item['NamaPim'];
+                   $unit->leader_call =  $item['KetPanggil'];
+                   $unit->type_unit =  $item['JenisUnor'];
+                   $unit->save();
                }
            }
+
+           $unit = Unit::groupBy('parent_code')->orderBy('parent_code','ASC')->get();
+
+           foreach($unit as $v){
+                $unit = Unit::where('code',$v->parent_code)->first();
+                $parent_unit = ParentUnit::where('code',$v->parent_code)->first();
+                if($parent_unit == NULL){
+                    $parent_unit = new ParentUnit();
+                }
+                $parent_unit->code = $unit->code;
+                $parent_unit->name = $unit->name;
+                $parent_unit->leader_eselon =  $unit->leader_eselon;
+                $parent_unit->leader_nip =  $unit->leader_nip;
+                $parent_unit->leader_name =  $unit->leader_name;
+                $parent_unit->leader_call =  $unit->leader_call;
+                $parent_unit->type_unit =  $unit->type_unit;
+                $parent_unit->save();
+           }
+
+           $unit = Unit::get();
+           
+           foreach($unit as $v){
+                $parent_unit = ParentUnit::where('code',$v->parent_code)->first();
+                $unit = Unit::where('id',$v->id)->first();
+                $unit->parent_unit_id = $parent_unit->id;
+                $unit->save();
+            }
+
 
            activity()->log('Sinkronisasi Data Class');
            return redirect('/unit')->with('status', 'Data Berhasil Disinkronisasi');

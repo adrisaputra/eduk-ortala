@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;   //nama model
 use App\Models\Group;   //nama model
-use App\Models\Office;   //nama model
+use App\Models\ParentUnit;   //nama model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +52,8 @@ class UserController extends Controller
     {
         $title = "User";
         $group = Group::get();
-		$view=view('admin.user.create',compact('title','group'));
+        $parent_unit = ParentUnit::get();
+		$view=view('admin.user.create',compact('title','group','parent_unit'));
         $view=$view->render();
         return $view;
     }
@@ -68,12 +69,21 @@ class UserController extends Controller
             'group_id' => 'required',
             'status' => 'required'
         ]);
-		
+
+		if($request->group_id == 2){
+            $this->validate($request, [
+                'parent_unit_id' => 'required'
+            ]);
+        }
+        
         $input['name'] = $request->name;
         $input['email'] = $request->email;
         $input['email_verified_at'] = date('Y-m-d H:i:s');
         $input['password'] = Hash::make($request->password);
         $input['group_id'] = $request->group_id;
+        if($request->group_id == 2){
+            $input['parent_unit_id'] = $request->parent_unit_id;
+        }
         $input['status'] = $request->status;
         User::create($input);
 		
@@ -89,8 +99,8 @@ class UserController extends Controller
         $user = Crypt::decrypt($user);
         $user = User::where('id',$user)->first();
         $group = Group::get();
-        $office = Office::get();
-        $view=view('admin.user.edit', compact('title','user','group','office'));
+        $parent_unit = ParentUnit::get();
+        $view=view('admin.user.edit', compact('title','user','group','parent_unit'));
         $view=$view->render();
 		return $view;
     }
@@ -108,6 +118,9 @@ class UserController extends Controller
                     'password' => 'required|string|min:8|confirmed'
                 ]);
             } 
+            $this->validate($request, [
+                'parent_unit_id' => 'required'
+            ]);
         } else {
             if($request->password){
                 $this->validate($request, [
@@ -126,16 +139,16 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->group_id = $request->group_id;
-            if ($request->group_id == 3 ) {
-                $user->office_id = $request->office_id;
+            if ($request->group_id == 2 ) {
+                $user->parent_unit_id = $request->parent_unit_id;
             }
             $user->status = $request->status;
 		} else {
             $user->name = $request->name;
             $user->email = $request->email;
             $user->group_id = $request->group_id;
-            if ($request->group_id == 3 ) {
-                $user->office_id = $request->office_id;
+            if ($request->group_id == 2 ) {
+                $user->parent_unit_id = $request->parent_unit_id;
             }
             $user->status = $request->status;
         }

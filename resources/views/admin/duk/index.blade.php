@@ -55,21 +55,25 @@ table {
 						   {{ csrf_field() }}		
 							<div class="widget-content widget-content-area">
 								<div class="row">
-									<div class="col-xl-6 col-md-12 col-sm-12 col-12">
+									<div class="@if(Auth::user()->group_id==1) col-xl-6 @else col-xl-9 @endif  col-md-12 col-sm-12 col-12">
 										<a href="{{ url(Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning ">Refresh</a>
 										<button type="submit" class="btn mb-2 mr-1 btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></button>
 									</div>
-									<div class="col-xl-3 col-md-12 col-sm-12 col-12">
-										<select name="parent_code" class="form-control form-control-sm" id="parent_code" onchange="tampil()">
-											<option value="">- Pilih Unor Induk-</option>
-											@foreach($unit as $i => $v)
-												<option value="{{ $tes[$i]->id }}">{{ $tes[$i]->name }}</option>
-											@endforeach
-										</select>
-									</div>
+									@if(Auth::user()->group_id==1)
+										<div class="col-xl-3 col-md-12 col-sm-12 col-12">
+											<select name="parent_unit_id" class="form-control form-control-sm" id="parent_unit_id" onchange="tampil()">
+												<option value="">- Pilih Unor Induk-</option>
+												@foreach($parent_unit as $v)
+													<option value="{{ $v->id }}" @if(request()->get('parent_unit_id')== $v->id) selected @endif>{{ $v->name }}</option>
+												@endforeach
+											</select>
+										</div>
+									@else
+										<input type="hidden" id="parent_unit_id" value="{{ Auth::user()->parent_unit_id }}">
+									@endif
 									<div class="col-xl-3 col-md-12 col-sm-12 col-12">
 										<div class="input-group" >
-											<input type="text" name="search" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()" onkeypress="disableEnterKey(event)">
+											<input type="text" name="search" value="{{ request()->get('search') }}" style="height: calc(1.4em + 1.4rem + -4px);" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()" onkeypress="disableEnterKey(event)">
 										</div>
 									</div>
 								</div>
@@ -148,7 +152,7 @@ table {
 											@endforeach
 											</tbody>
 										</table>
-											<div class="paginating-container">{{ $employee->appends(Request::only('search','parent_code'))->links() }}</div>
+											<div class="paginating-container">{{ $employee->appends(Request::only('search','parent_unit_id'))->links() }}</div>
 										</div>
 									</div>
 								</div>
@@ -168,11 +172,11 @@ table {
 </script>
 <script>
 function tampil(){
-    parent_code = document.getElementById("parent_code").value;
+    parent_unit_id = document.getElementById("parent_unit_id").value;
     search = document.getElementById("search").value;
     url = "{{ url('/duk/search') }}"
     $.ajax({
-        url:""+url+"?search="+search+"&&parent_code="+parent_code+"",
+        url:""+url+"?search="+search+"&&parent_unit_id="+parent_unit_id+"",
         success: function(response){
             $("#hasil").html(response);
         }

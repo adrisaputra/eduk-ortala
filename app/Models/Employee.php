@@ -31,8 +31,44 @@ class Employee extends Model
         'education_id',
         'position',
         'unit_id',
-        'parent_id',
+        'parent_unit_id',
     ];
+
+    ## Scopes
+    public function scopeGrouping($query){
+        return $query->groupBy('employees.nip');
+    }
+
+    public function scopeSorting($query){
+        return $query->orderByRaw("FIELD(status, 'PNS', 'CPNS') DESC")
+                    ->orderBy('status', 'ASC')
+                    ->orderBy('class_id','DESC')
+                    ->orderBy('class_histories.tmt','DESC')
+                    ->orderBy('unit_id','ASC')
+                    ->orderBy('class_histories.mk_month','DESC')
+                    ->orderBy('date_of_birth','ASC');
+    }
+
+    public function scopePagination($query){
+        return $query->paginate(25)->onEachSide(1);
+    }
+
+    public function scopeStatus($query){
+        return $query->whereIn("status",['PNS', 'CPNS']);
+    }
+
+    public function scopeKeyword($query, $employee, $parent_unit_id){
+        return $query->where(function ($query) use ($employee) {
+                $query->where('employees.nip', 'LIKE', '%'.$employee.'%')
+                ->orWhere('employees.name', 'LIKE', '%'.$employee.'%')
+                ->orWhere('employees.status', 'LIKE', '%'.$employee.'%');
+            })
+            ->when(!empty($parent_unit_id), function ($query) use ($parent_unit_id) {
+                $query->whereHas('parent_unit', function ($query) use ($parent_unit_id) {
+                    $query->where('parent_unit_id', $parent_unit_id);
+                });
+            });
+    }
 
     public function classes(){
         return $this->belongsTo(Classes::class, 'class_id');
@@ -64,6 +100,10 @@ class Employee extends Model
     
     public function unit(){
         return $this->belongsTo('App\Models\Unit');
+    }
+
+    public function parent_unit(){
+        return $this->belongsTo('App\Models\ParentUnit');
     }
 
     public function parent(){

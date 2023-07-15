@@ -24,7 +24,7 @@
 									<div class="form-group row mb-3">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('NIP') }}</label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input name="nip" type="text" class="form-control form-control-sm"  value="{{ $employee->nip }}">
+											<input name="nip" type="text" class="form-control"  value="{{ $employee->nip }}">
 											@if ($errors->has('nip')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nip') }}</div>@endif
 										</div>
 									</div>
@@ -32,7 +32,7 @@
 									<div class="form-group row mb-3">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Nama Pegawai') }}</label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input name="name" type="text" class="form-control form-control-sm" value="{{ $employee->name }}" >
+											<input name="name" type="text" class="form-control" value="{{ $employee->name }}" >
 											@if ($errors->has('name')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('name') }}</div>@endif
 										</div>
 									</div>
@@ -130,7 +130,7 @@
 									<div class="form-group row mb-4">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Alamat') }}</label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<textarea class="form-control form-control-sm" name="address">{{ $employee->address }}</textarea>
+											<textarea class="form-control" name="address">{{ $employee->address }}</textarea>
 											@if ($errors->has('address')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('address') }}</div>@endif
 										</div>
 									</div>
@@ -170,64 +170,6 @@
 										</div>
 									</div>
 
-									<div class="form-group row mb-1" style="margin-bottom: -0.6rem!important;">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Golongan') }}</label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<select class="form-control basic" name="class_id">
-												<option value="">- Pilih Golongan -</option>
-												@foreach($class as $v)
-													<option value="{{ $v->id }}" @if($employee->class_id==$v->id) selected @endif>{{ $v->rank }} - {{ $v->class }}</option>
-												@endforeach
-											</select>
-											@if ($errors->has('class_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('class_id') }}</div>@endif
-										</div>
-									</div>
-
-									<div class="form-group row mb-1" style="margin-bottom: -0.6rem!important;">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Pendidikan') }}</label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-										<select id='sel_emp' name="education_id">
-											<option value='{{ $employee->education_id }}'>{{ $employee->education->name }}</option>
-										</select>
-										</div>
-									</div>
-
-									<div class="form-group row mb-3">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Jabatan') }}</label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input type="text" class="form-control" name="position" value="{{ $employee->position }}" />
-										</div>
-									</div>
-
-									<div class="form-group row mb-3">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Unor') }}</label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<select class="form-control basic" name="unit_id">
-												<option value="">- Pilih Unor -</option>
-												@foreach($unit as $v)
-													<option value="{{ $v->id }}" @if($employee->unit_id==$v->id) selected @endif>{{ $v->name }}</option>
-												@endforeach
-											</select>
-											@if ($errors->has('unit_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('unit_id') }}</div>@endif
-										</div>
-									</div>
-<!-- 
-									<div class="form-group row mb-4 custom-file-container" data-upload-id="myFirstImage" style="display: flex;">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Gambar') }} <a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-											@if ($employee->image)
-											<span class="text-red"><a href="{{ asset('upload/employee/' . $employee->image) }}"  class="btn mb-2 mr-1 btn-sm btn-info snackbar-bg-info" target="blank">Lihat Gambar Sebelumnya</a>
-											@endif
-											<label class="custom-file-container__custom-file" >
-												<input type="file" name="image" class="custom-file-container__custom-file__custom-file-input" accept="image/*">
-												<input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-												<span class="custom-file-container__custom-file__custom-file-control"></span>
-											</label>
-											<div class="custom-file-container__image-preview"></div>
-											@if ($errors->has('image')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('image') }}</div>@endif
-										</div>
-									</div> -->
-									
 									<button type="submit" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Simpan"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></button>
 									<button type="reset" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Reset"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg></button>
 									<a href="{{ url(Request::segment(1)) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Kembali"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 8 12 12 16"></polyline><line x1="16" y1="12" x2="8" y2="12"></line></svg></a>

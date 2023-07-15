@@ -50,6 +50,7 @@
 													<th>Nama User</th>
 													<th>Email</th>
 													<th>Group</th>
+													<th>Unor Induk</th>
 													<th>Status</th>
 													<th></th>
 												</tr>
@@ -68,6 +69,7 @@
 															<span class="badge badge-warning">Tamu</span>
 														@endif
 													</td>
+													<td>{{ $v->parent_unit ? $v->parent_unit->name: NULL; }}</td>
 													<td>@if($v->status==0)
 														<span class="badge badge-danger">Tidak Aktif</span>
 														@elseif($v->status==1)

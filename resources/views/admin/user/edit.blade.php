@@ -54,7 +54,11 @@
 									<div class="form-group row mb-4">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Group') }}<span class="required" style="color: #dd4b39;">*</span></label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<select class="form-control" name="group_id">
+											<select class="form-control" name="group_id" onchange=" if (this.selectedIndex==1){ 
+												document.getElementById('parent_unit').style.display = 'none'; 
+											} else if (this.selectedIndex==2){
+												document.getElementById('parent_unit').style.display = 'inline'; 
+											};">
 												<option value="">- Pilih Group -</option>
 												@foreach($group as $v)
 													<option value="{{ $v->id }}" @if($user->group_id=="$v->id") selected @endif>{{ $v->group_name }}</option>
@@ -63,6 +67,25 @@
 											@if ($errors->has('group_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('group_id') }}</div>@endif
 										</div>
 									</div>
+
+									@if($user->group_id=="2")
+										<span id="parent_unit" style="display:inline;">
+									@else
+										<span id="parent_unit" style="display:none;">
+									@endif
+										<div class="form-group row mb-4">
+											<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Unor Induk') }}<span class="required" style="color: #dd4b39;">*</span></label>
+											<div class="col-xl-9 col-lg-9 col-sm-10">
+												<select class="form-control" name="parent_unit_id">
+													<option value="">- Pilih Unor Induk -</option>
+													@foreach($parent_unit as $v)
+														<option value="{{ $v->id }}" @if($user->parent_unit_id=="$v->id") selected @endif>{{ $v->name }}</option>
+													@endforeach
+												</select>
+												@if ($errors->has('parent_unit_id')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('parent_unit_id') }}</div>@endif
+											</div>
+										</div>
+									</span>
 									
 									<div class="form-group row mb-4">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Status') }}<span class="required" style="color: #dd4b39;">*</span></label>

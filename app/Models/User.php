@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'verification_code',
         'group_id',
-        'office_id',
+        'parent_unit_id',
         'foto',
         'status',
     ];
@@ -74,6 +74,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Group::class, 'group_id');
     }
 
+    public function parent_unit()
+    {
+        return $this->belongsTo('App\Models\ParentUnit');
+    }
+    
     public function isAdmin()
     {
         return $this->group_id === 1;
