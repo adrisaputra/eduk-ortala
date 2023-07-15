@@ -23,17 +23,21 @@ class EducationHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Pendidikan";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $education_history = EducationHistory::where('NIP',$employee->nip)->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         return view('admin.education_history.index',compact('title','employee','education_history'));
     }
 
      ## Tampilkan Data Search
-     public function search(Employee $employee, Request $request)
+     public function search($employee, Request $request)
      {
         $title = "Riwayat Pendidikan";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $education_history = $request->get('search');
         $education_history = EducationHistory::where('NIP',$employee->nip)
                             ->where(function ($query) use ($education_history) {
@@ -121,8 +125,11 @@ class EducationHistoryController extends Controller
     }
 
 	## Tampilkan Form Create
-    public function sync(Employee $employee)
+    public function sync($employee)
     {
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
         EducationHistory::where('nip',$employee->nip)->forceDelete();
 
         // Tarik data dari API
@@ -166,9 +173,9 @@ class EducationHistoryController extends Controller
            }
 
            activity()->log('Sinkronisasi Data Education History');
-           return redirect('/education_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
+           return redirect('/education_history/'.Crypt::encrypt($employee->id))->with('status', 'Data Berhasil Disinkronisasi');
        } else {
-            return redirect('/education_history/'.$employee->id)->with('status2', 'Data Gagal Disinkronisasi');
+            return redirect('/education_history/'.Crypt::encrypt($employee->id))->with('status2', 'Data Gagal Disinkronisasi');
        }
 
     }

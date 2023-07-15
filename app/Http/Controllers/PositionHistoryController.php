@@ -22,17 +22,21 @@ class PositionHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Jabatan";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $position_history = PositionHistory::where('NIP',$employee->nip)->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         return view('admin.position_history.index',compact('title','employee','position_history'));
     }
 
      ## Tampilkan Data Search
-     public function search(Employee $employee, Request $request)
+     public function search($employee, Request $request)
      {
         $title = "Riwayat Jabatan";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $position_history = $request->get('search');
         $position_history = PositionHistory::where('NIP',$employee->nip)
                             ->where(function ($query) use ($position_history) {
@@ -123,8 +127,11 @@ class PositionHistoryController extends Controller
     }
 
 	## Tampilkan Form Create
-    public function sync(Employee $employee)
+    public function sync($employee)
     {
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
         PositionHistory::where('nip',$employee->nip)->forceDelete();
 
         // Tarik data dari API
@@ -169,9 +176,9 @@ class PositionHistoryController extends Controller
            }
 
            activity()->log('Sinkronisasi Data Position History');
-           return redirect('/position_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
+           return redirect('/position_history/'.Crypt::encrypt($employee->id))->with('status', 'Data Berhasil Disinkronisasi');
        } else {
-            return redirect('/position_history/'.$employee->id)->with('status2', 'Data Gagal Disinkronisasi');
+            return redirect('/position_history/'.Crypt::encrypt($employee->id))->with('status2', 'Data Gagal Disinkronisasi');
        }
 
     }

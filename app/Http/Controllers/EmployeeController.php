@@ -239,17 +239,19 @@ class EmployeeController extends Controller
      }
  
  
-     ## Tampilkan Form Edit
-     public function edit(Employee $employee)
-     {
-         $title = "Pegawai";
-         $class = Classes::limit(10)->get();
-         $education = Education::limit(10)->get();
-         $unit = Unit::get();
-         $view=view('admin.employee.edit', compact('title','employee','class','education','unit'));
-         $view=$view->render();
-         return $view;
-     }
+    ## Tampilkan Form Edit
+    public function edit($employee)
+    {
+        $title = "Pegawai";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+        $class = Classes::limit(10)->get();
+        $education = Education::limit(10)->get();
+        $unit = Unit::get();
+        $view=view('admin.employee.edit', compact('title','employee','class','education','unit'));
+        $view=$view->render();
+        return $view;
+    }
  
      ## Edit Data
      public function update(Request $request, $employee)

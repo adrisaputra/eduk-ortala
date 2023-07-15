@@ -22,17 +22,21 @@ class PunishmentHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Hukuman";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $punishment_history = PunishmentHistory::where('NIP',$employee->nip)->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         return view('admin.punishment_history.index',compact('title','employee','punishment_history'));
     }
 
      ## Tampilkan Data Search
-     public function search(Request $request)
+     public function search(Request $request, $employee)
      {
         $title = "Riwayat Hukuman";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $punishment_history = $request->get('search');
         $punishment_history = PunishmentHistory::where('name', 'LIKE', '%'.$punishment_history.'%')
                 ->orderBy('id','DESC')->paginate(25)->onEachSide(1);
@@ -111,8 +115,11 @@ class PunishmentHistoryController extends Controller
     }
 
 	## Tampilkan Form Create
-    public function sync(Employee $employee)
+    public function sync($employee)
     {
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
         PunishmentHistory::where('nip',$employee->nip)->forceDelete();
 
         // Tarik data dari API
@@ -151,9 +158,9 @@ class PunishmentHistoryController extends Controller
            }
 
            activity()->log('Sinkronisasi Data Punishment History');
-           return redirect('/punishment_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
+           return redirect('/punishment_history/'.Crypt::encrypt($employee->id))->with('status', 'Data Berhasil Disinkronisasi');
        } else {
-            return redirect('/punishment_history/'.$employee->id)->with('status2', 'Data Tidak Ada');
+            return redirect('/punishment_history/'.Crypt::encrypt($employee->id))->with('status2', 'Data Tidak Ada');
        }
 
     }

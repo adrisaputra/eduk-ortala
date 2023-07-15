@@ -22,17 +22,21 @@ class TrainingHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Diklat";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $training_history = TrainingHistory::where('nip',$employee->nip)->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         return view('admin.training_history.index',compact('title','employee','training_history'));
     }
 
     ## Tampilkan Data Search
-    public function search(Employee $employee, Request $request)
+    public function search($employee, Request $request)
     {
         $title = "Riwayat Diklat";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $training_history = $request->get('search');
         $training_history = TrainingHistory::where('NIP',$employee->nip)
                             ->where(function ($query) use ($training_history) {

@@ -23,9 +23,11 @@ class FamilyHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Keluarga";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $parent_history = ParentHistory::where('nip',$employee->nip)->first();
         $child_history = ChildHistory::where('nip',$employee->nip)->orderBy('id','DESC')->get();
         return view('admin.family_history.index',compact('title','employee','parent_history','child_history'));
@@ -122,7 +124,7 @@ class FamilyHistoryController extends Controller
         $synchronization->status =  'Done';
         $synchronization->save();
         
-        return redirect('/training_employee')->with('status', 'Data Berhasil Disinkronisasi');
+        return redirect('/family_employee')->with('status', 'Data Berhasil Disinkronisasi');
     }
 
     ## Tampilkan Form Create
@@ -171,8 +173,11 @@ class FamilyHistoryController extends Controller
     }
 
     ## Tampilkan Form Create
-    public function sync(Employee $employee)
+    public function sync($employee)
     {
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
         ParentHistory::where('nip',$employee->nip)->forceDelete();
 
         // Tarik data dari API
@@ -232,9 +237,9 @@ class FamilyHistoryController extends Controller
            activity()->log('Sinkronisasi Data Parent History');
 
            $this->sync_child($employee);
-           return redirect('/family_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
+           return redirect('/family_history/'.Crypt::encrypt($employee->id))->with('status', 'Data Berhasil Disinkronisasi');
        } else {
-            return redirect('/family_history/'.$employee->id)->with('status2', $responseArray['message']);
+            return redirect('/family_history/'.Crypt::encrypt($employee->id))->with('status2', $responseArray['message']);
        }
 
     }

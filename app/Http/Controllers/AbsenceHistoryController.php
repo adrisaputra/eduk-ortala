@@ -22,17 +22,21 @@ class AbsenceHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Absensi";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $absence_history = AbsenceHistory::where('NIP',$employee->nip)->orderBy('date','ASC')->paginate(25)->onEachSide(1);
         return view('admin.absence_history.index',compact('title','employee','absence_history'));
     }
 
      ## Tampilkan Data Search
-     public function search(Request $request)
+     public function search(Request $request, $employee)
      {
         $title = "Riwayat Absensi";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $absence_history = $request->get('search');
         $absence_history = AbsenceHistory::where('date', 'LIKE', '%'.$absence_history.'%')
                 ->orderBy('date','ASC')->paginate(25)->onEachSide(1);
@@ -98,8 +102,12 @@ class AbsenceHistoryController extends Controller
     }
 
 	## Tampilkan Form Create
-    public function sync(Employee $employee, Request $request)
+    public function sync($employee, Request $request)
     {
+        
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
         AbsenceHistory::where('nip',$employee->nip)->whereMonth('date', $request->month)->whereYear('date', $request->year)->forceDelete();
 
         // Tarik data dari API
@@ -137,9 +145,9 @@ class AbsenceHistoryController extends Controller
            }
 
            activity()->log('Sinkronisasi Data Absence History');
-           return redirect('/absence_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
+           return redirect('/absence_history/'.Crypt::encrypt($employee->id))->with('status', 'Data Berhasil Disinkronisasi');
        } else {
-            return redirect('/absence_history/'.$employee->id)->with('status2', 'Data Gagal Disinkronisasi');
+            return redirect('/absence_history/'.Crypt::encrypt($employee->id))->with('status2', 'Data Gagal Disinkronisasi');
        }
 
     }

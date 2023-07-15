@@ -22,17 +22,21 @@ class LeaveHistoryController extends Controller
     }
 	
     ## Tampikan Data
-    public function index(Employee $employee)
+    public function index($employee)
     {
         $title = "Riwayat Cuti";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $leave_history = LeaveHistory::where('NIP',$employee->nip)->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         return view('admin.leave_history.index',compact('title','employee','leave_history'));
     }
 
     ## Tampilkan Data Search
-    public function search(Request $request, Employee $employee)
+    public function search(Request $request, $employee)
     {
         $title = "Riwayat Cuti";
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
         $leave_history = $request->get('search');
         $leave_history = LeaveHistory::where('NIP',$employee->nip)
                             ->where(function ($query) use ($leave_history) {
@@ -124,8 +128,11 @@ class LeaveHistoryController extends Controller
     }
 
     ## Tampilkan Form Create
-    public function sync(Employee $employee)
+    public function sync($employee)
     {
+        $employee = Crypt::decrypt($employee);
+        $employee = Employee::where('id',$employee)->first();
+
         LeaveHistory::where('nip',$employee->nip)->forceDelete();
 
         // Tarik data dari API
@@ -171,9 +178,9 @@ class LeaveHistoryController extends Controller
            }
 
            activity()->log('Sinkronisasi Data Leave History');
-           return redirect('/leave_history/'.$employee->id)->with('status', 'Data Berhasil Disinkronisasi');
+           return redirect('/leave_history/'.Crypt::encrypt($employee->id))->with('status', 'Data Berhasil Disinkronisasi');
        } else {
-            return redirect('/leave_history/'.$employee->id)->with('status2', 'Data Gagal Disinkronisasi');
+            return redirect('/leave_history/'.Crypt::encrypt($employee->id))->with('status2', 'Data Gagal Disinkronisasi');
        }
 
     }
