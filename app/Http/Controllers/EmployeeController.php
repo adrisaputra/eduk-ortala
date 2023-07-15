@@ -19,9 +19,7 @@ use App\Models\ChildHistory;
 use App\Models\TrainingHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 
