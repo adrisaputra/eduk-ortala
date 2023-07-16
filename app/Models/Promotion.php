@@ -10,6 +10,7 @@ class Promotion extends Model
     use HasFactory;
     protected $fillable =[
         'employee_id',
+        'parent_unit_id',
         'nip',
         'year',
         'period',
@@ -22,5 +23,9 @@ class Promotion extends Model
 
     public function employee(){
         return $this->belongsTo('App\Models\Employee');
+    }
+
+    public function parent_unit(){
+        return $this->belongsTo('App\Models\ParentUnit');
     }
 }

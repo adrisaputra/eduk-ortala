@@ -14,8 +14,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php $total = 0; @endphp
-                                        @foreach($promotion as $i => $v)
+                                        @php $total = 0; $i = 0;@endphp
+                                        @foreach($promotion as $v)
                                         @php $i = $i+1; @endphp
                                             <tr>
                                                 <td class="text-center">{{ ($promotion ->currentpage()-1) * $promotion ->perpage() + $loop->index + 1 }}</td>
@@ -72,20 +72,9 @@
                                         <tr>
                                             <td colspan=7>
                                                 <center>
-                                                    @if(Auth::user()->group_id=="2")
-                                                        @if($count_promotion_hold)
-                                                            <a href="{{ url('promotion/send/'.request()->get('year').'/'.request()->get('period'))}}" class="btn mr-1 btn-success" onclick="confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');">Kirim Pengajuan</a>
-                                                        @endif	
-                                                        @if($i == $count_promotion_accept)
-                                                            <a href="#" class="btn mr-1 btn-success">Cetak Dokumen Surat</a>
-                                                            <a href="#" class="btn mr-1 btn-info">Cetak Dokumen Lampiran</a>
-                                                        @endif	
-                                                    @elseif(Auth::user()->group_id=="1")
-                                                        @if($i == $count_promotion_accept)
-                                                            <a href="#" class="btn mr-1 btn-success">Cetak Dokumen Surat</a>
-                                                            <a href="#" class="btn mr-1 btn-info">Cetak Dokumen Lampiran</a>
-                                                        @endif	
-                                                    @endif
+                                                    @if($count_promotion_hold)
+                                                        <a href="{{ url('promotion/send/'.request()->get('year').'/'.request()->get('period'))}}" class="btn mr-1 btn-success" onclick="confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');">Kirim Pengajuan</a>
+                                                    @endif	
 
                                                     <!-- Modal -->
                                                     <form action="{{ url('promotion/fix_document/')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">

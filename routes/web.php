@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DukController;
+use App\Http\Controllers\ParentUnitController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationHistoryController;
@@ -206,6 +207,7 @@ Route::middleware(['all_admin'])->group(function () {
     Route::get('/training_history/sync/{employee}', [TrainingHistoryController::class, 'sync']);
         
     ## Naik Pangkat
+    Route::get('/parent_unit_promotion', [PromotionController::class, 'index']);
     Route::get('/promotion', [PromotionController::class, 'index']);
     Route::get('/promotion/search', [PromotionController::class, 'search']);
 
@@ -253,6 +255,11 @@ Route::middleware(['administrator'])->group(function () {
     Route::put('/constitution/edit/{constitution}', [ConstitutionController::class, 'update']);
     Route::get('/constitution/delete/{constitution}',[ConstitutionController::class, 'delete']);
      
+    Route::get('/parent_unit_promotion', [ParentUnitController::class, 'index']);
+    Route::get('/parent_unit_promotion/search', [ParentUnitController::class, 'search']);
+    Route::get('/promotion/{parent_unit}', [PromotionController::class, 'index_admin']);
+    Route::get('/promotion/search/{parent_unit}', [PromotionController::class, 'search_admin']);
+
     Route::get('/promotion/accept/{promotion}',[PromotionController::class, 'process']);
     Route::get('/promotion/reject/{promotion}',[PromotionController::class, 'process']);
     Route::post('/promotion/fix_document/{promotion}',[PromotionController::class, 'fix_document']);

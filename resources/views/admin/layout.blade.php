@@ -200,7 +200,7 @@ $notification = SiteHelpers::notification();
                                 <a href="component_tabs.html"> Pindah Instansi </a>
                             </li> -->
                             <li>
-                                <a href="{{ url('promotion') }}"> Naik Pangkat @if($notification)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification }}</span>@endif</a>
+                                <a href="@if(Auth::user()->group_id == 1) {{ url('parent_unit_promotion') }} @else {{ url('promotion') }} @endif"> Naik Pangkat @if($notification)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification }}</span>@endif</a>
                             </li>
                             <!-- <li>
                                 <a href="component_modal.html"> KGB </a>
