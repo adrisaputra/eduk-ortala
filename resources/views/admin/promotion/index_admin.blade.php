@@ -106,10 +106,12 @@
                                         <tr>
                                             <td colspan=7>
                                                 <center>
+                                                    @if($count_promotion_accept != 0)
                                                         @if($i == $count_promotion_accept)
-                                                            <a href="#" class="btn mr-1 btn-success">Cetak Dokumen Surat</a>
-                                                            <a href="#" class="btn mr-1 btn-info">Cetak Dokumen Lampiran</a>
+                                                        <a href="{{ url('promotion/print_letter/'.Crypt::encrypt($get_parent_unit->id).'/'.request()->get('year').'/'.request()->get('period'))}}" class="btn mr-1 btn-success">Cetak Dokumen Surat</a>
+                                <a href="{{ url('promotion/print_attachment/'.Crypt::encrypt($get_parent_unit->id).'/'.request()->get('year').'/'.request()->get('period'))}}" class="btn mr-1 btn-info">Cetak Dokumen Lampiran</a>
                                                         @endif	
+                                                    @endif	
 
                                                     <!-- Modal -->
                                                     <form action="{{ url('promotion/fix_document/')}}" method="POST" enctype="multipart/form-data" class="form-horizontal">

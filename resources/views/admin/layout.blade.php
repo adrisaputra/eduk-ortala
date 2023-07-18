@@ -166,14 +166,27 @@ $notification = SiteHelpers::notification();
                         </a>
                     </li>
 
-                    <li class="menu">
-                        <a href="fonticons.html" aria-expanded="false" class="dropdown-toggle">
+                    
+                    <li class="menu @if(in_array(Request::segment(1), array('statistic_number_of_employees','statistic_number_of_class'))) active @endif">
+                        <a href="#statistik" data-toggle="collapse" @if(in_array(Request::segment(1), array('statistic_number_of_employees','statistic_number_of_class'))) aria-expanded="true" @endif class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
                                 <span>Statistik</span>
                             </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" @if($notification) style="margin-top:-15px" @endif width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
                         </a>
+                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('statistic_number_of_employees','statistic_number_of_class'))) show @endif" id="statistik" data-parent="#accordionExample">
+                            <li @if(in_array(Request::segment(1), array('statistic_number_of_employees'))) class="active" @endif>
+                                <a href="{{ url('statistic_number_of_employees') }}"> Jumlah Pegawai</a>
+                            </li>
+                            <li @if(in_array(Request::segment(1), array('statistic_number_of_class'))) class="active" @endif>
+                                <a href="{{ url('statistic_number_of_class') }}"> Jumlah Pegawai Per <br>Golongan</a>
+                            </li>
+                        </ul>
                     </li>
+
 
                     <li class="menu" @if(Request::segment(1)=="duk") active @endif">
                     <a href="{{ url('duk') }}" @if(Request::segment(1)=="duk") aria-expanded="true" @endif class="dropdown-toggle">
@@ -184,8 +197,8 @@ $notification = SiteHelpers::notification();
                         </a>
                     </li>
 
-                    <li class="menu">
-                        <a href="#layanan" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" @if($notification) style="padding: 9px 10px;" @endif>
+                    <li class="menu @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) active @endif">
+                        <a href="#layanan" data-toggle="collapse" @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) aria-expanded="true" @endif class="dropdown-toggle" @if($notification) style="padding: 9px 10px;" @endif>
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 <span>Layanan</span>
@@ -195,11 +208,11 @@ $notification = SiteHelpers::notification();
                                 <svg xmlns="http://www.w3.org/2000/svg" @if($notification) style="margin-top:-15px" @endif width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled" id="layanan" data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) show @endif" id="layanan" data-parent="#accordionExample">
                             <!-- <li>
                                 <a href="component_tabs.html"> Pindah Instansi </a>
                             </li> -->
-                            <li>
+                            <li @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) class="active" @endif>
                                 <a href="@if(Auth::user()->group_id == 1) {{ url('parent_unit_promotion') }} @else {{ url('promotion') }} @endif"> Naik Pangkat @if($notification)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification }}</span>@endif</a>
                             </li>
                             <!-- <li>

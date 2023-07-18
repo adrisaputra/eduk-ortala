@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\DukController;
 use App\Http\Controllers\ParentUnitController;
 use App\Http\Controllers\EmployeeController;
@@ -74,6 +75,10 @@ Route::middleware(['all_admin'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->middleware('verified');
     Route::get('/user/edit_profil/{user}', [UserController::class, 'edit_profil'])->middleware('verified');
     Route::put('/user/edit_profil/{user}', [UserController::class, 'update_profil'])->middleware('verified');
+
+    ## Statistik
+    Route::get('/statistic_number_of_employees', [StatisticController::class, 'number_of_employees']);
+    Route::get('/statistic_number_of_class', [StatisticController::class, 'number_of_class']);
 
     ## DUK
     Route::get('/duk', [DukController::class, 'index']);
@@ -259,10 +264,11 @@ Route::middleware(['administrator'])->group(function () {
     Route::get('/parent_unit_promotion/search', [ParentUnitController::class, 'search']);
     Route::get('/promotion/{parent_unit}', [PromotionController::class, 'index_admin']);
     Route::get('/promotion/search/{parent_unit}', [PromotionController::class, 'search_admin']);
-
     Route::get('/promotion/accept/{promotion}',[PromotionController::class, 'process']);
     Route::get('/promotion/reject/{promotion}',[PromotionController::class, 'process']);
     Route::post('/promotion/fix_document/{promotion}',[PromotionController::class, 'fix_document']);
+    Route::get('/promotion/print_letter/{promotion}/{year}/{periode}',[PromotionController::class, 'print_letter']);
+    Route::get('/promotion/print_attachment/{promotion}/{year}/{periode}',[PromotionController::class, 'print_attachment']);
 
     ## User
     Route::get('/user', [UserController::class, 'index']);

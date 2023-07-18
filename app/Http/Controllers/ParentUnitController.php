@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ParentUnit;   //nama model
 use App\Http\Controllers\Controller;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,13 @@ class ParentUnitController extends Controller
     {
         $title = "Unor Induk";
         $parent_unit = ParentUnit::Sorting()->Pagination();
-        return view('admin.parent_unit.index',compact('title','parent_unit'));
+
+        foreach($parent_unit as $i => $v){
+            $promotion[$i] = Promotion::where('parent_unit_id', $v->id)
+                            ->where('status','Dikirim')
+                            ->groupBy('year','period')->count();
+        }
+        return view('admin.parent_unit.index',compact('title','parent_unit','promotion'));
     }
 
     ## Tampilkan Data Search
@@ -36,10 +43,16 @@ class ParentUnitController extends Controller
                     $query->where('name', 'LIKE', '%'.$parent_unit.'%');
                 })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
+        foreach($parent_unit as $i => $v){
+            $promotion[$i] = Promotion::where('parent_unit_id', $v->id)
+                            ->where('status','Dikirim')
+                            ->groupBy('year','period')->count();
+        }
+
         if($request->input('page')){
-            return view('admin.parent_unit.index',compact('title','parent_unit'));
+            return view('admin.parent_unit.index',compact('title','parent_unit','promotion'));
         } else {
-            return view('admin.parent_unit.search',compact('title','parent_unit'));
+            return view('admin.parent_unit.search',compact('title','parent_unit','promotion'));
         }
     }
 }

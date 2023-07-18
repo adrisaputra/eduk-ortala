@@ -55,12 +55,13 @@
 											</tr>
 										</thead>
 										<tbody>
-										@foreach($parent_unit as $v)
+										@foreach($parent_unit as $i => $v)
 											<tr onclick="selectRow(this)">
 												<td id="parent_unit-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($parent_unit ->currentpage()-1) * $parent_unit ->perpage() + $loop->index + 1 }}</td>
 												<td id="parent_unit-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->name }}</td>
 												<td class="col-md-3">
-													<a href="{{ url('/promotion/'.Crypt::encrypt($v->id)) }}" class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="top" title="Lihat Pengajuan">Lihat Pengajuan</a>
+													<a href="{{ url('/promotion/'.Crypt::encrypt($v->id)) }}" class="btn btn-info position-relative" data-toggle="tooltip" data-placement="top" title="Lihat Pengajuan">Lihat Pengajuan
+													@if($promotion[$i]>0)<span class="badge badge-danger counter">{{ $promotion[$i] }}</span></a>@endif
 												</td>
 											</tr>
 										@endforeach
