@@ -12,7 +12,6 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ClassHistoryController;
 use App\Http\Controllers\EducationHistoryController;
 use App\Http\Controllers\PositionHistoryController;
-// use App\Http\Controllers\PunishmentHistoryController;
 use App\Http\Controllers\AbsenceHistoryController;
 use App\Http\Controllers\LeaveHistoryController;
 use App\Http\Controllers\FamilyHistoryController;
@@ -230,6 +229,7 @@ Route::middleware(['all_admin'])->group(function () {
     ## KGB
     Route::get('/salary_increase', [SalaryIncreaseController::class, 'index']);
     Route::get('/salary_increase/search', [SalaryIncreaseController::class, 'search']);
+    Route::get('/salary_increase/reload',[SalaryIncreaseController::class, 'reload']);
 
     ## File KGB
     Route::get('/salary_increase_file/{salary_increase}', [SalaryIncreaseFileController::class, 'index']);
@@ -239,7 +239,7 @@ Route::middleware(['all_admin'])->group(function () {
     Route::get('/salary_increase_file/edit/{salary_increase}/{salary_increase_file}', [SalaryIncreaseFileController::class, 'edit']);
     Route::put('/salary_increase_file/edit/{salary_increase}/{salary_increase_file}', [SalaryIncreaseFileController::class, 'update']);
     Route::get('/salary_increase_file/delete/{salary_increase_file}',[SalaryIncreaseFileController::class, 'delete']);
-
+    
     ## Edit Profil
     Route::get('/edit_profil/{user}',[UserController::class, 'edit_profil']);
     Route::put('/edit_profil/{user}',[UserController::class, 'update_profil']);
@@ -304,9 +304,8 @@ Route::middleware(['administrator'])->group(function () {
     Route::get('/salary_increase/accept/{salary_increase}',[SalaryIncreaseController::class, 'process']);
     Route::get('/salary_increase/reject/{salary_increase}',[SalaryIncreaseController::class, 'process']);
     Route::post('/salary_increase/fix_document/{salary_increase}',[SalaryIncreaseController::class, 'fix_document']);
-    Route::get('/salary_increase/print_letter/{salary_increase}/{year}/{periode}',[SalaryIncreaseController::class, 'print_letter']);
-    Route::get('/salary_increase/print_attachment/{salary_increase}/{year}/{periode}',[SalaryIncreaseController::class, 'print_attachment']);
-
+    Route::get('/salary_increase/print/{salary_increase}',[SalaryIncreaseController::class, 'print']);
+    
     ## User
     Route::get('/user', [UserController::class, 'index']);
     Route::get('/user/search', [UserController::class, 'search']);

@@ -184,8 +184,8 @@ $total_notification = SiteHelpers::total_notification();
                         </a>
                     </li>
 
-                    <li class="menu @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase'))) active @endif">
-                        <a href="#layanan" data-toggle="collapse" @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase'))) aria-expanded="true" @endif class="dropdown-toggle" @if($notification) style="padding: 9px 10px;" @endif>
+                    <li class="menu @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase','salary_increase_file'))) active @endif">
+                        <a href="#layanan" data-toggle="collapse" @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase','salary_increase_file'))) aria-expanded="true" @endif class="dropdown-toggle" @if($notification) style="padding: 9px 10px;" @endif>
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 <span>Layanan</span>
@@ -195,14 +195,15 @@ $total_notification = SiteHelpers::total_notification();
                                 <svg xmlns="http://www.w3.org/2000/svg" @if($total_notification) style="margin-top:-15px" @endif width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase'))) show @endif" id="layanan" data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase','salary_increase_file'))) show @endif" id="layanan" data-parent="#accordionExample">
                             <!-- <li>
                                 <a href="component_tabs.html"> Pindah Instansi </a>
                             </li> -->
                             <li @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) class="active" @endif>
                                 <a href="@if(Auth::user()->group_id == 1) {{ url('parent_unit_promotion') }} @else {{ url('promotion') }} @endif"> Naik Pangkat @if($notification)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification }}</span>@endif</a>
                             </li>
-                            <li @if(in_array(Request::segment(1), array('parent_unit_salary_increase','salary_increase'))) class="active" @endif>
+                            
+                            <li id="salary_increase" @if(in_array(Request::segment(1), array('parent_unit_salary_increase','salary_increase','salary_increase_file'))) class="active" @endif>
                                 <a href="@if(Auth::user()->group_id == 1) {{ url('parent_unit_salary_increase') }} @else {{ url('salary_increase') }} @endif"> KGB @if($notification2)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification2 }}</span>@endif</a>
                             </li>
                             <!-- <li>

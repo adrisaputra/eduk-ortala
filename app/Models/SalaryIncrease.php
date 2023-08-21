@@ -28,6 +28,9 @@ class SalaryIncrease extends Model
         'next_kgb',
         'status',
         'note',
+        'letter_number',
+        'letter_date',
+        'attachment',
     ];
 
     public function employee(){

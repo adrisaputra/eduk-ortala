@@ -138,4 +138,5 @@ class SalaryIncreaseFileController extends Controller
         activity()->log('Hapus Data Constitution dengan ID = '.$salary_increase_file->id);
         return redirect('/salary_increase_file/'.Crypt::encrypt($salary_increase_file->salary_increase_id))->with('status', 'Data Berhasil Diubah');
     }
+
 }

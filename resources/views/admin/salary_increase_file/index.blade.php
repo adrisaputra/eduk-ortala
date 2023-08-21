@@ -21,7 +21,8 @@
 										@if(Auth::user()->group_id=="2")
 											@if($salary_increase->status=="Hold" || $salary_increase->status=="Diperbaiki" )
 												<a href="{{ url(Request::segment(1).'/'.Request::segment(2).'/create') }}" class="btn mb-2 mr-1 btn-success">Tambah Data</a>	
-												<a href="{{ url('salary_increase/send/'.Crypt::encrypt($salary_increase->id))}}" class="btn mb-2 mr-1 btn-info" onclick="return confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');">Kirim Pengajuan</a>            
+												<a href="{{ url('salary_increase/send/'.Crypt::encrypt($salary_increase->id))}}" class="btn mb-2 mr-1 btn-info" onclick="return confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');notification2();">Kirim Pengajuan</a>            
+												<!-- <a href="#" class="btn mb-2 mr-1 btn-info" onclick="notification2();">Kirim Pengajuans</a>             -->
 											@endif
 										@endif
 										<a href="{{ url(Request::segment(1).'/'.Request::segment(2)) }}" class="btn mb-2 mr-1 btn-warning ">Refresh</a>
@@ -291,34 +292,10 @@ function tampil(){
         })
     }
 </script>
-<script>
-	function add_to_cart(id){
-
-		// var quantity = document.getElementById('order_quantity' + id).value; // Mengambil nilai input
-		// console.log(quantity)
-		// $.ajax({
-		// 	url : "{{ url('/cart') }}",
-		// 	type : "POST",
-		// 	data: {
-		// 		_token: $('input[name=_token]').val(),
-		// 		user_id: user_id, // Menambahkan data input ke objek data
-		// 		product_id: id, // Menambahkan data input ke objek data
-		// 		price: price, // Menambahkan data input ke objek data
-		// 		quantity: quantity, // Menambahkan data input ke objek data
-		// 		total: price * quantity, // Menambahkan data input ke objek data
-		// 	},
-		// 	success: function(response){
-		// 	    Snackbar.show({
-		// 			pos: 'top-right',
-		// 			text: 'Pesanan Dimasukkan Dikeranjang',
-		// 			actionTextColor: '#fff',
-		// 			backgroundColor: '#8dbf42'
-		// 		});
-				
-		// 		$("#cart").load("{{ url('cart/reload')}}" );
-		// 	}
-		// })
-		console.log(id);
+<!-- <script>
+	function notification2(){
+		$("#salary_increase").load("{{ url('salary_increase/reload')}}" );
+		console.log(1);
 	}
-</script>
+</script> -->
 @endsection
