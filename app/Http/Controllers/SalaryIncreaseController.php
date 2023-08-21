@@ -476,60 +476,6 @@ class SalaryIncreaseController extends Controller
         $sheet->setCellValue('D46', $leader->classes->rank.' '.$leader->classes->class);	
         $sheet->setCellValue('D47', "NIP : ".$leader->nip);	
 
-        // $sheet->setCellValue('A16', 'NO.'); $sheet->mergeCells('A16:G16');
-        // $sheet->getStyle('A15:A16')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-        // $sheet->setCellValue('A18', 'NO');
-        // $sheet->setCellValue('B18', 'URAIAN PENGANTAR'); $sheet->mergeCells('B18:C18');
-        // $sheet->setCellValue('D18', 'BANYAKNYA');
-        // $sheet->setCellValue('E18', 'KETERANGAN');$sheet->mergeCells('E18:G18');
-        // $sheet->getStyle('A18:G18')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-        // $sheet->setCellValue('A19', '1');
-
-        // $sheet->setCellValue('B19', 'Daftar Usulan Kenaikan Pangkat periode : '.$salary_increase->period.' '.$salary_increase->year); $sheet->mergeCells('B19:C19');
-        // $sheet->setCellValue('B20', 'a.n '.$salary_increase->employee->name.' dan Kawan-kawan');$sheet->mergeCells('B20:C20');
-        // $sheet->mergeCells('B21:C21');
-        // $sheet->mergeCells('B22:C22');
-        // $sheet->mergeCells('B23:C23');
-        // $sheet->mergeCells('B24:C24');
-        // $sheet->mergeCells('B25:C25');
-        // $sheet->mergeCells('B26:C26');
-        // $sheet->mergeCells('B27:C27');
-
-        // $sheet->setCellValue('D19', $count_salary_increase);
-
-        // $sheet->setCellValue('E19', 'Berkas usul terdiri dari :');$sheet->mergeCells('E19:G19');
-        // $sheet->setCellValue('E20', '1. FC Karpeg');$sheet->mergeCells('E20:G20');
-        // $sheet->setCellValue('E21', '2. FC Karis/Karsu	');$sheet->mergeCells('E21:G21');;	
-        // $sheet->setCellValue('E22', '3. SK CPNS dan Pengangkatan PNS');$sheet->mergeCells('E22:G22');	
-        // $sheet->setCellValue('E23', '4. SK Pangkat Terakhir	');$sheet->mergeCells('E23:G23');
-        // $sheet->setCellValue('E24', '5. SKP 2 Tahun Terakhir');$sheet->mergeCells('E24:G24');
-        // $sheet->setCellValue('E25', '6. FC Ijazah Terakhir');$sheet->mergeCells('E25:G25');
-        // $sheet->setCellValue('E26', '7. Bahan Kelengkapan lainnya');$sheet->mergeCells('E26:G26');
-        // $sheet->setCellValue('E27', '8. Lain-Lain');$sheet->mergeCells('E27:G27');
-
-        // $sheet->setCellValue('A30', 'Sesuai ketentuan dalam peraturan pemerintah Nomor 99 Tahun 2000 jo Peraturan Pemerintah Nomor 12 Tahun 2002, yang');	
-        // $sheet->setCellValue('A31', 'bersangkutan telah memenuhi syarat untuk dapat dipertimbangkan kenaikan pangkatnya setingkat lebih tinggi.');	
-        
-        // $sheet->setCellValue('E34', 'Pengirim');	
-
-        // $sheet->setCellValue('E36', $parent_unit->leader_call.' '.$parent_unit->name);	
-        // $sheet->setCellValue('E37', 'PROVINSI SULAWESI TENGGARA');	
-        // $sheet->setCellValue('E41', $parent_unit->leader_name);	
-
-        // $leader = Employee::where('nip',$parent_unit->leader_nip)->first();
-        		
-        // $sheet->setCellValue('E42', $leader->classes->rank.' '.$leader->classes->class);	
-        // $sheet->setCellValue('E43', "NIP : ".$leader->nip);	
-
-        // $sheet->getStyle('A18:G27')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        // // $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        // $sheet->getStyle('A1')->getFont()->setBold(true);
-        // $sheet->getStyle('A2')->getFont()->setBold(true);
-        // $sheet->getStyle('A15')->getFont()->setBold(true);
-        // $sheet->getStyle('A18:G18')->getFont()->setBold(true);
-        
         $type = 'xlsx';
         $fileName = "SURAT KENAIKAN GAJI BERKALA (".$salary_increase->employee->name.").".$type;
 
