@@ -30,6 +30,8 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ConstitutionController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SalaryIncreaseController;
+use App\Http\Controllers\SalaryIncreaseFileController;
 use App\Http\Controllers\UserController;
 use Carbon\Carbon;
 
@@ -212,9 +214,9 @@ Route::middleware(['all_admin'])->group(function () {
     Route::get('/training_history/sync/{employee}', [TrainingHistoryController::class, 'sync']);
         
     ## Naik Pangkat
-    Route::get('/parent_unit_promotion', [PromotionController::class, 'index']);
     Route::get('/promotion', [PromotionController::class, 'index']);
     Route::get('/promotion/search', [PromotionController::class, 'search']);
+    Route::get('/promotion/delete/{promotion}',[PromotionController::class, 'delete']);
 
     ## File Naik Pangkat
     Route::get('/promotion_file/{promotion}', [PromotionFileController::class, 'index']);
@@ -225,6 +227,19 @@ Route::middleware(['all_admin'])->group(function () {
     Route::put('/promotion_file/edit/{promotion}/{promotion_file}', [PromotionFileController::class, 'update']);
     Route::get('/promotion_file/delete/{promotion_file}',[PromotionFileController::class, 'delete']);
 
+    ## KGB
+    Route::get('/salary_increase', [SalaryIncreaseController::class, 'index']);
+    Route::get('/salary_increase/search', [SalaryIncreaseController::class, 'search']);
+
+    ## File KGB
+    Route::get('/salary_increase_file/{salary_increase}', [SalaryIncreaseFileController::class, 'index']);
+    Route::get('/salary_increase_file/{salary_increase}/search', [SalaryIncreaseFileController::class, 'search']);
+    Route::get('/salary_increase_file/{salary_increase}/create', [SalaryIncreaseFileController::class, 'create']);
+    Route::post('/salary_increase_file/{salary_increase}', [SalaryIncreaseFileController::class, 'store']);
+    Route::get('/salary_increase_file/edit/{salary_increase}/{salary_increase_file}', [SalaryIncreaseFileController::class, 'edit']);
+    Route::put('/salary_increase_file/edit/{salary_increase}/{salary_increase_file}', [SalaryIncreaseFileController::class, 'update']);
+    Route::get('/salary_increase_file/delete/{salary_increase_file}',[SalaryIncreaseFileController::class, 'delete']);
+
     ## Edit Profil
     Route::get('/edit_profil/{user}',[UserController::class, 'edit_profil']);
     Route::put('/edit_profil/{user}',[UserController::class, 'update_profil']);
@@ -233,12 +248,22 @@ Route::middleware(['all_admin'])->group(function () {
 
 Route::middleware(['admin_biro'])->group(function () {
     
+    ## Naik Pangkat
     Route::get('/promotion/create', [PromotionController::class, 'create']);
     Route::post('/promotion', [PromotionController::class, 'store']);
     Route::get('/promotion/edit/{promotion}', [PromotionController::class, 'edit']);
     Route::put('/promotion/edit/{promotion}', [PromotionController::class, 'update']);
     Route::get('/promotion/delete/{promotion}',[PromotionController::class, 'delete']);
     Route::get('/promotion/send/{year}/{period}',[PromotionController::class, 'send']);
+    
+    ## KGB
+    Route::get('/salary_increase/create', [SalaryIncreaseController::class, 'create']);
+    Route::post('/salary_increase', [SalaryIncreaseController::class, 'store']);
+    Route::get('/salary_increase/edit/{salary_increase}', [SalaryIncreaseController::class, 'edit']);
+    Route::put('/salary_increase/edit/{salary_increase}', [SalaryIncreaseController::class, 'update']);
+    Route::get('/salary_increase/delete/{salary_increase}',[SalaryIncreaseController::class, 'delete']);
+    Route::get('/salary_increase/send/{salary_increase}',[SalaryIncreaseController::class, 'send']);
+    
 });
 
 Route::middleware(['administrator'])->group(function () {
@@ -260,6 +285,7 @@ Route::middleware(['administrator'])->group(function () {
     Route::put('/constitution/edit/{constitution}', [ConstitutionController::class, 'update']);
     Route::get('/constitution/delete/{constitution}',[ConstitutionController::class, 'delete']);
      
+    ## Kenaikan Pangkat
     Route::get('/parent_unit_promotion', [ParentUnitController::class, 'index']);
     Route::get('/parent_unit_promotion/search', [ParentUnitController::class, 'search']);
     Route::get('/promotion/{parent_unit}', [PromotionController::class, 'index_admin']);
@@ -269,6 +295,17 @@ Route::middleware(['administrator'])->group(function () {
     Route::post('/promotion/fix_document/{promotion}',[PromotionController::class, 'fix_document']);
     Route::get('/promotion/print_letter/{promotion}/{year}/{periode}',[PromotionController::class, 'print_letter']);
     Route::get('/promotion/print_attachment/{promotion}/{year}/{periode}',[PromotionController::class, 'print_attachment']);
+
+    ## KGB
+    Route::get('/parent_unit_salary_increase', [ParentUnitController::class, 'index']);
+    Route::get('/parent_unit_salary_increase/search', [ParentUnitController::class, 'search']);
+    Route::get('/salary_increase/{parent_unit}', [SalaryIncreaseController::class, 'index_admin']);
+    Route::get('/salary_increase/search/{parent_unit}', [SalaryIncreaseController::class, 'search_admin']);
+    Route::get('/salary_increase/accept/{salary_increase}',[SalaryIncreaseController::class, 'process']);
+    Route::get('/salary_increase/reject/{salary_increase}',[SalaryIncreaseController::class, 'process']);
+    Route::post('/salary_increase/fix_document/{salary_increase}',[SalaryIncreaseController::class, 'fix_document']);
+    Route::get('/salary_increase/print_letter/{salary_increase}/{year}/{periode}',[SalaryIncreaseController::class, 'print_letter']);
+    Route::get('/salary_increase/print_attachment/{salary_increase}/{year}/{periode}',[SalaryIncreaseController::class, 'print_attachment']);
 
     ## User
     Route::get('/user', [UserController::class, 'index']);

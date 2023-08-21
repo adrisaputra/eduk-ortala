@@ -60,8 +60,13 @@
 												<td id="parent_unit-{{ $v->id }}" onClick="getEmployee(this.id)">{{ ($parent_unit ->currentpage()-1) * $parent_unit ->perpage() + $loop->index + 1 }}</td>
 												<td id="parent_unit-{{ $v->id }}" onClick="getEmployee(this.id)">{{ $v->name }}</td>
 												<td class="col-md-3">
-													<a href="{{ url('/promotion/'.Crypt::encrypt($v->id)) }}" class="btn btn-info position-relative" data-toggle="tooltip" data-placement="top" title="Lihat Pengajuan">Lihat Pengajuan
-													@if($promotion[$i]>0)<span class="badge badge-danger counter">{{ $promotion[$i] }}</span></a>@endif
+													@if(request()->segment(1)=="parent_unit_promotion")
+														<a href="{{ url('/promotion/'.Crypt::encrypt($v->id)) }}" class="btn btn-info position-relative btn-sm" data-toggle="tooltip" data-placement="top" title="Lihat Pengajuan">Lihat Pengajuan
+														@if($promotion[$i]>0)<span class="badge badge-danger counter">{{ $promotion[$i] }}</span></a>@endif
+													@elseif(request()->segment(1)=="parent_unit_salary_increase")
+														<a href="{{ url('/salary_increase/'.Crypt::encrypt($v->id)) }}" class="btn btn-info position-relative btn-sm" data-toggle="tooltip" data-placement="top" title="Lihat Pengajuan">Lihat Pengajuan
+														@if($salary_increase[$i]>0)<span class="badge badge-danger counter">{{ $salary_increase[$i] }}</span></a>@endif
+													@endif
 												</td>
 											</tr>
 										@endforeach

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ParentUnit;   //nama model
 use App\Http\Controllers\Controller;
 use App\Models\Promotion;
+use App\Models\SalaryIncrease;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
@@ -29,8 +30,10 @@ class ParentUnitController extends Controller
             $promotion[$i] = Promotion::where('parent_unit_id', $v->id)
                             ->where('status','Dikirim')
                             ->groupBy('year','period')->count();
+            $salary_increase[$i] = SalaryIncrease::where('parent_unit_id', $v->id)
+                                ->where('status','Dikirim')->count();
         }
-        return view('admin.parent_unit.index',compact('title','parent_unit','promotion'));
+        return view('admin.parent_unit.index',compact('title','parent_unit','promotion','salary_increase'));
     }
 
     ## Tampilkan Data Search

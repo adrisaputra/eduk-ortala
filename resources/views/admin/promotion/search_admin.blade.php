@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-            @php $total = 0; $i = 0; @endphp
+            @php $total = 0; $i = 0;@endphp
             @foreach($promotion as $v)
             @php $i = $i+1; @endphp
                 <tr>
@@ -24,23 +24,23 @@
                     <td style="width:14%">{{ $v->new_promotion }}</td>
                     <td style="width:14%">{{ $v->promotion_type }}</td>
                     <td style="width:14%">
-                        @if($v->status=="Dikirim")
-                            @if($v->note)
-                                <span class="badge badge-primary">Sudah Diperbaiki</span><br><br>
-                                Note :<br> {{ $v->note }}
-                            @else
-                                <span class="badge badge-primary">Dokumen Masuk</span>
-                            @endif
-                        @elseif($v->status=="Diperbaiki")
-                            <span class="badge badge-info">Dokumen Salah</span><br><br>
+                    @if($v->status=="Dikirim")
+                        @if($v->note)
+                            <span class="badge badge-primary">Sudah Diperbaiki</span><br><br>
                             Note :<br> {{ $v->note }}
-                        @elseif($v->status=="Diterima")
-                            <span class="badge badge-success">Terverifikasi</span>
+                        @else
+                            <span class="badge badge-primary">Dokumen Masuk</span>
                         @endif
+                    @elseif($v->status=="Diperbaiki")
+                        <span class="badge badge-info">Dokumen Salah</span><br><br>
+                        Note :<br> {{ $v->note }}
+                    @elseif($v->status=="Diterima")
+                        <span class="badge badge-success">Terverifikasi</span>
+                    @endif
                     </td>
                     <td class="col-md-3">
                         @if($v->status=="Dikirim")
-                            <a href="{{ url('/promotion_file/'.Crypt::encrypt($v->id)) }}" class="btn mb-2 mr-1 btn-success ">Verifikasi</a>
+                            <a href="{{ url('/promotion_file/'.Crypt::encrypt($v->id)) }}" class="btn mb-2 mr-1 btn-success btn-sm ">Verifikasi</a>
                         @endif
                     </td>
                 </tr>
@@ -52,7 +52,7 @@
                             @if($i == $count_promotion_accept)
                                 <a href="{{ url('promotion/print_letter/'.Crypt::encrypt($get_parent_unit->id).'/'.request()->get('year').'/'.request()->get('period'))}}" class="btn mr-1 btn-success">Cetak Dokumen Surat</a>
                                 <a href="{{ url('promotion/print_attachment/'.Crypt::encrypt($get_parent_unit->id).'/'.request()->get('year').'/'.request()->get('period'))}}" class="btn mr-1 btn-info">Cetak Dokumen Lampiran</a>
-                            @endif		
+                            @endif	
                         @endif	
 
                         <!-- Modal -->

@@ -14,7 +14,13 @@ class CreateSalaryIncreasesFilesTable extends Migration
     public function up()
     {
         Schema::create('salary_increases_files', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id',11);
+            
+            $table->unsignedInteger('salary_increase_id');
+            $table->foreign("salary_increase_id")->references('id')->on("salary_increases");
+
+            $table->string('name')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

@@ -19,10 +19,25 @@ class CreateSalaryIncreasesTable extends Migration
             $table->unsignedBigInteger('employee_id');
             $table->foreign("employee_id")->references('id')->on("employees");
 
+            $table->unsignedInteger('parent_unit_id');
+            $table->foreign("parent_unit_id")->references('id')->on("parent_units");
+
             $table->string('nip')->nullable();
-            $table->string('last_promotion')->nullable();
-            $table->string('new_promotion')->nullable();
-            $table->enum('promotion_type', ['Pejabat Negara', 'Prestasi Luar Biasa', 'Penyesuaian Ijazah', 'Jabatan Fungsional Tertentu', 'Jabatan Struktural', 'Reguler']);
+            $table->string('old_salary')->nullable();
+            $table->string('pejabat')->nullable();
+            $table->date('sk_date')->nullable();
+            $table->string('sk_number')->nullable();
+            $table->date('start_old_date')->nullable();
+            $table->year('year_old_salary')->nullable();
+            $table->integer('month_old_salary')->nullable();
+
+            $table->string('new_salary')->nullable();
+            $table->year('year_new_salary')->nullable();
+            $table->integer('month_new_salary')->nullable();
+            $table->string('class')->nullable();
+            $table->date('start_new_date')->nullable();
+            $table->string('status_employee')->nullable();
+            $table->date('next_kgb')->nullable();
             $table->enum('status', ['Diterima', 'Diperbaiki', 'Ditolak']);
             $table->text('note');
             $table->timestamps();

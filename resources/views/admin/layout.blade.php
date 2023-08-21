@@ -1,6 +1,8 @@
 @php
 $setting = SiteHelpers::setting();
 $notification = SiteHelpers::notification();
+$notification2 = SiteHelpers::notification2();
+$total_notification = SiteHelpers::total_notification();
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -24,10 +26,6 @@ $notification = SiteHelpers::notification();
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
     <link href="{{ asset('plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/css/dashboard/dash_1.css') }}" rel="stylesheet" type="text/css" />
-    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
-
-    
-    <!-- BEGIN THEME GLOBAL STYLES -->
     <link href="{{ asset('assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('plugins/animate/animate.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('plugins/sweetalerts/promise-polyfill.js') }}"></script>
@@ -35,25 +33,14 @@ $notification = SiteHelpers::notification();
     <link href="{{ asset('plugins/sweetalerts/sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/components/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/elements/alert.css') }}">
-    <!-- <link rel="stylesheet" type="text/css" href="{{ asset('css/dashboard/dash_2.css') }}"> -->
-    <!-- <link rel="stylesheet" href="{{ asset('plugins/font-icons/fontawesome2/css/all.css') }}"> -->
-    <!-- <link rel="stylesheet" href="{{ asset('plugins/font-icons/fontawesome2/css/fontawesome.css') }}"> -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/select2.min.css') }}">
     <link href="{{ asset('plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('plugins/flatpickr/custom-flatpickr.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('plugins/noUiSlider/custom-nouiSlider.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('plugins/bootstrap-range-Slider/bootstrap-slider.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('plugins/notification/snackbar/snackbar.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
-    
-   <!-- CSS -->
-   <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
-
-    <!-- Script -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
 
 </head>
 <body class="sidebar-noneoverflow">
@@ -197,23 +184,26 @@ $notification = SiteHelpers::notification();
                         </a>
                     </li>
 
-                    <li class="menu @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) active @endif">
-                        <a href="#layanan" data-toggle="collapse" @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) aria-expanded="true" @endif class="dropdown-toggle" @if($notification) style="padding: 9px 10px;" @endif>
+                    <li class="menu @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase'))) active @endif">
+                        <a href="#layanan" data-toggle="collapse" @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase'))) aria-expanded="true" @endif class="dropdown-toggle" @if($notification) style="padding: 9px 10px;" @endif>
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                                 <span>Layanan</span>
                             </div>
                             <div>
-                                @if($notification)<span class="badge badge-danger" style="margin-top:6px">{{ $notification }}</span>@endif
-                                <svg xmlns="http://www.w3.org/2000/svg" @if($notification) style="margin-top:-15px" @endif width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                @if($total_notification)<span class="badge badge-danger" style="margin-top:6px">{{ $total_notification }}</span>@endif
+                                <svg xmlns="http://www.w3.org/2000/svg" @if($total_notification) style="margin-top:-15px" @endif width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) show @endif" id="layanan" data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion','parent_unit_salary_increase','salary_increase'))) show @endif" id="layanan" data-parent="#accordionExample">
                             <!-- <li>
                                 <a href="component_tabs.html"> Pindah Instansi </a>
                             </li> -->
                             <li @if(in_array(Request::segment(1), array('parent_unit_promotion','promotion'))) class="active" @endif>
                                 <a href="@if(Auth::user()->group_id == 1) {{ url('parent_unit_promotion') }} @else {{ url('promotion') }} @endif"> Naik Pangkat @if($notification)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification }}</span>@endif</a>
+                            </li>
+                            <li @if(in_array(Request::segment(1), array('parent_unit_salary_increase','salary_increase'))) class="active" @endif>
+                                <a href="@if(Auth::user()->group_id == 1) {{ url('parent_unit_salary_increase') }} @else {{ url('salary_increase') }} @endif"> KGB @if($notification2)<span class="badge badge-danger" style="margin-top:-2px">{{ $notification2 }}</span>@endif</a>
                             </li>
                             <!-- <li>
                                 <a href="component_modal.html"> KGB </a>
