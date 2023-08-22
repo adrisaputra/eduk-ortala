@@ -1,5 +1,8 @@
 @extends('admin/layout')
 @section('konten')
+<style>
+	
+</style>
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
             <div class="layout-px-spacing">
@@ -195,10 +198,52 @@
 															@if(Auth::user()->group_id=="2")
 																<!-- <a href="#" class="btn mr-1 btn-success" onclick="confirm('Apakah Anda Yakin Akan Mengirim Pengajuan Ini ?');add_to_cart({{ $salary_increase->id }})">Kirim Pengajuan</a> -->
 															@elseif(Auth::user()->group_id=="1")
-																<a href="{{ url('salary_increase/accept/'.Crypt::encrypt($salary_increase->id))}}" class="btn mr-1 btn-success" onclick="return confirm('Apakah Anda Yakin Akan Menerima Pengajuan Ini ?');">Terima</a>
+																<!-- <a href="{{ url('salary_increase/accept/'.Crypt::encrypt($salary_increase->id))}}" class="btn mr-1 btn-success" onclick="return confirm('Apakah Anda Yakin Akan Menerima Pengajuan Ini ?');">Terima</a> -->
+																<button type="button" class="btn mr-1 btn-success" data-toggle="modal" data-target="#exampleModalAccept">Terima</button>
 																<button type="button" class="btn mr-1 btn-info" data-toggle="modal" data-target="#exampleModal">Perbaiki</button>
 																<!-- <a href="{{ url('salary_increase/reject/'.Crypt::encrypt($salary_increase->id))}}" class="btn mr-1 btn-danger" onclick="return confirm('Apakah Anda Yakin Akan Menolak Pengajuan Ini ?');">Tolak</a> -->
 															@endif
+
+															<!-- Modal -->
+															<form action="{{ url('salary_increase/accept/'.Crypt::encrypt($salary_increase->id))}}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+															{{ csrf_field() }}
+																<div class="modal fade" id="exampleModalAccept" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 1050;">
+																	<div class="modal-dialog" role="document">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<h5 class="modal-title" id="exampleModalLabel">Terima Dokumen</h5>
+																				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																				<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+																				</button>
+																			</div>
+																			<div class="modal-body">
+																				<div class="form-group row mb-4">
+																					<label class="col-xl-5 col-sm-3 col-sm-2 col-form-label">{{ __('Nomor Surat') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+																					<div class="col-xl-7 col-lg-9 col-sm-10">
+																						<input type="text" class="form-control" placeholder="Nomor Surat" name="letter_number" required >
+																					</div>
+																				</div>
+																				<div class="form-group row mb-4">
+																					<label class="col-xl-5 col-sm-3 col-sm-2 col-form-label">{{ __('Tanggal Surat') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+																					<div class="col-xl-7 col-lg-9 col-sm-10">
+																						<input name="letter_date" id="basicFlatpickr" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Pilih Tanggal" style="z-index: 1060;" required>
+																					</div>
+																				</div>
+																				<div class="form-group row mb-4">
+																					<label class="col-xl-5 col-sm-3 col-sm-2 col-form-label">{{ __('Jumlah Lampiran') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+																					<div class="col-xl-7 col-lg-9 col-sm-10">
+																						<input type="text" class="form-control" placeholder="Jumlah Lampiran" name="attachment" required >
+																					</div>
+																				</div>
+																			</div>
+																			<div class="modal-footer">
+																				<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Batal</button>
+																				<button type="submit" class="btn btn-success">Terima</button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</form>
 
 															<!-- Modal -->
 															<form action="{{ url('salary_increase/fix_document/'.Crypt::encrypt($salary_increase->id))}}" method="POST" enctype="multipart/form-data" class="form-horizontal">

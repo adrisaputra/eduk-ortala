@@ -230,6 +230,7 @@ Route::middleware(['all_admin'])->group(function () {
     Route::get('/salary_increase', [SalaryIncreaseController::class, 'index']);
     Route::get('/salary_increase/search', [SalaryIncreaseController::class, 'search']);
     Route::get('/salary_increase/reload',[SalaryIncreaseController::class, 'reload']);
+    Route::get('/salary_increase/print/{salary_increase}',[SalaryIncreaseController::class, 'print']);
 
     ## File KGB
     Route::get('/salary_increase_file/{salary_increase}', [SalaryIncreaseFileController::class, 'index']);
@@ -301,10 +302,9 @@ Route::middleware(['administrator'])->group(function () {
     Route::get('/parent_unit_salary_increase/search', [ParentUnitController::class, 'search']);
     Route::get('/salary_increase/{parent_unit}', [SalaryIncreaseController::class, 'index_admin']);
     Route::get('/salary_increase/search/{parent_unit}', [SalaryIncreaseController::class, 'search_admin']);
-    Route::get('/salary_increase/accept/{salary_increase}',[SalaryIncreaseController::class, 'process']);
+    Route::post('/salary_increase/accept/{salary_increase}',[SalaryIncreaseController::class, 'accept']);
     Route::get('/salary_increase/reject/{salary_increase}',[SalaryIncreaseController::class, 'process']);
     Route::post('/salary_increase/fix_document/{salary_increase}',[SalaryIncreaseController::class, 'fix_document']);
-    Route::get('/salary_increase/print/{salary_increase}',[SalaryIncreaseController::class, 'print']);
     
     ## User
     Route::get('/user', [UserController::class, 'index']);

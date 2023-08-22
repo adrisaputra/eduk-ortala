@@ -318,6 +318,22 @@ class SalaryIncreaseController extends Controller
 		return redirect('/salary_increase/'.Crypt::encrypt($salary_increase->parent_unit_id).'?search=&&year='.$salary_increase->year.'&&period='.$salary_increase->period)->with('status', 'Data Berhasil Dikirim');
     }
 
+    ## Terima Pengajuan
+    public function accept($salary_increase, Request $request)
+    {
+        $salary_increase = Crypt::decrypt($salary_increase);
+        $salary_increase = SalaryIncrease::where('id',$salary_increase)->first();
+
+        $salary_increase->letter_number = $request->letter_number;
+        $salary_increase->letter_date = $request->letter_date;
+        $salary_increase->attachment = $request->attachment;
+        $salary_increase->status = "Diterima";
+        $salary_increase->save();
+		
+        activity()->log('Kirim Data SalaryIncrease dengan ID = '.$salary_increase->id);
+		return redirect('/salary_increase/'.Crypt::encrypt($salary_increase->parent_unit_id).'?search=&&year='.$salary_increase->year.'&&period='.$salary_increase->period)->with('status', 'Data Berhasil Dikirim');
+    }
+
     ## Perbaiki Pengajuan
     public function fix_document($salary_increase, Request $request)
     {
@@ -387,7 +403,7 @@ class SalaryIncreaseController extends Controller
 
         $sheet->setCellValue('A11', 'Perihal');
         $sheet->setCellValue('B11', ': Kenaikan Gaji Berkala');
-        $sheet->setCellValue('B12', '  An.'.$salary_increase->employee->name);
+        $sheet->setCellValue('B12', '  An.'.$salary_increase->employee->front_title.' '.$salary_increase->employee->name.' '.$salary_increase->employee->back_title);
 
         $sheet->setCellValue('F6', 'Kendari,  '.date('d-m-Y', strtotime($salary_increase->letter_date)));
         $sheet->setCellValue('F8', 'Kepada');
