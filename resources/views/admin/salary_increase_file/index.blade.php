@@ -230,9 +230,9 @@
 																					</div>
 																				</div>
 																				<div class="form-group row mb-4">
-																					<label class="col-xl-5 col-sm-3 col-sm-2 col-form-label">{{ __('Jumlah Lampiran') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+																					<label class="col-xl-5 col-sm-3 col-sm-2 col-form-label">{{ __('Jumlah Lampiran') }}</label>
 																					<div class="col-xl-7 col-lg-9 col-sm-10">
-																						<input type="text" class="form-control" placeholder="Jumlah Lampiran" name="attachment" required >
+																						<input type="text" class="form-control" placeholder="Jumlah Lampiran" name="attachment" >
 																					</div>
 																				</div>
 																			</div>
