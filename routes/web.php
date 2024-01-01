@@ -29,6 +29,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ConstitutionController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PresenceRecapitulationController;
 use App\Http\Controllers\SalaryIncreaseController;
 use App\Http\Controllers\SalaryIncreaseFileController;
 use App\Http\Controllers\UserController;
@@ -241,6 +242,16 @@ Route::middleware(['all_admin'])->group(function () {
     Route::put('/salary_increase_file/edit/{salary_increase}/{salary_increase_file}', [SalaryIncreaseFileController::class, 'update']);
     Route::get('/salary_increase_file/delete/{salary_increase_file}',[SalaryIncreaseFileController::class, 'delete']);
     
+    ## Rekapitulasi Absensi
+    Route::get('/presence_recapitulation', [PresenceRecapitulationController::class, 'index']);
+    Route::get('/presence_recapitulation/search', [PresenceRecapitulationController::class, 'search']);
+    Route::get('/presence_recapitulation/create', [PresenceRecapitulationController::class, 'create']);
+    Route::post('/presence_recapitulation', [PresenceRecapitulationController::class, 'store']);
+    Route::get('/presence_recapitulation/edit/{presence_recapitulation}', [PresenceRecapitulationController::class, 'edit']);
+    Route::put('/presence_recapitulation/edit/{presence_recapitulation}', [PresenceRecapitulationController::class, 'update']);
+    Route::get('/presence_recapitulation/delete/{presence_recapitulation}',[PresenceRecapitulationController::class, 'delete']);
+    Route::post('/presence_recapitulation/print',[PresenceRecapitulationController::class, 'print']);
+     
     ## Edit Profil
     Route::get('/edit_profil/{user}',[UserController::class, 'edit_profil']);
     Route::put('/edit_profil/{user}',[UserController::class, 'update_profil']);
