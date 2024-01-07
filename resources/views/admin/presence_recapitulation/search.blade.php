@@ -33,7 +33,7 @@
 				<td>{{ $v->th }}</td>
 				<td>
 					@php
-						$x = $v->tl + $v->ct + $v->s + $v->h; 
+						$x = $v->h; 
 						$persentase = ($x/$v->employee_amount)*100;
 					@endphp
 					{{ number_format($persentase, 2) }} %

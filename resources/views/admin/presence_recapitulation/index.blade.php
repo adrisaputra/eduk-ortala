@@ -25,7 +25,15 @@
 											<a href="{{ url(Request::segment(1).'/create') }}" class="btn mb-2 mr-1 btn-success">Tambah Data</a>	
 										@endif
 										<a href="{{ url('presence_recapitulation') }}" class="btn mb-2 mr-1 btn-warning ">Refresh</a>
-										<button type="submit" class="btn mb-2 mr-1 btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg></button>
+										<div class="btn-group" role="group">
+											<button id="btnGroupVerticalDrop2" type="button" class="btn mb-2 mr-1 btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-printer"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+											</button>
+											<div class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop2">
+												<button type="submit" class="dropdown-item" name="print" value="xls">XLS</button>
+												<button type="submit" class="dropdown-item" name="print" value="pdf">PDF</button>
+											</div>
+										</div>
 									</div>
                                     
 									<div class="col-xl-2 col-md-12 col-sm-12 col-12">
@@ -58,7 +66,8 @@
 									@if(Auth::user()->group_id==1)
 										<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 											<select name="parent_unit_id" class="form-control form-control-sm" id="parent_unit_id" onchange="tampil()" style="height: 38px;padding: 5px;">
-												<option value="">- Pilih Unor Induk-</option>
+												<option value="">- Pilih Unor Induk -</option>
+												<option value="100">SEMUA UNOR</option>
 												@foreach($parent_unit as $v)
 													<option value="{{ $v->id }}" @if(request()->get('parent_unit_id')== $v->id) selected @endif>{{ $v->name }}</option>
 												@endforeach

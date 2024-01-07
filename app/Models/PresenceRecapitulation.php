@@ -18,6 +18,7 @@ class PresenceRecapitulation extends Model
         's',
         'h',
         'th',
+        'file',
         'desc'
     ];
 }

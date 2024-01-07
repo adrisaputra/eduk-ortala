@@ -73,6 +73,19 @@
 									<hr>
 
 									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label" style="color: #000000;font-weight:bold;">{{ __('File') }}</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="file" class="form-control" name="file" value="{{ old('file') }}">
+											<span style="font-size:11px"><i>Ukuran File Tidak Boleh Lebih Dari 10 Mb (jpg,jpeg,png,dan pdf)</i></span><br>
+											@if ($errors->has('file')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('file') }}</div>@endif
+											@if($presence_recapitulation->file)
+											<a href="{{ asset('upload/presence_recapitulation/'.$presence_recapitulation->file) }}" target="_blank" class="btn mb-2 mr-1 btn-info">Download File</a>
+											@endif
+										</div>
+									</div>
+									
+									
+									<div class="form-group row mb-4">
 										<label class="col-xl-3 col-sm-3 col-sm-2 col-5 col-form-label" style="color: #000000;font-weight:bold;">{{ __('Keterangan') }}</label>
 										<div class="col-xl-9 col-lg-9 col-sm-10 col-7">
 											<textarea class="form-control" name="desc" >{{ $presence_recapitulation->desc }}</textarea>
