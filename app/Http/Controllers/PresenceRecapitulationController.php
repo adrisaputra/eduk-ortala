@@ -30,6 +30,7 @@ class PresenceRecapitulationController extends Controller
     {
         $title = "Rekapitulasi Absensi";
         $parent_unit = ParentUnit::get();
+        $parent_unit_id = Auth::user()->parent_unit_id;
         if(Auth::user()->group_id!=1){
             $presence_recapitulation = PresenceRecapitulation::
                                         where('parent_unit_id', Auth::user()->parent_unit_id)
@@ -39,7 +40,7 @@ class PresenceRecapitulationController extends Controller
         } else {
             $presence_recapitulation = NULL;
         }
-        return view('admin.presence_recapitulation.index',compact('title','presence_recapitulation','parent_unit'));
+        return view('admin.presence_recapitulation.index',compact('title','presence_recapitulation','parent_unit','parent_unit_id'));
     }
 
 	## Tampilkan Data Search
@@ -74,9 +75,9 @@ class PresenceRecapitulationController extends Controller
         }
 
         if($request->input('page')){
-            return view('admin.presence_recapitulation.index',compact('title','presence_recapitulation'));
+            return view('admin.presence_recapitulation.index',compact('title','presence_recapitulation','parent_unit_id'));
         } else {
-            return view('admin.presence_recapitulation.search',compact('title','presence_recapitulation'));
+            return view('admin.presence_recapitulation.search',compact('title','presence_recapitulation','parent_unit_id'));
         }
     }
 	
