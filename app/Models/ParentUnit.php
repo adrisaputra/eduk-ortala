@@ -36,5 +36,10 @@ class ParentUnit extends Model
                             $query->where('year', 'LIKE', '%' . $macro . '%');
                         });
     }
+    
+    public function presence_recapitulation()
+    {
+        return $this->hasOne('App\Models\PresenceRecapitulation');
+    }
 
 }

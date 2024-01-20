@@ -92,6 +92,7 @@
 					
 								<div id="hasil">
 									<div class="table-responsive">
+										<div class="table-scroll">
 										<table class="table table-bordered table-hover mb-4">
 											<thead>
 												<tr>
@@ -168,6 +169,7 @@
 										@if($presence_recapitulation)
 											<div class="paginating-container">{{ $presence_recapitulation->appends(Request::only('search'))->links() }}</div>
 										@endif
+									</div>
 									</div>
 								</div>
                             </div>

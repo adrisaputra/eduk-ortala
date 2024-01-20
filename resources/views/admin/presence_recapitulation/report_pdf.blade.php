@@ -93,6 +93,9 @@
 	<thead>
 		<tr style="background-color: gray;color:white">
 			<th rowspan=2>No</th>
+			@if($parent_unit_id == 100)
+				<th rowspan=2>Nama Unor</th>
+			@endif
 			<th rowspan=2>Hari/Tanggal</th>
 			<th rowspan=2>Jumlah ASN</th>
 			<th colspan=6>Laporan</th>
@@ -112,6 +115,9 @@
 	@foreach($presence_recapitulation as $i => $v)
 		<tr>
 			<td class="text-center">{{ $i+1 }}</td>
+			@if($parent_unit_id == 100)
+				<td style="width:20%">{{ $v->parent_unit->name }}</td>
+			@endif
 			<td style="width:20%">{{ $v->day }}, {{ date('d-m-Y', strtotime($v->date)) }}</td>
 			<td style="width:20%">{{ $v->employee_amount }}</td>
 			<td>{{ $v->tl }}</td>

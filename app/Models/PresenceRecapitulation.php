@@ -21,4 +21,11 @@ class PresenceRecapitulation extends Model
         'file',
         'desc'
     ];
+
+    
+    public function parent_unit()
+    {
+        return $this->belongsTo('App\Models\ParentUnit');
+    }
+    
 }
